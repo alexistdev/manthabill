@@ -1,168 +1,227 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Domain
-        <small>Layanan Produk Anda yang Aktif</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><i class="fa fa-dashboard"></i> &nbsp;Dashboard</li>
-		<li><i class="active"></i> &nbsp;Domain</li>
-      </ol>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Domain</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="<?= base_url('member') ?>">Home</a></li>
+                        <li class="breadcrumb-item active">Domain</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
     </section>
 
     <!-- Main content -->
-    <section class="content container-fluid">
-		<div class="row">
-			
-			
-				<!-- BOX TABLE -->
-				<div class="box">
-					<!-- box-header -->
-					<div class="box-header">
-						<h3 class="box-title">Domain</h3>
-						<p><?php echo $this->session->flashdata('item'); ?></p>
-					</div>
-					<!-- End box-header -->
-					<div class="box-body">
-						<form action="<?php echo base_url('domain/checkout');?>" method="post">
-							
-							<div class="col-md-8 col-sm-6 col-xs-6">
-								<div class="form-group">
-									<label>
-										<input type="checkbox" class="flat-red" checked>
-										<?php echo htmlentities($nama, ENT_QUOTES, 'UTF-8');?>
-										<input type="hidden" name="namaDomain" value="<?php echo htmlentities($nama, ENT_QUOTES, 'UTF-8');?>">
-										<input type="hidden" name="idLog" value="<?php echo htmlentities($idLog, ENT_QUOTES, 'UTF-8');?>">
-										<input type="hidden" name="idTLD" value="<?php echo htmlentities($idTLD, ENT_QUOTES, 'UTF-8');?>">
-									</label>
-								</div>
-							</div>
-							<div class="row align-items-right">
-							<div class="col-md-2 col-sm-3 col-xs-3">
-								<label>Rp. <?php echo htmlentities(number_format($harga,0,",","."), ENT_QUOTES, 'UTF-8');?> /tahun</label>
-								<input type="hidden" name="hargaDomain" value="<?php echo htmlentities($harga, ENT_QUOTES, 'UTF-8');?>">
-							</div>
-							
-							<div class="col-md-1 col-sm-2 ofsetcol-xs-12">
-								<button type="button" id="tombolHilang" onclick="myFunction()" class="btn btn-primary btn-xs">Beli Domain</button>
-							</div>
-							</div>
-							<!-- FORM TERSEMBUNYI -->
-							<div id="myDIV">
-							<div id="pesan"></div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label1" style="visibility:hidden">Nama Depan</label>
-									<input id="namaDepan" type="text" class="form-control" name="namaDepan"  value="<?php echo htmlentities($namaDepan, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label2" style="visibility:hidden">Nama Belakang</label>
-									<input id="namaBelakang" type="text" class="form-control" name="namaBelakang" value="<?php echo htmlentities($namaBelakang, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-6 col-sm-12 col-xs-12">
-								<div class="form-group">
-									<label id="label3" style="visibility:hidden">Alamat Kolom 1</label>
-									<input id="alamat1" type="text" class="form-control" name="alamat1" value="<?php echo htmlentities($alamat1, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-6 col-sm-12 col-xs-12">
-								<div class="form-group">
-									<label id="label4" style="visibility:hidden">Alamat Kolom 2</label>
-									<input id="alamat2" type="text" class="form-control" name="alamat2" value="<?php echo htmlentities($alamat2, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label5" style="visibility:hidden">Kota</label>
-									<input id="kota" type="text" class="form-control" name="kota" required="required" value="<?php echo htmlentities($kota, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label6" style="visibility:hidden">Provinsi</label>
-									<input id="provinsi" type="text" class="form-control" name="provinsi" required="required" value="<?php echo htmlentities($provinsi, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label7" style="visibility:hidden">Kodepos</label>
-									<input id="kodepos" type="text" class="form-control" name="kodepos" required="required" value="<?php echo htmlentities($kodepos, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label8" style="visibility:hidden">Negara</label>
-									<input id="negara" type="text" class="form-control" name="negara" required="required" value="<?php echo htmlentities($negara, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							<div class="col-md-4 col-sm-6 col-xs-12">
-								<div class="form-group">
-									<label id="label9" style="visibility:hidden">Telepon</label>
-									<input id="telepon" type="text" class="form-control" name="telepon" required="required" value="<?php echo htmlentities($telepon, ENT_QUOTES, 'UTF-8');?>" style="visibility:hidden"/>
-								</div>		
-							</div>
-							</div>
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								<button type="button" onclick="fungsiCollapse()" id="tombolMuncul" class="btn btn-primary" style="visibility:hidden">Beli Domain</button>
-							</div>
-							<!-- END FORM TERSEMBUNYI -->
-							<!-- START FORM TERSEMBUNYI NAMESERVER -->
-							<div id="myDIV2">
-							<div class="container">
-								<div class="row">
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<label id="labelA" style="visibility:hidden">Nameserver 1</label>
-										<input id="nameserver1" type="text" class="form-control" name="nameserver1"  value="ns1.domain.com" required="required" style="visibility:hidden"/>
-									</div>		
-								</div>
-								</div>
-								<div class="row">
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<label id="labelB" style="visibility:hidden">Nameserver 2</label>
-										<input id="nameserver2" type="text" class="form-control" name="nameserver2" value="ns2.domain.com" required="required" style="visibility:hidden"/>
-									</div>		
-								</div>
-								</div>
-								<div class="row">
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<label id="labelC" style="visibility:hidden">Nameserver 3</label>
-										<input id="nameserver3" type="text" class="form-control" name="nameserver3" value="ns3.domain.com" required="required" style="visibility:hidden"/>
-									</div>		
-								</div>
-								</div>
-								<div class="row">
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<div class="form-group">
-										<label id="labelD" style="visibility:hidden">Nameserver 4</label>
-										<input id="nameserver4" type="text" class="form-control" name="nameserver4" value="ns4.domain.com" required="required" style="visibility:hidden"/>
-									</div>		
-								</div>
-								</div>
-							</div>
-							</div>
-							<div class="col-md-12 col-sm-12 col-xs-12">
-								
-							<input type="submit" id="tombolMuncul2" class="btn btn-primary" value="CHECKOUT" style="visibility:hidden" /> 
-							
-							</div>
-							<!-- END FORM TERSEMBUNYI NAMESERVER -->
-						</form>
-					</div>
-				</div>
-				<!-- END BOX TABLE -->
-				
-			
-		</div>
+    <section class="content">
+
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <!-- Khusus Personal Hosting -->
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Registrasi Domain Baru</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- Start Card Body -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="alert alert-warning">
+                                        <h3 class="text-center"><?php echo htmlentities($namaDom, ENT_QUOTES, 'UTF-8'); ?></h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-warning">
+                                        <h3 class="text-center">Rp. <?php echo htmlentities(number_format($hargaDom, 0, ',', '.'), ENT_QUOTES, 'UTF-8'); ?> / tahun</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <?= form_open('domain/checkout') ?>
+                            <!-- Start Nameserver -->
+                            <div class="row mt-5">
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'nameserver1', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'ns1.hosting.com', 'value' => 'ns1.hosting.com']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span>Nameserver1</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'nameserver2', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'ns2.hosting.com', 'value' => 'ns2.hosting.com']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span>Nameserver2</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'nameserver3', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'ns3.hosting.com', 'value' => 'ns3.hosting.com']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span>Nameserver3</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'nameserver4', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'ns4.hosting.com', 'value' => 'ns4.hosting.com']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span>Nameserver4</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'nameserver5', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'ns5.hosting.com', 'value' => 'ns5.hosting.com']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span>Nameserver5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Nameserver -->
+                        </div>
+                    </div>
+                    <!-- Start Data Whois -->
+                    <div class="card card-info">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'namaDepan', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Nama Depan', 'value' => htmlentities($namaDepan, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">*</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'namaBelakang', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Nama Belakang', 'value' => htmlentities($namaBelakang, ENT_QUOTES, 'UTF-8')]); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">&nbsp;&nbsp</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'namaPerusahaan', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Nama Perusahaan', 'value' => htmlentities($namaUsaha, ENT_QUOTES, 'UTF-8')]); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">&nbsp;&nbsp</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'notelp', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Nomor Telepon', 'value' => htmlentities($noTelp, ENT_QUOTES, 'UTF-8')]); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">&nbsp;&nbsp</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'email', 'type' => 'email', 'class' => 'form-control', 'placeholder' => 'Email', 'value' => htmlentities($email, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">*</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'alamat1', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Alamat kolom 1', 'value' => htmlentities($alamat1, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">*</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <?= form_input(['name' => 'alamat2', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Alamat kolom 2', 'value' => htmlentities($alamat2, ENT_QUOTES, 'UTF-8')]); ?>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="text-danger">&nbsp;&nbsp</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <div class="input-group mb-3">
+                                                <?= form_input(['name' => 'kota', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Kota', 'value' => htmlentities($kota, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="text-danger">*</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group mb-3">
+                                                <?= form_input(['name' => 'provinsi', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Provinsi', 'value' => htmlentities($provinsi, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="text-danger">*</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group mb-3">
+                                                <?= form_input(['name' => 'kodepos', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Kodepos', 'value' => htmlentities($kodepos, ENT_QUOTES, 'UTF-8')]); ?>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="text-danger">&nbsp;&nbsp</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="input-group mb-3">
+                                                <?= form_input(['name' => 'negara', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Negara', 'value' => htmlentities($negara, ENT_QUOTES, 'UTF-8'), 'required' => 'required']); ?>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="text-danger">*</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?= form_input(['name' => 'namaDomain', 'type' => 'hidden', 'value' => htmlentities($namaDom, ENT_QUOTES, 'UTF-8')]); ?>
+                                    <?= form_input(['name' => 'hargaDomain', 'type' => 'hidden', 'value' => htmlentities($hargaDom, ENT_QUOTES, 'UTF-8')]); ?>
+                                    <?= form_input(['name' => 'idTLD', 'type' => 'hidden', 'value' => htmlentities($idTld, ENT_QUOTES, 'UTF-8')]); ?>
+                                    <button type="submit" class="btn btn-block btn-danger btn-lg">CHECKOUT</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Data Whois -->
+                    <?= form_close() ?>
+                </div>
+            </div>
+            <!-- end Personal Hosting -->
+
     </section>
     <!-- /.content -->
 </div>
-  <!-- /.content-wrapper -->
-
-  
+<!-- /.content-wrapper -->

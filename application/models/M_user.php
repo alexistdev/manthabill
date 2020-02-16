@@ -11,6 +11,7 @@ class M_user extends CI_Model
 	/*Mengirimkan email
 	/
 	/
+	
 	/=====================================*/
 	function kirim_email($email, $subject, $pesan)
 	{
@@ -50,6 +51,7 @@ class M_user extends CI_Model
 		$this->db->where('password', $password);
 		return $this->db->get('tbuser')->row();
 	}
+
 	function loginok($id)
 	{
 		$this->db->select("*");

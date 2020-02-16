@@ -18,6 +18,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
         </div>
     </div>
 </div>
+
 <div class="row">
 
     <div class="col-md-6">

@@ -49,6 +49,7 @@ class Login extends CI_Controller
 		}
 	}
 
+
 	public function index()
 	{
 		$this->form_validation->set_rules(
@@ -101,7 +102,7 @@ class Login extends CI_Controller
 				$data_session = array(
 					'id_user' => $row->id_user,
 					'token' => $key,
-					'status' => "login"
+					'is_login_in' => TRUE
 				);
 				//mempersiapkan data untuk token
 				$hashkey = array(
@@ -119,5 +120,9 @@ class Login extends CI_Controller
 				redirect("login");
 			}
 		}
+	}
+	public function test()
+	{
+		echo $this->session->userdata('token');
 	}
 }
