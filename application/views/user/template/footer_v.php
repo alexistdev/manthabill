@@ -25,3 +25,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/demo.js"></script>
+<!-- pace-progress -->
+<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
+<!-- DataTables -->
+<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.js"></script>
+<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>

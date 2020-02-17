@@ -22,7 +22,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <!-- Main content -->
     <section class="content">
-
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
@@ -40,7 +39,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?= form_open('domain/cekDomain', ['class' => 'form-horizontal']) ?>
                             <div class="form-row">
                                 <label class="col-md-2 control-label">Domain Lookup</label>
-
                                 <div class="col-md-4">
                                     <?= form_input(['name' => 'domain', 'type' => 'text', 'class' => 'form-control pull-right', 'placeholder' => 'NamaDomain', 'required' => 'required']); ?>
                                 </div>
@@ -67,8 +65,50 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <!-- End Card Body -->
                     </div>
                 </div>
-                <!-- end Personal Hosting -->
-
+                <!-- end domain lookup -->
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Daftar Domain Anda</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="tabelku" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Domain</th>
+                                        <th class="text-center">Registrasi</th>
+                                        <th class="text-center">Expire</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($dataDomain->result_array() as $row) :
+                                        $idHosting = $row['id_hosting'];
+                                        $namaDomain = $row['nama_domain'];
+                                        $dateRegister = konversiTanggal($row['date_register']);
+                                        $expire = konversiTanggal($row['due_date']);
+                                    ?>
+                                        <tr>
+                                            <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= htmlentities($namaDomain, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= htmlentities($dateRegister, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= htmlentities($expire, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center">pending</td>
+                                            <td class="text-center"><a class="btn btn-primary" href="">Detail</a></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
     </section>
     <!-- /.content -->
 </div>

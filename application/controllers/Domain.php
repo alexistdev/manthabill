@@ -32,6 +32,7 @@ class Domain extends CI_Controller
 		$data = $this->_dataMember($idUser);
 		$view = 'v_domain';
 		$data['tld'] = $this->member->select_tld();
+		$data['dataDomain'] = $this->member->tampilDomain($idUser);
 		$this->_template($data, $view);
 	}
 
@@ -61,11 +62,23 @@ class Domain extends CI_Controller
 		$hasil = $domainInfo->domainAvailability;
 		return $hasil;
 	}
-
+	private function _cekProfil($idUser)
+	{
+		$namaDepan = $this->member->getProfilUser($idUser)->nama_depan;
+		$alamat1 = $this->member->getProfilUser($idUser)->nama_depan;
+		$kota = $this->member->getProfilUser($idUser)->kota;
+		$provinsi = $this->member->getProfilUser($idUser)->provinsi;
+		$negara = $this->member->getProfilUser($idUser)->negara;
+		if ($namaDepan == "" || $alamat1 == "" || $kota == "" || $provinsi == "" || $negara == "") {
+			$pesan = "<div class=\"alert alert-danger\" role=\"alert\">Silahkan lengkapi profil anda terlebih dahulu !</div>";
+			$this->session->set_flashdata('pesan', $pesan);
+			redirect('setting');
+		}
+	}
 	public function cekDomain()
 	{
 		$idUser = $this->session->userdata('id_user');
-
+		$this->_cekProfil($idUser);
 		$cekPendingInv = $this->member->cek_pendingInv($idUser);
 		if ($cekPendingInv > 0) {
 			$this->session->set_flashdata('item', array('pesan' => 'Silahkan anda selesaikan pembayaran invoice berikut!'));
@@ -264,7 +277,7 @@ class Domain extends CI_Controller
 			);
 			$idInvoice = $this->member->simpan_invoice($dataInvoice);
 			$this->member->hapus_domLog($idUser);
-			$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Domain berhasil dipesan silahkan lengkapi pembayarannya</div>');
+			$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Domain berhasil dipesan silahkan lengkapi pembayarannya</div>');
 			redirect('domain');
 		}
 

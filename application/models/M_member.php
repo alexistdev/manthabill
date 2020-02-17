@@ -201,4 +201,43 @@ class M_member extends CI_Model
         $this->db->where('id_user', $idUser);
         $this->db->delete('tbdomaintransit');
     }
+    public function tampilDomain($idUser)
+    {
+        $this->db->where('id_user', $idUser);
+        $hasil = $this->db->get('tbdomain');
+        return $hasil;
+    }
+
+    ##############################################################
+    #                                                            #
+    #                Menangani halaman Service                   #
+    #                                                            #
+    ##############################################################
+
+    public function tampilService($idUser)
+    {
+        $this->db->where('id_user', $idUser);
+        $this->db->order_by('id_hosting', 'DESC');
+        $hasil = $this->db->get('tbhosting');
+        return $hasil;
+    }
+    public function cek_host($id)
+    {
+        $this->db->where('id_hosting', $id);
+        $query =  $this->db->get('tbhosting');
+        return $query->num_rows();
+    }
+
+    ##############################################################
+    #                                                            #
+    #                Menangani halaman Invoice                   #
+    #                                                            #
+    ##############################################################
+    public function tampil_invoice($id)
+    {
+        $this->db->where('id_user', $id);
+        $this->db->order_by('id_invoice', 'DESC');
+        $result = $this->db->get('tbinvoice');
+        return $result;
+    }
 }

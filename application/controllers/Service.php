@@ -1,50 +1,46 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Service extends CI_Controller {
-	function __construct(){
+class Service extends CI_Controller
+{
+	function __construct()
+	{
 		parent::__construct();
-		$this->load->model('m_user');
+		$this->load->model('m_member', 'member');
+		if ($this->session->userdata('is_login_in') !== TRUE) {
+			redirect('login');
+		}
+	}
+	private function _dataMember($idUser)
+	{
+		$data['idUser'] = $idUser;
+		//nama dan gambar disidebar
+		$data['namaUser'] = $this->member->getProfilUser($idUser)->nama_depan;
+		$data['gambarUser'] = $this->member->getProfilUser($idUser)->gambar;
+		return $data;
+	}
+
+	private function _template($data, $view)
+	{
+		$this->load->view('user/' . $view, $data);
 	}
 
 	public function index()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_user->get_token($hashSes);
-		//mendapatkan data session id dan status login
 		$idUser = $this->session->userdata('id_user');
-		$b['status'] = $this->session->userdata('status');
-		//mengambil data hosting di database
-		$b['data'] = $this->m_user->tampil_service($idUser);
-		$b['user'] = $this->m_user->loginok($idUser);
-		//membuat status default halaman saat diakses
-		if ($hashKey==0){
-			redirect('login');
-		} else{
-			$this->load->view('user/v_service',$b);
-		}
+		$data = $this->_dataMember($idUser);
+		$view = 'v_service';
+		$data['dataService'] = $this->member->tampilService($idUser);
+		$this->_template($data, $view);
 	}
-	
-	function detailhosting($idHost){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_user->get_token($hashSes);
-		$cek = $this->m_user->cek_host($idHost);
-		if($cek ==1){
-			if (($idHost =="") OR ($idHost ==NULL)){
-				redirect('service');
-			}else{
-				if ($hashKey==0){
-					redirect('login');
-				}else{
-					$idUser= $this->session->userdata('id_user');;
-					$b['data'] = $this->m_user->detail_host($idHost);
-					$b['user'] = $this->m_user->loginok($idUser);
-					$this->load->view('user/v_detailservice',$b);
-				}
-			}
-		}else{
+
+	public function detailhosting($idHost = NULL)
+	{
+		$cekHosting = $this->member->cek_host($idHost);
+		if (($cekHosting < 1) || ($idHost == NULL) || ($idHost == "")) {
 			redirect('service');
+		} else {
+			echo "oke";
 		}
 	}
-		
 }

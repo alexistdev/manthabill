@@ -43,3 +43,9 @@ function kirim_emailInvoice($email, $message)
     //simpan data ke tbemail
     $ci->member->simpan_email($dataEmail);
 }
+
+function konversiTanggal($date)
+{
+    $tanggalKonversi = date("d-m-Y", strtotime($date));
+    return $tanggalKonversi;
+}

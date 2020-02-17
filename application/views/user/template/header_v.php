@@ -19,5 +19,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- End Header -->
+    <!-- Pace -->
+    <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
 </head>

@@ -22,6 +22,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 });
             }, 2000);
         });
+        $(function() {
+            $('#tabelku').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+            });
+        });
     </script>
 </body>
 
