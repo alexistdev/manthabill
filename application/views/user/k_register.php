@@ -2,6 +2,8 @@
 defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?= form_open('daftar') ?>
 <div class="input-group mb-3">
+	<!-- CSRF Token -->
+	<?= form_input(['name' => $this->security->get_csrf_token_name(),'id'=>'csrftoken', 'type' => 'hidden', 'class' => 'token_csrf', 'value' => $this->security->get_csrf_hash()]); ?>
   <?= form_input(['name' => 'email', 'id' => 'email', 'type' => 'email', 'class' => 'form-control', 'placeholder' => 'Email', 'value' => set_value('email'), 'required' => 'required']); ?>
   <div class="input-group-append">
     <div class="input-group-text">

@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> <?= cetak($title) ?> | Buat Akun</title>
+    <title>  Buat Akun</title>
     <meta name="description" content="AdriHost WebHosting Solution">
     <meta name="author" content="AlexistDev">
     <!-- Tell the browser to be responsive to screen width -->
@@ -81,24 +81,55 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                 });
             });
             $(document).ready(function() {
-                $('#email').blur(function() {
+				function generate_csrf()
+				{
+					$.ajax({
+						type: "GET",
+						dataType: 'json',
+						url: "<?= base_url('daftar/get_csrf'); ?>", //replace with your domain
+						success: function (data) {
+							csrf_name = data.csrf_name;
+							csrf_token = data.csrf_token;
+							$('#csrftoken').attr('name', csrf_name);
+							$('#csrftoken').val(csrf_token);
+						}
+					});
+				}
+                $('#email').change(function() {
+					var csrfName = $('.token_csrf').attr('name');
+					var csrfHash = $('.token_csrf').val();
+					var email = $('#email').val();
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url('daftar/checkEmail'); ?>",
-                        data: $(this).serialize(),
+                        url: "<?= base_url('daftar/checkEmail'); ?>",
+                        data: {
+							[csrfName]: csrfHash,
+							email: email
+						},
                         success: function(data) {
                             if (data == "ok") {
                                 $('#username_result2').html('<img src="<?php echo base_url('assets/img/not.png'); ?>" width="5%"> <font color="red">pernah terdaftar</font>');
-                                $("#err2").removeClass("form-group has-feedback").addClass("form-group has-error");
+								$("#email").removeClass("form-control is-valid").addClass("form-control is-invalid");
                                 $('#email').focus();
+								generate_csrf();
                             } else {
-                                $('#username_result2').html('');
-                                $("#err2").removeClass("form-group has-error").addClass("form-group has-feedback");
-                            }
+								if (email.length == 0) {
+									$('#username_result2').html('');
+									$("#email").removeClass("form-control is-invalid").addClass("form-control");
+									$("#email").removeClass("form-control is-valid").addClass("form-control");
+									generate_csrf();
+								} else {
+									$('#username_result2').html('');
+									$("#email").removeClass("form-control is-invalid").addClass("form-control is-valid");
+									generate_csrf();
+								}
+							}
                         }
                     });
                 });
+
             });
+
         </script>
 </body>
 

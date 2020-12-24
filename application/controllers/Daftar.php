@@ -40,7 +40,7 @@ class Daftar extends CI_Controller
 		}
 	}
 
-	function index()
+	public function index()
 	{
 		$this->form_validation->set_rules(
 			'email',
@@ -95,16 +95,7 @@ class Daftar extends CI_Controller
 			$ip = $this->input->ip_address();
 			$inPass = sha1($password);
 			$dateCreate = date("Y-m-d");
-			$hosting = $this->m_daftar->getCompany()->nama_hosting;
-			$message = "
-							Selamat anda telah berhasil mendaftar akun di adrihost.com , berikut informasi akun anda:<br><br>
-							Username: " . $email . " <br>
-							Password: " . $password . " <br><br>
-							Anda bisa login di " . $hosting . "<br><br>
-							Regards<br>
-							Admin
-						";
-			$companyEmail = $this->m_daftar->get_companyEmail()->email_hosting;
+
 			//mempersiapkan data user untuk disimpan di tabel user
 			$dataPengguna = array(
 				'password' => $inPass,
@@ -120,16 +111,7 @@ class Daftar extends CI_Controller
 				'id_user' => $idIduser
 			);
 			$this->m_daftar->simpan_detail($dataDetail);
-			//mempersiapkan data untuk disimpan ke tabel email
-			$dataEmail = array(
-				'email_pengirim' => $companyEmail,
-				'email_tujuan' => $email,
-				'subyek' => 'Akun Anda Berhasil Dibuat',
-				'email_pesan' => $message,
-				'status' => 2
-			);
-			//simpan data ke tbemail
-			$this->m_daftar->simpan_email($dataEmail);
+
 			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
 			redirect('login');
 		}
@@ -139,7 +121,7 @@ class Daftar extends CI_Controller
 	#                                                                         #
 	#                       Validasi Username dengan Ajax                        #
 	###########################################################################
-	function checkUsername()
+	public function checkUsername()
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$userName = $this->input->post("username");
@@ -155,7 +137,7 @@ class Daftar extends CI_Controller
 	#                                                                         #
 	#                       Validasi Email dengan Ajax                        #
 	###########################################################################
-	function checkEmail()
+	public function checkEmail()
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$email = $this->input->post("email");
@@ -166,5 +148,12 @@ class Daftar extends CI_Controller
 		} else {
 			redirect('daftar');
 		}
+	}
+	public function get_csrf()
+	{
+		$csrf['csrf_name'] = $this->security->get_csrf_token_name();
+		$csrf['csrf_token'] = $this->security->get_csrf_hash();
+
+		echo json_encode($csrf);
 	}
 }
