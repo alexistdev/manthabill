@@ -7,6 +7,9 @@ class Daftar extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('m_daftar');
+		if ($this->session->userdata('is_login_in') == TRUE) {
+			redirect('member');
+		}
 	}
 	//khusus membuat captcha dan cek validasi captcha
 	private function _create_captcha()
@@ -39,65 +42,61 @@ class Daftar extends CI_Controller
 
 	function index()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_daftar->get_token($hashSes);
-		if ($hashKey == 0) {
-			$this->form_validation->set_rules(
-				'email',
-				'Email',
-				'required',
-				[
-					'required' => 'Email harus diisi!'
-				]
-			);
-			$this->form_validation->set_rules(
-				'password',
-				'Password',
-				'required|min_length[6]',
-				[
-					'required' => 'Password harus diisi!',
-					'min_length' => 'Password minimal harus terdiri dari 6 karakter'
-				]
-			);
-			$this->form_validation->set_rules(
-				'password2',
-				'Ulangi Password',
-				'trim|required|matches[password]',
-				[
-					'required' => 'Konfirmasi password harus diisi!',
-					'matches' => 'Password tidak sama!'
-
-				]
-			);
-			$this->form_validation->set_rules(
-				'tos',
-				'tos',
-				'trim|required',
-				[
-					'required' => 'Anda harus menyetujui Term of Service Kami!'
-				]
-			);
-			$this->form_validation->set_rules(
-				'captcha',
-				'Captcha',
-				'trim|callback_check_captcha|required',
-				[
-					'required' => 'Captcha harus diisi!'
-				]
-			);
-			if ($this->form_validation->run() === false) {
-				$data['image'] = $this->_create_captcha();
-				$data['title'] = $this->m_daftar->getCompany()->nama_hosting;
-				$this->session->set_flashdata('pesan', validation_errors());
-				$this->load->view('user/v_register', $data);
-			} else {
-				$email = $this->input->post('email', TRUE);
-				$password = $this->input->post('password', TRUE);
-				$ip = $this->input->ip_address();
-				$inPass = sha1($password);
-				$dateCreate = date("Y-m-d");
-				$hosting = $this->m_daftar->getCompany()->nama_hosting;
-				$message = "
+		$this->form_validation->set_rules(
+			'email',
+			'Email',
+			'required',
+			[
+				'required' => 'Email harus diisi!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'password',
+			'Password',
+			'required|min_length[6]',
+			[
+				'required' => 'Password harus diisi!',
+				'min_length' => 'Password minimal harus terdiri dari 6 karakter'
+			]
+		);
+		$this->form_validation->set_rules(
+			'password2',
+			'Ulangi Password',
+			'trim|required|matches[password]',
+			[
+				'required' => 'Konfirmasi password harus diisi!',
+				'matches' => 'Password tidak sama!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'tos',
+			'tos',
+			'trim|required',
+			[
+				'required' => 'Anda harus menyetujui Term of Service Kami!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'captcha',
+			'Captcha',
+			'trim|callback_check_captcha|required',
+			[
+				'required' => 'Captcha harus diisi!'
+			]
+		);
+		if ($this->form_validation->run() === false) {
+			$data['image'] = $this->_create_captcha();
+			$data['title'] = $this->m_daftar->getCompany()->nama_hosting;
+			$this->session->set_flashdata('pesan', validation_errors());
+			$this->load->view('user/v_register', $data);
+		} else {
+			$email = $this->input->post('email', TRUE);
+			$password = $this->input->post('password', TRUE);
+			$ip = $this->input->ip_address();
+			$inPass = sha1($password);
+			$dateCreate = date("Y-m-d");
+			$hosting = $this->m_daftar->getCompany()->nama_hosting;
+			$message = "
 							Selamat anda telah berhasil mendaftar akun di adrihost.com , berikut informasi akun anda:<br><br>
 							Username: " . $email . " <br>
 							Password: " . $password . " <br><br>
@@ -105,37 +104,34 @@ class Daftar extends CI_Controller
 							Regards<br>
 							Admin
 						";
-				$companyEmail = $this->m_daftar->get_companyEmail()->email_hosting;
-				//mempersiapkan data user untuk disimpan di tabel user
-				$dataPengguna = array(
-					'password' => $inPass,
-					'email' => $email,
-					'date_create' => $dateCreate,
-					'ip' => $ip,
-					'status' => 2
-				);
-				//proses simpan data user
-				$idIduser = $this->m_daftar->simpan_daftar($dataPengguna);
-				//menyimpan data ke detail/profil user
-				$dataDetail = array(
-					'id_user' => $idIduser
-				);
-				$this->m_daftar->simpan_detail($dataDetail);
-				//mempersiapkan data untuk disimpan ke tabel email
-				$dataEmail = array(
-					'email_pengirim' => $companyEmail,
-					'email_tujuan' => $email,
-					'subyek' => 'Akun Anda Berhasil Dibuat',
-					'email_pesan' => $message,
-					'status' => 2
-				);
-				//simpan data ke tbemail
-				$this->m_daftar->simpan_email($dataEmail);
-				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
-				redirect('login');
-			}
-		} else {
-			redirect('member');
+			$companyEmail = $this->m_daftar->get_companyEmail()->email_hosting;
+			//mempersiapkan data user untuk disimpan di tabel user
+			$dataPengguna = array(
+				'password' => $inPass,
+				'email' => $email,
+				'date_create' => $dateCreate,
+				'ip' => $ip,
+				'status' => 2
+			);
+			//proses simpan data user
+			$idIduser = $this->m_daftar->simpan_daftar($dataPengguna);
+			//menyimpan data ke detail/profil user
+			$dataDetail = array(
+				'id_user' => $idIduser
+			);
+			$this->m_daftar->simpan_detail($dataDetail);
+			//mempersiapkan data untuk disimpan ke tabel email
+			$dataEmail = array(
+				'email_pengirim' => $companyEmail,
+				'email_tujuan' => $email,
+				'subyek' => 'Akun Anda Berhasil Dibuat',
+				'email_pesan' => $message,
+				'status' => 2
+			);
+			//simpan data ke tbemail
+			$this->m_daftar->simpan_email($dataEmail);
+			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
+			redirect('login');
 		}
 	}
 

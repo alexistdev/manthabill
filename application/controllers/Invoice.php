@@ -42,6 +42,7 @@ class Invoice extends CI_Controller
 		// } else{
 		// 	$this->load->view('user/v_minvoice',$b);
 		// }
+
 		$idUser = $this->session->userdata('id_user');
 		$data = $this->_dataMember($idUser);
 		$view = 'v_minvoice';

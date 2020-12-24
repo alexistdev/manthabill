@@ -33,6 +33,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <!-- Start Pesan -->
+                            <?= $this->session->flashdata('pesan'); ?>
+                            <!-- End Pesan -->
                             <table id="tabelku" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -52,15 +55,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $idInvoice = $row['id_invoice'];
                                         $noInvoice = strtoupper($row['no_invoice']);
                                         $tanggal = konversiTanggal($row['inv_date']);
+                                        $expire = konversiTanggal($row['due']);
+                                        $totalJumlah = number_format($row['total_jumlah'], 0, ",", ".");
+                                        $status = htmlentities($row['status_inv'], ENT_QUOTES, 'UTF-8');
+                                        if ($status == 1) {
+                                            $statusInvoice = '<small class=\"badge badge-warning\"> AKTIF </small>';
+                                        } else if ($status == 2) {
+                                            $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                        } else {
+                                            $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                        };
+
                                     ?>
                                         <tr>
                                             <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
                                             <td class="text-center"><?= htmlentities($noInvoice, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"></td>
-                                            <td class="text-center"></td>
-                                            <td class="text-center"></td>
-                                            <td class="text-center"></td>
-                                            <td class="text-center"></td>
+                                            <td class="text-center"><?= htmlentities($tanggal, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= htmlentities($expire, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center">Rp. <?= htmlentities($totalJumlah, ENT_QUOTES, 'UTF-8') ?>, -</td>
+                                            <td class="text-center"><?= $statusInvoice ?></td>
+
+                                            <td class="text-center"><a class="btn btn-primary" href="">Detail</a></td>
+
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

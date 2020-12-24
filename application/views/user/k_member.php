@@ -35,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="icon">
                             <i class="ion ion-social-buffer"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="<?= base_url('service') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="icon">
                             <i class="ion ion-earth"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="<?= base_url('domain') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -65,7 +65,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="icon">
                             <i class="ion ion-card"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="<?= base_url('invoice') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -74,13 +74,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3><?php echo htmlentities($supportTicket, ENT_QUOTES, 'UTF-8'); ?></h3>
-
                             <p>Ticket Support</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-chatbubbles"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="<?= base_url('ticket') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -117,7 +116,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-md-6">
                     <div class="card card-danger">
                         <div class="card-header">
-                            <h3 class="card-title">Berita Terbaru</h3>
+                            <h3 class="card-title">Support Ticket Terbaru</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">

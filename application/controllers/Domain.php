@@ -81,7 +81,7 @@ class Domain extends CI_Controller
 		$this->_cekProfil($idUser);
 		$cekPendingInv = $this->member->cek_pendingInv($idUser);
 		if ($cekPendingInv > 0) {
-			$this->session->set_flashdata('item', array('pesan' => 'Silahkan anda selesaikan pembayaran invoice berikut!'));
+			$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Anda belum dapat membeli domaian, dikarenakan masih memiliki invoice pending. Silahkan selesaikan pembayarannya, atau anda bisa menghubungi admin di bagian Ticket!</div>');
 			redirect('invoice');
 		} else {
 			$this->form_validation->set_rules(

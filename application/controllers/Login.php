@@ -7,6 +7,9 @@ class Login extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('m_login');
+		if ($this->session->userdata('is_login_in') == TRUE) {
+			redirect('member');
+		}
 	}
 
 	//khusus membuat captcha dan cek validasi captcha
@@ -78,17 +81,11 @@ class Login extends CI_Controller
 			]
 		);
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_login->get_token($hashSes);
 		if ($this->form_validation->run() === false) {
-			if ($hashKey == 0) {
-				$data['image'] = $this->_create_captcha();
-				$data['title'] = $this->m_login->getCompany()->nama_hosting;
-				$this->session->set_flashdata('pesan', validation_errors());
-				$this->load->view('user/login/v_login', $data);
-			} else {
-				redirect('member');
-			}
+			$data['image'] = $this->_create_captcha();
+			$data['title'] = $this->m_login->getCompany()->nama_hosting;
+			$this->session->set_flashdata('pesan', validation_errors());
+			$this->load->view('user/login/v_login', $data);
 		} else {
 			$username = $this->input->post('email', TRUE);
 			$password = sha1($this->input->post('password', TRUE));
@@ -120,9 +117,5 @@ class Login extends CI_Controller
 				redirect("login");
 			}
 		}
-	}
-	public function test()
-	{
-		echo $this->session->userdata('token');
 	}
 }

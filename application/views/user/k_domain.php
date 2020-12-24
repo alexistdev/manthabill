@@ -88,10 +88,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php
                                     $no = 1;
                                     foreach ($dataDomain->result_array() as $row) :
-                                        $idHosting = $row['id_hosting'];
+                                        $idDomain = $row['id_domain'];
                                         $namaDomain = $row['nama_domain'];
                                         $dateRegister = konversiTanggal($row['date_register']);
                                         $expire = konversiTanggal($row['due_date']);
+                                        $status = htmlentities($row['status'], ENT_QUOTES, 'UTF-8');
+                                        if ($status == 1) {
+                                            $statusDomain = '<small class=\"badge badge-warning\"> AKTIF </small>';
+                                        } else if ($status == 2) {
+                                            $statusDomain = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                        } else {
+                                            $statusDomain = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                        };
                                     ?>
                                         <tr>
                                             <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>

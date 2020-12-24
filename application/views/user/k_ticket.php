@@ -1,102 +1,91 @@
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
+?>
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Support Ticket
-        <small>Silahkan buat tiket untuk pertanyaan atau meminta dukungan layanan kami</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><i class="fa fa-dashboard"></i> &nbsp;Dashboard</li>
-		    <li><i class="active"></i> &nbsp;Ticket</li>
-      </ol>
-    </section>
-    
-    <!-- Main content -->
-    <section class="content container-fluid">
-			<div class="row">
-			
-				<div class="col-md-12">
-					<!-- BOX TABLE -->
-					<div class="box box-primary">
-					  <div class="box-body">
-              <!-- START SUBMIT FORM PESAN SUKSES-->
-                <?php if (!empty($keren = $this->session->flashdata('pesanSukses'))){;?>
-                        <div class="alert alert-success">
-                          <?php $keren=$this->session->flashdata('pesanSukses');echo $keren;?>
-                        </div>
-                      <?php } else { ;?>
-                        <div></div>
-                      <?php } ;?>
-              <!-- END SUBMIT FORM PESAN SUKSES-->
-              <!-- START SUBMIT FORM PESAN GAGAL-->
-              <?php if (!empty($keren = $this->session->flashdata('pinSudah'))){;?>
-                        <div class="alert alert-danger">
-                          <?php $keren=$this->session->flashdata('pinSudah');echo $keren['pesan'];?>
-                        </div>
-                      <?php } else { ;?>
-                        <div></div>
-                      <?php } ;?>
-              <!-- END SUBMIT FORM PESAN GAGAL-->
-              <!-- START TABEL-->
-              <div class="jeda">
-                <a href="<?php echo base_url('ticket/buat_ticket');?>" class="btn btn-primary"> Buat Ticket </a>
-              </div>
-                <div class="table-responsive"> 
-                  <table id="myTable" class="table table-bordered table-hover">
-							      <thead>
-								      <tr>
-                        <th><p class="text-center">NOMOR</p></th>
-                        <th><p class="text-center">TANGGAL</p></th>
-                        <th><p class="text-center">SUBYEK</p></th>
-                        <th><p class="text-center">STATUS</p></th>
-                        <th><p class="text-center">ACTION</p></th>
-								      </tr>
-							      </thead>
-                      
-                    <tbody>
-                    <?php 
-                        foreach($infoTicket->result_array() as $row):
-                          $idProduct=$row['id_ticket'];
-                          $timeTicket =date("d-m-Y", $row['timeticket']);
-                          $judulTicket=$row['subyek'];
-                          $keyTicket = $row['keyticket'];
-                          $status = $row['status'];
-                          if ($status==1){
-                            $statusPrint = "OPEN";
-                          } else if ($status == 2){
-                            $statusPrint = "DIBALAS";
-                          } else {
-                            $statusPrint = "CLOSED";
-                          };
-                    ?>  
-                    <tr>
-                      <td width="5%"class="align text-center"><?php echo htmlentities($idProduct, ENT_QUOTES, 'UTF-8');?></td>
-                      <td class="align text-center"><?php echo htmlentities($timeTicket, ENT_QUOTES, 'UTF-8');?></td>
-                      <td><?php echo htmlentities($judulTicket, ENT_QUOTES, 'UTF-8');?></td>
-                      <td class="align text-center"><span class="<?php  if ($statusPrint == "CLOSED"){echo "label label-danger";}else if ($statusPrint=="OPEN"){ echo "label label-success";} else {echo "label label-danger";};?>"><?php echo htmlentities($statusPrint, ENT_QUOTES, 'UTF-8');?></span></td>                     
-                      <td class="align text-center">
-                      <?php if($status == 1){;?>
-                        <a href="<?php echo base_url('ticket/view_ticket/'.$keyTicket);?>" class="btn btn-info">Detail</a>
-                      <?php } else if($status == 2){
-                        echo "<a href=\"\" class=\"btn btn-success\">Balas</a>";  
-                      } else {
-                        echo "<a href=\"\" class=\"btn btn-danger\">View</a>";
-                      }
-                      ;?>
-                      </td>
-                    </tr>
-                    <?php endforeach; ?>   
-                    </tbody>
-                       
-                  </table>
-                </div>          
-              <!-- END TABEL-->
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Support Ticket</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="<?= base_url('member') ?>">Home</a></li>
+                        <li class="breadcrumb-item active">Ticket</li>
+                    </ol>
+                </div>
             </div>
-					</div>
-					<!-- END BOX TABLE -->
-				</div>
-      <!-- Profile Deskripsi -->    
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <!-- Khusus Personal Hosting -->
+                <div class="col-md-12">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Daftar Support Ticket Anda</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="tabelku" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Subyek</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $no = 1;
+                                    foreach ($daftarTicket->result_array() as $row) :
+                                        $idTicket = $row['id_ticket'];
+                                        $tanggal = date("d-m-Y", $row['timeticket']);
+                                        $subyek = $row['subyek'];
+                                        $status = htmlentities($row['status'], ENT_QUOTES, 'UTF-8');
+                                        if ($status == 1) {
+                                            $statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
+                                        } else if ($status == 2) {
+                                            $statusPrint = "<small class=\"badge badge-warning\"> DIBALAS </small>";
+                                        } else {
+                                            $statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
+                                        };
+                                        // $status = htmlentities($row['status_hosting'], ENT_QUOTES, 'UTF-8');
+                                        // if ($status == 1) {
+                                        //     $statusHosting = '<small class=\"badge badge-warning\"> AKTIF </small>';
+                                        // } else if ($status == 2) {
+                                        //     $statusHosting = "<small class='badge badge-warning'> PENDING </small>";
+                                        // } else if ($status == 3) {
+                                        //     $statusHosting = 'SUSPEND';
+                                        // } else {
+                                        //     $statusHosting = 'TERMINATED';
+                                        // }
+                                    ?>
+                                        <tr>
+                                            <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= htmlentities($tanggal, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-left"><?= htmlentities($subyek, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= $statusPrint ?></td>
+
+
+                                            <td class="text-center"><a class="btn btn-primary" href="">Detail</a></td>
+
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+</div>
+<!-- /.content-wrapper -->

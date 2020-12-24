@@ -143,6 +143,7 @@ class Product extends CI_Controller
 					'domain' => $domainJadi,
 					'status_hosting' => 2
 				);
+
 				$idHosting = $this->member->simpan_hosting($dataHosting);
 				//menyimpan ke tbinvoice, sehingga terbentuk invoice pending
 				$dateNowInv = date("Y-m-d");

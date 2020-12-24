@@ -240,4 +240,36 @@ class M_member extends CI_Model
         $result = $this->db->get('tbinvoice');
         return $result;
     }
+
+    ##############################################################
+    #                                                            #
+    #                Menangani halaman Ticket                    #
+    #                                                            #
+    ##############################################################
+
+    public function tampil_ticketUser($idUser)
+    {
+        $this->db->select('*');
+        $this->db->from('ticket');
+        $this->db->where("id_user", $idUser);
+        $this->db->where("balasan", 0);
+        $this->db->order_by("timeticket", "DESC");
+        $hasil = $this->db->get();
+        return $hasil;
+    }
+    public function cek_security($idUser)
+    {
+        $this->db->where("id_user", $idUser);
+        return $this->db->get('tbuser')->row();
+    }
+    ##############################################################
+    #                                                            #
+    #                Menangani halaman Setting                   #
+    #                                                            #
+    ##############################################################
+    public function update_profil($dataProfil, $idUser)
+    {
+        $this->db->where('id_user', $idUser);
+        $this->db->update('tbdetailuser', $dataProfil);
+    }
 }
