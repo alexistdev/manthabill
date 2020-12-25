@@ -226,12 +226,19 @@ class M_member extends CI_Model
         $hasil = $this->db->get('tbhosting');
         return $hasil;
     }
-    public function cek_host($id)
+    public function cek_host($idHosting,$idUser)
     {
-        $this->db->where('id_hosting', $id);
+        $this->db->where('id_hosting', $idHosting);
+		$this->db->where('id_user', $idUser);
         $query =  $this->db->get('tbhosting');
         return $query->num_rows();
     }
+
+    public function tampil_detail_service($idHosting)
+	{
+		$this->db->where('id_hosting', $idHosting);
+		return $this->db->get('tbhosting');
+	}
 
     ##############################################################
     #                                                            #

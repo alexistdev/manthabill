@@ -47,32 +47,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $no = 1;
+									$no =1;
                                     foreach ($dataService->result_array() as $row) :
                                         $idHosting = $row['id_hosting'];
                                         $namaService = $row['nama_hosting'];
                                         $domain = $row['domain'];
                                         $harga = number_format($row['harga'], 0, ",", ".");
                                         $dateRegister = konversiTanggal($row['start_hosting']);
-                                        $status = htmlentities($row['status_hosting'], ENT_QUOTES, 'UTF-8');
+                                        $status = $row['status_hosting'];
                                         if ($status == 1) {
-                                            $statusHosting = '<small class=\"badge badge-warning\"> AKTIF </small>';
+                                            $statusHosting = "<small class='badge badge-success'> AKTIF </small>";
                                         } else if ($status == 2) {
                                             $statusHosting = "<small class='badge badge-warning'> PENDING </small>";
                                         } else if ($status == 3) {
-                                            $statusHosting = 'SUSPEND';
+                                            $statusHosting = "<small class='badge badge-danger'> SUSPEND </small>";
                                         } else {
-                                            $statusHosting = 'TERMINATED';
+                                            $statusHosting = "<small class='badge badge-dark'> TERMINATED </small>";
                                         }
                                     ?>
                                         <tr>
-                                            <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($namaService, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($domain, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center">Rp. <?= htmlentities($harga, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($dateRegister, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= cetak($no++); ?></td>
+                                            <td class="text-center"><?= cetak($namaService) ?></td>
+                                            <td class="text-center"><?= cetak($domain) ?></td>
+                                            <td class="text-center">Rp. <?= cetak($harga) ?></td>
+                                            <td class="text-center"><?= cetak($dateRegister) ?></td>
                                             <td class="text-center"><?= $statusHosting ?></td>
-                                            <td class="text-center"><a class="btn btn-primary" href="<?= base_url('service/detailhosting/' . htmlentities($idHosting, ENT_QUOTES, 'UTF-8')) ?>">Detail</a></td>
+                                            <td class="text-center"><a class="btn btn-primary btn-sm" href='<?= base_url("service/detailhosting/" . encrypt_url($idHosting)); ?>'>Detail</a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

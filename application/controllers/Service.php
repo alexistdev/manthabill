@@ -3,6 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Service extends CI_Controller
 {
+	public $load;
+	public $session;
+	public $member;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -36,11 +40,20 @@ class Service extends CI_Controller
 
 	public function detailhosting($idHost = NULL)
 	{
-		$cekHosting = $this->member->cek_host($idHost);
-		if (($cekHosting < 1) || ($idHost == NULL) || ($idHost == "")) {
+		$idUser = $this->session->userdata('id_user');
+		$cekHosting = $this->member->cek_host(decrypt_url($idHost),$idUser);
+		if (($idHost == NULL) || ($idHost == "")) {
 			redirect('service');
 		} else {
-			echo "oke";
+			if($cekHosting != 0 ){
+				$idUser = $this->session->userdata('id_user');
+				$data = $this->_dataMember($idUser);
+				$view = 'v_detailservice';
+				$data['data'] = $this->member->tampil_detail_service($idHost);
+				$this->_template($data, $view);
+			} else {
+				redirect('service');
+			}
 		}
 	}
 }
