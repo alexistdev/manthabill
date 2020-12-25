@@ -3,6 +3,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Product extends CI_Controller
 {
+	public $member;
+	public $load;
+	public $session;
+	public $form_validation;
+	public $input;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -100,23 +106,8 @@ class Product extends CI_Controller
 				$tldName = $this->input->post('tldName', TRUE);
 				$diskonUnik = $this->input->post('diskonUnik', TRUE);
 				$idUser = $this->session->userdata('id_user');
-
-				//menghilangkan http, slash dan backslash
-				$domainFilter1 = stripslashes(preg_replace('/https|http/', '', $nameDomain));
-				$domainFilter1 = str_replace('/', '', $domainFilter1);
-				$domainFilter1 =  str_replace(':', "", $domainFilter1);
-
-				//menghilangkan www
-				$domainFilter2 = str_replace("www.", "", $domainFilter1);
-
-				//menghilangkan tld dibelakangnya
-				$domainFilter3  = stristr($domainFilter2, '.', true);
-				if (empty($domainFilter3)) {
-					$domainJadi = $domainFilter2 . '.' . $tldName;
-				} else {
-					$domainJadi = $domainFilter3 . '.' . $tldName;
-				}
-
+				/** proses filtrasi domain */
+				$domainJadi = filter_domain($nameDomain, $tldName);
 				//mendapatkan nama produk yang kemudian akan dicantumkan di invoice
 				$getNamaProduct = $this->member->getProduct($idProduct)->nama_product . " " . $domainJadi;
 				//mengecek tipe product
@@ -131,9 +122,10 @@ class Product extends CI_Controller
 				$hargaSetelahDiskon = $getHarga - $diskonUnik;
 				$startDate = date('Y-m-d');
 				$nextendDate = date("Y-m-d", strtotime($startDate . ' + ' . $bulan . ' Months'));
-				$noInvoice =  $this->_angkaUnik();
-				//menyimpan ke tbhosting, sehingga terbentuk layanan pending
-				$dataHosting = array(
+
+
+				/** Meyimpan ke tbhosting, sehingga terbentuk layanan pending */
+				$dataHosting = [
 					'id_product' => $idProduct,
 					'id_user' => $idUser,
 					'nama_hosting' => $getNamaProduct,
@@ -142,7 +134,7 @@ class Product extends CI_Controller
 					'end_hosting' => $nextendDate,
 					'domain' => $domainJadi,
 					'status_hosting' => 2
-				);
+				];
 
 				$idHosting = $this->member->simpan_hosting($dataHosting);
 				//menyimpan ke tbinvoice, sehingga terbentuk invoice pending
@@ -151,7 +143,7 @@ class Product extends CI_Controller
 				$dataInvoice = array(
 					'id_user' => $idUser,
 					'id_hosting' => $idHosting,
-					'no_invoice' => $noInvoice,
+					'no_invoice' => $this->_angkaUnik(),
 					'detail_produk' => $getDetailInvoice,
 					'total_jumlah' => $hargaSetelahDiskon,
 					'sub_total' => $getHarga,
@@ -160,8 +152,10 @@ class Product extends CI_Controller
 					'inv_date' => $dateNowInv,
 					'status_inv' => 2
 				);
+
 				$idInvoice = $this->member->simpan_invoice($dataInvoice);
-				//mengirimkan email invoice
+
+				//mengirimkan email invoice ke tabel email
 				$email = $this->member->getUser($idUser)->email;
 				$message = "
 					Yth.Pelanggan , kami telah menambahkan satu layanan ke dalam akun anda, berikut informasi detailnya:<br><br>
@@ -169,7 +163,7 @@ class Product extends CI_Controller
 					Nama Produk:" . $getNamaProduct . " <br>
 					Harga: " . $hargaSetelahDiskon . " <br>
 					Durasi: " . $bulan . " Bulan<br>
-					Invoice: " . $noInvoice . "<br>
+					Invoice: " . $this->_angkaUnik() . "<br>
 					Register: " . date("d-m-Y", strtotime($startDate)) . "<br>
 					Expired:  " . date("d-m-Y", strtotime($nextendDate)) . "<br>
 					Langkah selanjutnya adalah selesaikan pembayarannya sesuai dengan harga yang tercantum ke rekening kami.
@@ -177,12 +171,19 @@ class Product extends CI_Controller
 					Regards<br>
 					Admin<br>
 				";
+
 				kirim_emailInvoice($email, $message);
+
+				//mengarahkan ke halaman instruksi pembayaran
 				$data = $this->_dataMember($idUser);
 				$data['telpHosting'] = $this->member->getSetting()->telp_hosting;
 				$data['namaHosting'] = $this->member->getSetting()->nama_hosting;
 				$totalBiaya = $this->member->getInvoice($idInvoice)->total_jumlah;
+				$data['namaProduk'] = $getNamaProduct;
 				$data['NoInvoice'] = $this->member->getInvoice($idInvoice)->no_invoice;
+				$data['namaBank'] = $this->member->getInfoBank()->nama_bank;
+				$data['nomorRekening'] = $this->member->getInfoBank()->no_rekening;
+				$data['namaPemilikRekening'] = $this->member->getInfoBank()->nama_pemilik;
 				$data['totalBiaya'] = $totalBiaya;
 				$data['formatSMS'] = "<b>BAYAR</b> [spasi] <b>INV</b> [spasi] <b>" .
 					htmlentities(strtoupper($data['NoInvoice']), ENT_QUOTES, 'UTF-8') .

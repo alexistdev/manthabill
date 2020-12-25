@@ -44,14 +44,14 @@ function kirim_emailInvoice($email, $message)
     $ci->member->simpan_email($dataEmail);
 }
 
-function simpan_email($emailTujuan,$username,$password)
+function simpan_email($emailTujuan,$password)
 {
 	$ci = get_instance();
 	$hosting = $ci->m_daftar->getCompany()->nama_hosting;
 	$companyEmail = $ci->m_daftar->get_companyEmail()->email_hosting;
 	$message = "
 							Selamat anda telah berhasil mendaftar akun di adrihost.com , berikut informasi akun anda:<br><br>
-							Username: " . $username . " <br>
+							Username: " . $emailTujuan . " <br>
 							Password: " . $password . " <br><br>
 							Anda bisa login di " . $hosting . "<br><br>
 							Regards<br>
@@ -66,7 +66,7 @@ function simpan_email($emailTujuan,$username,$password)
 		'status' => 2
 	);
 	//simpan data ke tbemail
-	$this->m_daftar->simpan_email($dataEmail);
+	$ci->m_daftar->simpan_email($dataEmail);
 }
 function konversiTanggal($date)
 {

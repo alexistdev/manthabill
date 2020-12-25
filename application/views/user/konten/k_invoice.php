@@ -19,7 +19,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
 
@@ -44,8 +43,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <h3 class="text-center">Detail Invoice</h3>
                             <hr>
                             <dl>
-                                <dt>INVOICE: #<?php echo htmlentities(strtoupper($NoInvoice), ENT_QUOTES, 'UTF-8'); ?></dt>
-                                <dd>Total : Rp. <?php echo htmlentities(number_format($totalBiaya, 0, ",", "."), ENT_QUOTES, 'UTF-8'); ?>,- </dd>
+                                <dt>INVOICE: #<?= cetak(strtoupper($NoInvoice)); ?></dt>
+                                <dd>Total : Rp. <?= cetak(number_format($totalBiaya, 0, ",", ".")); ?>,- </dd>
+								<dd>Nama Produk: <?= cetak($namaProduk); ?></dd>
                                 <div class="callout callout-danger mt-5">
                                     <dt>BERITA</dt>
                                     <dd>
@@ -59,9 +59,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </div>
                                 <dt>Data Bank</dt>
                                 <dd>
-                                    BCA KCU Yogyakarta <br>
-                                    No. Rek. 123456789 <br>
-                                    a/n Alexsander Hendra Wijaya
+                                    <?= cetak($namaBank); ?> <br>
+                                    No.Rek <?= cetak($nomorRekening); ?> <br>
+                                    A/n. <?= cetak($namaPemilikRekening); ?>
                                 </dd>
                             </dl>
                         </div>
@@ -83,8 +83,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <li>
                                 <dl>
                                     <dt>SMS</dt>
-                                    <dd>Kirimkan SMS ke nomor <?php echo htmlentities($telpHosting, ENT_QUOTES, 'UTF-8'); ?> dengan format berikut :</dd>
-                                    <dd><?php echo $formatSMS; ?>
+                                    <dd>Kirimkan SMS ke nomor <?= cetak($telpHosting); ?> dengan format berikut :</dd>
+                                    <dd><?= $formatSMS; ?>
                                     </dd>
                                 </dl>
                             </li>
@@ -94,7 +94,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                         <a href="<?= base_url('invoice') ?>" class="btn btn-block btn-warning btn-lg">Halaman Invoice</a>
                     </div>
-
                 </div>
 
                 <!-- END BOX KANAN -->

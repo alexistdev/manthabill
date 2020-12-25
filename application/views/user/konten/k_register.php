@@ -61,4 +61,4 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="col-md-12 mt-3">
   Sudah Memiliki Akun?
 </div>
-<a href="login"><button type="submit" class="btn btn-primary btn-block btn-flat">Login</button></a>
+<a href="../login"><button type="submit" class="btn btn-primary btn-block btn-flat">Login</button></a>

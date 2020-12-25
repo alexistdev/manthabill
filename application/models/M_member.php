@@ -43,6 +43,11 @@ class M_member extends CI_Model
         $hasil = $this->db->get('tbinvoice');
         return $hasil->row();
     }
+    public function getInfoBank()
+	{
+		$hasil = $this->db->get('tbsetting');
+		return $hasil->row();
+	}
     public function getTld($idTld)
     {
         $this->db->where('id_tld', $idTld);

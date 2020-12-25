@@ -3,6 +3,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Daftar extends CI_Controller
 {
+	public $form_validation;
+	public $session;
+	public $m_daftar;
+	public $load;
+	public $input;
+	public $security;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -30,12 +37,12 @@ class Daftar extends CI_Controller
 		return $image;
 	}
 
-	public function check_captcha($string)
+	public function _check_captcha($string)
 	{
 		if ($string == $this->session->userdata('captchaword')) {
 			return TRUE;
 		} else {
-			$this->form_validation->set_message('check_captcha', 'Captcha yang anda masukkan salah!');
+			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
 			return FALSE;
 		}
 	}
@@ -79,7 +86,7 @@ class Daftar extends CI_Controller
 		$this->form_validation->set_rules(
 			'captcha',
 			'Captcha',
-			'trim|callback_check_captcha|required',
+			'trim|callback__check_captcha|required',
 			[
 				'required' => 'Captcha harus diisi!'
 			]
@@ -104,14 +111,16 @@ class Daftar extends CI_Controller
 				'ip' => $ip,
 				'status' => 2
 			);
-			//proses simpan data user
+			//proses simpan data ke tabel tbuser
 			$idIduser = $this->m_daftar->simpan_daftar($dataPengguna);
-			//menyimpan data ke detail/profil user
+
+			//menyimpan data ke detail/profil user ke tabel tbdetailuser
 			$dataDetail = array(
-				'id_user' => $idIduser
+				'id_user' => $idIduser,
+				'gambar' => 'default.jpg'
 			);
 			$this->m_daftar->simpan_detail($dataDetail);
-
+			simpan_email($email,$password);
 			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
 			redirect('login');
 		}
@@ -151,9 +160,12 @@ class Daftar extends CI_Controller
 	}
 	public function get_csrf()
 	{
-		$csrf['csrf_name'] = $this->security->get_csrf_token_name();
-		$csrf['csrf_token'] = $this->security->get_csrf_hash();
-
-		echo json_encode($csrf);
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+			$csrf['csrf_name'] = $this->security->get_csrf_token_name();
+			$csrf['csrf_token'] = $this->security->get_csrf_hash();
+			echo json_encode($csrf);
+		} else {
+			redirect('Login');
+		}
 	}
 }

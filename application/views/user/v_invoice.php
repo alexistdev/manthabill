@@ -11,7 +11,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="wrapper">
         <?php $this->load->view('user/template/navbar_v') ?>
         <?php $this->load->view('user/template/sidebar_v') ?>
-        <?php $this->load->view('user/k_invoice') ?>
+        <?php $this->load->view('user/konten/k_invoice') ?>
         <?php $this->load->view('user/template/footer_v') ?>
     </div>
 

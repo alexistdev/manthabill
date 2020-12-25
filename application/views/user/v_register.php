@@ -49,7 +49,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                 <!-- END PESAN -->
 
                 <!-- START FORM -->
-                <?php $this->load->view('user/k_register'); ?>
+                <?php $this->load->view('user/konten/k_register'); ?>
                 <!-- END FORM -->
 
 
@@ -73,6 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     });
                 }, 3000);
             });
+            /** Jquery untuk checkbox dari adminlte */
             $(function() {
                 $('input').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
@@ -80,6 +81,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     increaseArea: '20%' /* optional */
                 });
             });
+            /** Ajax untuk generate CSRF setiap kali mengecek email */
             $(document).ready(function() {
 				function generate_csrf()
 				{
@@ -95,6 +97,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 						}
 					});
 				}
+				/** Ajax untuk mengecek email apakah sudah ada atau belum */
                 $('#email').change(function() {
 					var csrfName = $('.token_csrf').attr('name');
 					var csrfHash = $('.token_csrf').val();
@@ -129,7 +132,6 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                 });
 
             });
-
         </script>
 </body>
 
