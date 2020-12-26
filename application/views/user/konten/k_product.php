@@ -63,10 +63,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <li>Rp.<?php echo htmlentities($harga, ENT_QUOTES, 'UTF-8'); ?>,-/bulan</li>
                                                     <li><?php echo htmlentities($kapasitas, ENT_QUOTES, 'UTF-8'); ?> Disk Space</li>
                                                     <li><?php echo htmlentities($bandwith, ENT_QUOTES, 'UTF-8'); ?> Bandwith</li>
-                                                    <li><?php echo htmlentities($addon, ENT_QUOTES, 'UTF-8'); ?> Addon</li>
-                                                    <li><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8'); ?> Email</li>
-                                                    <li><?php echo htmlentities($dbase, ENT_QUOTES, 'UTF-8'); ?> Database</li>
-                                                    <li><?php echo htmlentities($ftp, ENT_QUOTES, 'UTF-8'); ?> FTP Account</li>
+													<?php if ($addon != "") { ?>
+                                                    	<li><?php echo htmlentities($addon, ENT_QUOTES, 'UTF-8'); ?> Addon</li>
+													<?php }; ?>
+													<?php if ($email != "") { ?>
+                                                    	<li><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8'); ?> Email</li>
+													<?php }; ?>
+													<?php if ($dbase != "") { ?>
+                                                    	<li><?php echo htmlentities($dbase, ENT_QUOTES, 'UTF-8'); ?> Database</li>
+													<?php }; ?>
+													<?php if ($ftp != "") { ?>
+                                                    	<li><?php echo htmlentities($ftp, ENT_QUOTES, 'UTF-8'); ?> FTP Account</li>
+													<?php }; ?>
                                                     <?php if ($pil1 != "") { ?>
                                                         <li><?php echo htmlentities($pil1, ENT_QUOTES, 'UTF-8'); ?></li>
                                                     <?php }; ?>
@@ -79,8 +87,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <?php if ($pil4 != "") { ?>
                                                         <li><?php echo htmlentities($pil4, ENT_QUOTES, 'UTF-8'); ?></li>
                                                     <?php }; ?>
-                                                    <li>CageFS</li>
-                                                    <li>Support 24 jam</li>
                                                 </ul>
                                                 <a href="<?php echo base_url('product/beli/' . $idProduct); ?>"><button type="button" class="btn btn-block btn-primary btn-sm">Beli</button></a>
                                             </div>
@@ -131,10 +137,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <li>Rp.<?php echo htmlentities($harga, ENT_QUOTES, 'UTF-8'); ?>,-/bulan</li>
                                                     <li><?php echo htmlentities($kapasitas, ENT_QUOTES, 'UTF-8'); ?> Disk Space</li>
                                                     <li><?php echo htmlentities($bandwith, ENT_QUOTES, 'UTF-8'); ?> Bandwith</li>
-                                                    <li><?php echo htmlentities($addon, ENT_QUOTES, 'UTF-8'); ?> Addon</li>
-                                                    <li><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8'); ?> Email</li>
-                                                    <li><?php echo htmlentities($dbase, ENT_QUOTES, 'UTF-8'); ?> Database</li>
-                                                    <li><?php echo htmlentities($ftp, ENT_QUOTES, 'UTF-8'); ?> FTP Account</li>
+													<?php if ($addon != "") { ?>
+                                                    	<li><?php echo htmlentities($addon, ENT_QUOTES, 'UTF-8'); ?> Addon</li>
+													<?php }; ?>
+													<?php if ($email != "") { ?>
+                                                    	<li><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8'); ?> Email</li>
+													<?php }; ?>
+													<?php if ($dbase != "") { ?>
+                                                    	<li><?php echo htmlentities($dbase, ENT_QUOTES, 'UTF-8'); ?> Database</li>
+													<?php }; ?>
+													<?php if ($ftp != "") { ?>
+                                                    	<li><?php echo htmlentities($ftp, ENT_QUOTES, 'UTF-8'); ?> FTP Account</li>
+													<?php }; ?>
                                                     <?php if ($pil1 != "") { ?>
                                                         <li><?php echo htmlentities($pil1, ENT_QUOTES, 'UTF-8'); ?></li>
                                                     <?php }; ?>
@@ -147,8 +161,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <?php if ($pil4 != "") { ?>
                                                         <li><?php echo htmlentities($pil4, ENT_QUOTES, 'UTF-8'); ?></li>
                                                     <?php }; ?>
-                                                    <li>CageFS</li>
-                                                    <li>Support 24 jam</li>
+
                                                 </ul>
                                                 <a href="<?php echo base_url('product/beli/' . $idProduct); ?>"><button type="button" class="btn btn-block btn-primary btn-sm">Beli</button></a>
                                             </div>

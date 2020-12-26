@@ -222,7 +222,7 @@ class M_member extends CI_Model
     public function tampilService($idUser)
     {
         $this->db->where('id_user', $idUser);
-        $this->db->order_by('id_hosting', 'DESC');
+        $this->db->order_by('status_hosting', 'ASC');
         $hasil = $this->db->get('tbhosting');
         return $hasil;
     }
@@ -236,8 +236,11 @@ class M_member extends CI_Model
 
     public function tampil_detail_service($idHosting)
 	{
+		$this->db->from('tbhosting as b');
+		$this->db->join('tbproduct as a', 'a.id_product = b.id_product');
 		$this->db->where('id_hosting', $idHosting);
-		return $this->db->get('tbhosting');
+
+		return $this->db->get()->result_array();
 	}
 
     ##############################################################

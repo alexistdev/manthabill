@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 function cetak($str)
 {
-	echo htmlentities($str, ENT_QUOTES, 'UTF-8');
+	return htmlentities($str, ENT_QUOTES, 'UTF-8');
 }
 
 function filter_domain($nameDomain, $tldName)

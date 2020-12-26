@@ -13,26 +13,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<?php $this->load->view('user/konten/k_detailservice') ?>
 	<?php $this->load->view('user/template/footer_v') ?>
 </div>
-<script>
-	/** After window Load */
-	$(window).bind("load", function() {
-		window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function() {
-				$(this).remove();
-			});
-		}, 2000);
-	});
-	$(function() {
-		$('#tabelku').DataTable({
-			"paging": true,
-			"lengthChange": false,
-			"searching": false,
-			"ordering": true,
-			"info": true,
-			"autoWidth": false,
-		});
-	});
-</script>
 </body>
 
 </html>
