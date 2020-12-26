@@ -36,7 +36,7 @@ class Login extends CI_Controller{
 			redirect("staff/admin");
 		}else{
 			$this->session->set_flashdata('item', array('pesan' => 'username atau password salah'));  
-			redirect("login");
+			redirect("staff/login");
 		}	
 	}
 	

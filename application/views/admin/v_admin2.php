@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-<?php $this->load->view('admin/template/header');?>
+<head>
+	<?php $this->load->view('admin/template/header');?>
+</head>
+
 <body>
 <?php $this->load->view('admin/template/topheader');?>
 <?php $this->load->view('admin/template/menu_kedua');?>
@@ -86,9 +89,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     
   </div>
 </div>
-<div class="row-fluid">
-  <div id="footer" class="span12"> 2012 &copy; Marutii Admin. Brought to you by <a href="http://themedesigner.in">Themedesigner.in</a> </div>
-</div>
+<!-- Footer -->
+<?php $this->load->view('admin/template/footer');?>
+<!-- /Footer -->
 
 
 <script src="<?php echo base_url('assets/admin2/js/excanvas.min.js');?>"></script> 

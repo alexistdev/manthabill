@@ -61,9 +61,7 @@
 <div class="account-container">
 	
 	<div class="content clearfix">
-		
-		<form action="<?php echo base_url('staff/login/aksi_login');?>" method="post">
-		
+		<?= form_open('staff/login/aksi_login') ?>
 			<h1>Admin Login</h1>		
 			
 			<div class="login-fields">
@@ -72,12 +70,12 @@
 				
 				<div class="field">
 					<label for="username">Username</label>
-					<input type="text" id="username" name="username" value="" placeholder="Username" class="login username-field" />
+					<?= form_input(['name' => 'username', 'id'=>'username', 'type' => 'text', 'class' => 'login username-field', 'placeholder' => 'Username', 'required' => 'required']); ?>
 				</div> <!-- /field -->
 				
 				<div class="field">
 					<label for="password">Password:</label>
-					<input type="password" id="password" name="password" value="" placeholder="Password" class="login password-field"/>
+					<?= form_input(['name' => 'password', 'id'=>'password', 'type' => 'password', 'class' => 'login password-field', 'placeholder' => 'Password', 'required' => 'required']); ?>
 				</div> <!-- /password -->
 				
 			</div> <!-- /login-fields -->
@@ -88,14 +86,12 @@
 					<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
 					<label class="choice" for="Field">Keep me signed in</label>
 				</span>
-									
-				<input type="submit" class="button btn btn-success btn-large" value="Sign In">
-				
+				<?= form_input(['name' => 'submit', 'type' => 'submit', 'class' => 'button btn btn-success btn-large', 'value' => 'Masuk']); ?>
 			</div> <!-- .actions -->
-			
-			
-			
-		</form>
+
+
+
+		<?= form_close() ?>
 		
 	</div> <!-- /content -->
 	

@@ -43,7 +43,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <thead>
                 <tr>
 				  <th>No.</th>
-                  <th>Username</th>
                   <th>Email</th>
                   <th>Tanggal Daftar</th>
                   <th>Aksi</th>
@@ -54,7 +53,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					$no=1;
 					foreach($data->result_array() as $row):
 							$idUser=$row['id_user'];
-							$username=$row['username'];
 							$email=$row['email'];
 							$dateCreate = $row['date_create'];
 							$newDate = date("d-m-Y",strtotime($dateCreate));
@@ -65,33 +63,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			  ?>
                 <tr class="gradeX">
 				  <td><?php echo htmlentities($no++, ENT_QUOTES, 'UTF-8');?></td>
-                  <td><?php echo htmlentities($username, ENT_QUOTES, 'UTF-8');?></td>
                   <td><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8');?></td>
                   <td><?php echo htmlentities($newDate, ENT_QUOTES, 'UTF-8');?></td>
                   <td width="20%" >
 				  <a href="<?php echo site_url('staff/admin/detail_user/'.$idUser); ?>" class="btn btn-primary">Detail</a>
 				  
-				  <a href="#myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?><?php echo htmlentities($username, ENT_QUOTES, 'UTF-8');?>" data-toggle="modal" class="btn btn-danger">Hapus</a>
+				  <a href="#myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?>" data-toggle="modal" class="btn btn-danger">Hapus</a>
 				  </td>
                 </tr>
-				<div id="myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?><?php echo htmlentities($username, ENT_QUOTES, 'UTF-8');?>" class="modal hide">
-					<div class="modal-header">
-						<button data-dismiss="modal" class="close" type="button">×</button>
-						<h3>Perhatian!!</h3>
-					</div>
-					<div class="modal-body">
-						<p>Apakah ingin menghapus data user <strong><font color="red"><?php echo htmlentities(strtoupper($username), ENT_QUOTES, 'UTF-8');?></font></strong> ?</p>
-					</div>
-					<div class="modal-footer"> <a  class="btn btn-primary" href="<?php echo site_url('staff/admin/hapus_user/'.$idUser); ?>">Confirm</a> <a data-dismiss="modal" class="btn" href="#">Cancel</a> </div>
-				</div>
+
+
 			  <?php endforeach; ?>
               </tbody>
 			
             </table>
           
-        <!--END TABLE-->  
-				
+        <!--END TABLE-->
+		<!--	Modal HAPUS		-->
+			<div id="myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?>" class="modal hide">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button">×</button>
+					<h3>Perhatian!!</h3>
+				</div>
+				<div class="modal-body">
+					<p>Apakah ingin menghapus data user <strong><font color="red"><?php echo htmlentities(strtoupper($email), ENT_QUOTES, 'UTF-8');?></font></strong> ?</p>
+				</div>
+				<div class="modal-footer"> <a  class="btn btn-primary" href="<?php echo site_url('staff/admin/hapus_user/'.$idUser); ?>">Confirm</a> <a data-dismiss="modal" class="btn" href="#">Cancel</a> </div>
+			</div>
         </div>
+	<!--	END MODAL HAPUS-->
     </div>   
   </div>
 </div>

@@ -19,17 +19,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 					<div class="widget-content nopadding">
 						<div class="control-group">											
-							<label class="control-label" >Username<span style="color:red">*</span></label>
-							<div id="err" class="controls">
-								<input type="text"  id="username" class="span4" name="username" placeholder="Example" required="required">
-								<span id="username_result"></span>
-								<p>Panjang karakter minimal 4.</p>
-							</div> 				
-						</div>				
-						<div class="control-group">											
 							<label class="control-label" >Email<span style="color:red">*</span></label>
 							<div id="err2" class="controls">
-								<input type="email" id="email" class="span6" name="email" placeholder="john.smith@gmail.com" required="required">
+								<input type=
+									   "email" id="email" class="span6" name="email" placeholder="john.smith@gmail.com" required="required">
 								<span id="email_result"></span>
 							</div>				
 						</div>

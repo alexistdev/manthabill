@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Admin extends CI_Controller {
 
 	/**
-	 * ManthaBill V.1.0
+	 * ManthaBill V.2.0
 	 *
 	 * Software Billing ini ditujukan untuk pemula hoster
 	 * Low Budget dan ingin memulai usaha selling hosting.
@@ -44,7 +44,7 @@ class Admin extends CI_Controller {
 	#                               Ini adalah menu User                                      #
 	#                                                                                         #
 	###########################################################################################
-	function user(){
+	public function user(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
 		if ($hashKey==0){
