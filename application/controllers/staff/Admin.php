@@ -15,7 +15,7 @@ class Admin extends CI_Controller {
 	 * Software ini gratis.Namun jika anda ingin support pengembangan software ini
 	 * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
 	 * 
-	 * Dukungan anda sangat membantu pengembangan produk dalam negeri.
+	 * Terimakasih atas dukungan anda.
 	 * 
 	 */
 	public $load;
@@ -627,5 +627,15 @@ class Admin extends CI_Controller {
 		} else{
 			$this->load->view('admin/v_admin');
 		}
+	}
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu License                                     #
+	#                                                                                         #
+	###########################################################################################
+
+	public function lisense
+	{
+		$this->load->view('admin/v_admin');
 	}
 }

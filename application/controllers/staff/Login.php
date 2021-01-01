@@ -1,16 +1,40 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
+
 class Login extends CI_Controller{
-	function __construct(){
+	public function __construct(){
 		parent:: __construct();
 		$this->load->model('m_admin');
 		$this->load->helper('captcha');
 		$this->load->library('encryption');
 	}
-	function index(){
-		$this->load->view('admin/login/v_login');
+	public function index(){
+		$data['title'] = 'Login Administrator | Manthabill';
+		$view = "v_login2";
+		$this->_template($data,$view);
 	}
+
+	private function _template($data, $view)
+	{
+		$this->load->view('admin/login/' . $view, $data);
+	}
+
 	function aksi_login(){
 		$username = $this->input->post('username');
 		$password = sha1($this->input->post('password'));
