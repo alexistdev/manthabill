@@ -128,22 +128,6 @@ class Daftar extends CI_Controller
 
 	###########################################################################
 	#                                                                         #
-	#                       Validasi Username dengan Ajax                        #
-	###########################################################################
-	public function checkUsername()
-	{
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$userName = $this->input->post("username");
-			$cekUser = $this->m_daftar->CekName($userName);
-			if ($cekUser > 0) {
-				echo "ok";
-			}
-		} else {
-			redirect('daftar');
-		}
-	}
-	###########################################################################
-	#                                                                         #
 	#                       Validasi Email dengan Ajax                        #
 	###########################################################################
 	public function checkEmail()
@@ -158,6 +142,7 @@ class Daftar extends CI_Controller
 			redirect('daftar');
 		}
 	}
+
 	public function get_csrf()
 	{
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {

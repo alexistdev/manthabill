@@ -18,11 +18,23 @@ class Admin extends CI_Controller {
 	 * Dukungan anda sangat membantu pengembangan produk dalam negeri.
 	 * 
 	 */
-	function __construct(){
+	public $load;
+	public $session;
+	public $m_admin;
+	public $input;
+	public $form_validation;
+	public $email;
+
+	public function __construct(){
 		parent:: __construct();
 		$this->load->model('m_admin');
 		$this->load->helper('form');
 		$this->load->library('form_validation');
+	}
+
+	private function _template($data, $view)
+	{
+		$this->load->view('admin/' . $view, $data);
 	}
 
 	public function index()
@@ -32,39 +44,61 @@ class Admin extends CI_Controller {
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$this->load->view('admin/v_admin2');
+			$data['title'] = "Dashboard | Manthabill";
+			$view = "v_admin2";
+			$this->_template($data, $view);
 		}
 	}
-	function logout(){
+	public function logout(){
 		$this->session->sess_destroy();
 		redirect(base_url('staff/login'));
 	}
+
 	###########################################################################################
 	#                                                                                         #
 	#                               Ini adalah menu User                                      #
 	#                                                                                         #
 	###########################################################################################
+
 	public function user(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$x['data'] = $this->m_admin->tampil_user();
-			$this->load->view('admin/v_user',$x);
+			$data['data'] = $this->m_admin->tampil_user();
+			$data['title'] = "Dashboard | Manthabill";
+			$view ='v_user';
+			$this->_template($data,$view);
 		}
 	}
-	function tambah_user(){
+
+	/**
+	 *
+	 * Method untuk menambahkan user !
+	 *
+	 */
+
+	public function tambah_user(){
 		$this->load->helper('url');
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$this->load->view('admin/v_tambahuser');
+			$data['title'] = "Dashboard | Manthabill";
+			$view ='v_tambahuser';
+			$this->_template($data,$view);
 		}
 	}
-	function detail_user($id=null){
+
+	/**
+	 *
+	 * Menampilkan halaman detail user !
+	 *
+	 */
+
+	public function detail_user($id=null){
 		$cekDetail = $this->m_admin->cekDetailUser($id);
 		if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 			redirect('staff/admin/user');
@@ -91,28 +125,12 @@ class Admin extends CI_Controller {
 			}
 		}
 	}
-	//menyimpan data user melalui form tambah user
-	//Ini adalah mengecek user suda ada atau belum dengan AJAX
-	/*========================================*/
-	
-	function checkUsername(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-				$userName = $this->input->post("username");
-				$cekUser = $this->m_admin->CekName($userName);
-				if ($cekUser > 0){
-					echo "ok";
-				} 
-			} else {
-				redirect('staff/admin/user');
-			}
-		}
-	}
-	function checkEmail(){
+
+	/**
+	 * Mengecek Email user apakah sudah terdaftar sebelumnya !
+	 */
+
+	public function checkEmail(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
 		if ($hashKey==0){
@@ -129,10 +147,28 @@ class Admin extends CI_Controller {
 			}
 		}
 	}
-	
-	
-	/*========================================*/
-	function simpan_user(){
+
+	/**
+	 * Pemanggilan di fungsi ajax untuk mengirimkan token CSRF !
+	 */
+
+	public function get_csrf()
+	{
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+			$csrf['csrf_name'] = $this->security->get_csrf_token_name();
+			$csrf['csrf_token'] = $this->security->get_csrf_hash();
+			echo json_encode($csrf);
+		} else {
+			redirect('Login');
+		}
+	}
+
+	/**
+	 * Method untuk menyimpan data user yang dikirimkan melalui Form Tambah User !
+	 *
+	 */
+
+	public function simpan_user(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
 		if ($hashKey==0){

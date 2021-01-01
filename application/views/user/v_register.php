@@ -98,7 +98,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 					});
 				}
 				/** Ajax untuk mengecek email apakah sudah ada atau belum */
-                $('#email').change(function() {
+                $('#email').blur(function() {
 					var csrfName = $('.token_csrf').attr('name');
 					var csrfHash = $('.token_csrf').val();
 					var email = $('#email').val();
