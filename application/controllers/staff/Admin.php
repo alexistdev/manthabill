@@ -28,8 +28,6 @@ class Admin extends CI_Controller {
 	public function __construct(){
 		parent:: __construct();
 		$this->load->model('m_admin');
-		$this->load->helper('form');
-		$this->load->library('form_validation');
 	}
 
 	private function _template($data, $view)
@@ -45,7 +43,7 @@ class Admin extends CI_Controller {
 			redirect('staff/login');
 		} else{
 			$data['title'] = "Dashboard | Manthabill";
-			$view = "v_admin2";
+			$view = "v_admin";
 			$this->_template($data, $view);
 		}
 	}
@@ -66,7 +64,7 @@ class Admin extends CI_Controller {
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$data['data'] = $this->m_admin->tampil_user();
+			$data['dataUser'] = $this->m_admin->tampil_user();
 			$data['title'] = "Dashboard | Manthabill";
 			$view ='v_user';
 			$this->_template($data,$view);
@@ -98,7 +96,8 @@ class Admin extends CI_Controller {
 	 *
 	 */
 
-	public function detail_user($id=null){
+	public function detail_user($idx=null){
+		$id = decrypt_url($idx);
 		$cekDetail = $this->m_admin->cekDetailUser($id);
 		if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 			redirect('staff/admin/user');

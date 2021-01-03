@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed'); ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
@@ -14,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?= cetak($title) ?> | Log in</title>
-	<meta name="description" content="AdriHost WebHosting Solution">
+	<meta name="description" content="Manthabill Hosting Billing System">
 	<meta name="author" content="AlexistDev">
 	<link rel="icon" href="<?= base_url('assets/img/') ?>myicon.png">
 	<!-- Tell the browser to be responsive to screen width -->

@@ -1,97 +1,71 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div id="content">
-  <div id="content-header">
-    <div id="breadcrumb"> <a href="<?php echo base_url('staff/admin');?>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a><a href="#" class="current">Managemen User</a></div>
-	 <h1>Daftar User</h1>
-  </div>
-  
-  <div class="container-fluid">
-	<div class="row">
-		<div class="span4">
-			<a href="<?php echo site_url('staff/admin/tambah_user'); ?>" class="btn btn-primary" >Tambah Data</a>
-		</div>
-		<div class="span12">
-		<!-- START PESAN -->
-					<?php if (!empty($pesan = $this->session->flashdata('item'))){;?>
-						<div class="alert alert-success">
-							<strong>SUKSES!</strong> <?php $pesan = $this->session->flashdata('item');echo $pesan['pesan'];?>.
-						</div>
-					<?php } else { ;?>
-						<div></div>
-					<?php } ;?>
-					<!-- END PESAN -->
-					
-					<!-- START SUBMIT FORM PESAN -->
-					<?php if (!empty($keren = $this->session->flashdata('item2'))){;?>
-						<div class="alert alert-danger">
-							<strong>ALERT!</strong> <?php $keren=$this->session->flashdata('item2');echo $keren['pesan2'];?>
-						</div>
-					<?php } else { ;?>
-						<div></div>
-					<?php } ;?>
-					<span id="pesan"></span>
-					<!-- END SUBMIT FORM PESAN -->
-		</div>
-	</div>
-	
-    <div class="row-fluid">
-		<div class="span12"> 
-        <!--START TABLE-->
-            <table id="example" class="table table-bordered table-striped">
-              <thead>
-                <tr>
-				  <th>No.</th>
-                  <th>Email</th>
-                  <th>Tanggal Daftar</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-			  <?php 
-					$no=1;
-					foreach($data->result_array() as $row):
-							$idUser=$row['id_user'];
-							$email=$row['email'];
-							$dateCreate = $row['date_create'];
-							$newDate = date("d-m-Y",strtotime($dateCreate));
-							$namaDepan=$row['nama_depan'];
-							$namaBelakang=$row['nama_belakang'];
-							$namaLengkap = $namaDepan." ".$namaBelakang;
-							
-			  ?>
-                <tr class="gradeX">
-				  <td><?php echo htmlentities($no++, ENT_QUOTES, 'UTF-8');?></td>
-                  <td><?php echo htmlentities($email, ENT_QUOTES, 'UTF-8');?></td>
-                  <td><?php echo htmlentities($newDate, ENT_QUOTES, 'UTF-8');?></td>
-                  <td width="20%" >
-				  <a href="<?php echo site_url('staff/admin/detail_user/'.$idUser); ?>" class="btn btn-primary">Detail</a>
-				  
-				  <a href="#myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?>" data-toggle="modal" class="btn btn-danger">Hapus</a>
-				  </td>
-                </tr>
-
-
-			  <?php endforeach; ?>
-              </tbody>
-			
-            </table>
-          
-        <!--END TABLE-->
-		<!--	Modal HAPUS		-->
-			<div id="myAlert<?php echo htmlentities($idUser, ENT_QUOTES, 'UTF-8');?>" class="modal hide">
-				<div class="modal-header">
-					<button data-dismiss="modal" class="close" type="button">×</button>
-					<h3>Perhatian!!</h3>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>Clients</h1>
 				</div>
-				<div class="modal-body">
-					<p>Apakah ingin menghapus data user <strong><font color="red"><?php echo htmlentities(strtoupper($email), ENT_QUOTES, 'UTF-8');?></font></strong> ?</p>
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="<?= base_url('staff/Admin') ?>">Home</a></li>
+						<li class="breadcrumb-item active">Clients</li>
+					</ol>
 				</div>
-				<div class="modal-footer"> <a  class="btn btn-primary" href="<?php echo site_url('staff/admin/hapus_user/'.$idUser); ?>">Confirm</a> <a data-dismiss="modal" class="btn" href="#">Cancel</a> </div>
 			</div>
-        </div>
-	<!--	END MODAL HAPUS-->
-    </div>   
-  </div>
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<!-- Small boxes (Stat box) -->
+			<div class="row">
+				<!-- Khusus Personal Hosting -->
+				<div class="col-md-12">
+					<div class="card card-dark">
+						<div class="card-header">
+							<h3 class="card-title">Daftar Clients Hosting</h3>
+							<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button>
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body">
+							<table id="tabelUser" class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">No</th>
+										<th class="text-center">Email</th>
+										<th class="text-center">Tanggal Daftar</th>
+										<th class="text-center">Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php
+									$no =1;
+									foreach ($dataUser->result_array() as $row) :
+										$dateCreate = cetak($row['date_create']);
+										?>
+									<tr>
+										<td class="text-center"><?= cetak($no++); ?></td>
+										<td class="text-center"><?= cetak($row['email']) ?></td>
+										<td class="text-center"><?= cetak(date("d-m-Y",strtotime($dateCreate))) ?></td>
+										<td class="text-center">
+											<a class="btn btn-primary btn-sm" href='<?= base_url("staff/admin/detail_user/" . encrypt_url($row['id_user'])); ?>'>Detail</a>
+											<a href="#myAlert" data-toggle="modal" class="btn btn-danger btn-sm">Hapus</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+	</section>
+	<!-- /.content -->
+
 </div>
+<!-- /.content-wrapper -->
