@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
-<?= form_open('staff/login/aksi_login') ?>
+<?= form_open('staff/login') ?>
 	<div class="input-group mb-3">
 		<?= form_input(['name' => 'username', 'id'=>'username', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Username', 'required' => 'required']); ?>
 
@@ -22,7 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 	<div class="row">
 		<div class="col-md-6">
-
+			<?= $image; ?>
 		</div>
 		<div class="col-md-6">
 			<?= form_input(['name' => 'captcha', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'captcha', 'required' => 'required']); ?>
@@ -36,10 +36,5 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 <?= form_close() ?>
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-	<input type="hidden" name="cmd" value="_s-xclick">
-	<input type="hidden" name="hosted_button_id" value="Y69TVF3TQB7BQ">
-	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-	<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
+
 

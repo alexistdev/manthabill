@@ -16,7 +16,7 @@ class Login extends CI_Controller
 		}
 	}
 
-	//khusus membuat captcha dan cek validasi captcha
+	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
 		$config = array(
@@ -34,6 +34,20 @@ class Login extends CI_Controller
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
 	}
+
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
+	public function _check_captcha($string)
+	{
+		if ($string == $this->session->userdata('captchaword')) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
+			return FALSE;
+		}
+	}
+
+
+
 	//validasi mengecek email apakah sudah terdaftar
 	public function _check_email($email)
 	{
@@ -45,16 +59,7 @@ class Login extends CI_Controller
 			return false;
 		}
 	}
-	//validasi untuk mengecek captcha apakah sudah benar
-	public function _check_captcha($string)
-	{
-		if ($string == $this->session->userdata('captchaword')) {
-			return TRUE;
-		} else {
-			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
-			return FALSE;
-		}
-	}
+
 
 
 	public function index()

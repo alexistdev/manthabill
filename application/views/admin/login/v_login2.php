@@ -30,34 +30,40 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <body class="hold-transition login-page bg-dark">
 <div class="login-box">
 	<div class="login-logo">
-		Login <b><?= cetak($title) ?></b>
+		Login Administrator</b>
 	</div>
 	<div class="card">
 		<div class="card-body login-card-body">
 			<!-- START PESAN -->
-			<p class="login-box-msg">
-				<?php
-				echo $this->session->flashdata('pesan');
-				echo $this->session->flashdata('pesan2');
-				echo $this->session->flashdata('pesan3');
-				?>
-			</p>
+			<div class="row">
+				<div class="col-md-12">
+					<p class="login-box-msg">
+						<?php
+						echo $this->session->flashdata('pesan');
+						echo $this->session->flashdata('pesan2');
+						echo $this->session->flashdata('pesan3');
+						?>
+					</p>
+				</div>
+			</div>
 			<!-- END PESAN -->
 
 			<!-- START FORM -->
-			<?php $this->load->view('admin/login/k_login'); ?>
+			<div class="row">
+				<div class="col-md-12">
+					<?php $this->load->view('admin/login/k_login'); ?>
+				</div>
+			</div>
 			<!-- END FORM -->
 
-			<!-- START LUPA PASSWORD DAN REGISTER -->
-			<p class="mb-1">
-				<a href="<?php echo base_url('reset_password'); ?>">Lupa Password</a><br>
-			</p>
-			<p class="mb-0">
-				<a href="<?php echo base_url('daftar'); ?>" class="text-center">Daftar Akun Baru</a>
-			</p>
-			<!-- END LUPA PASSWORD DAN REGISTER -->
+			<div class="row">
+				<div class="col-md-12">
+					<span class="text-muted"><small>Manthabill v.2.0</small></span>
+				</div>
+			</div>
 		</div>
 	</div>
+
 
 
 </div>

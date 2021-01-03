@@ -619,6 +619,7 @@ class Admin extends CI_Controller {
 			$this->load->view('admin/v_admin');
 		}
 	}
+
 	function setting(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->m_admin->get_token($hashSes);
@@ -634,7 +635,7 @@ class Admin extends CI_Controller {
 	#                                                                                         #
 	###########################################################################################
 
-	public function lisense
+	public function lisense()
 	{
 		$this->load->view('admin/v_admin');
 	}
