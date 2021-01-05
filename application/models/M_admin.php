@@ -54,7 +54,7 @@ class M_admin extends CI_Model{
 		$this->db->from("tbdetailuser as a");
 		$this->db->join("tbuser as b", "a.id_user = b.id_user");
 		$this->db->where("b.id_user", $idUser);
-		$detail = $this->db->get()->row();
+		$detail = $this->db->get();
 		return $detail;
 	}
 	function get_userHapus($idUserHapus){

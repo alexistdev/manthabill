@@ -18,27 +18,31 @@ class Admin extends CI_Controller {
 	 * Terimakasih atas dukungan anda.
 	 * 
 	 */
+
 	public $load;
 	public $session;
-	public $m_admin;
+	public $admin;
 	public $input;
 	public $form_validation;
 	public $email;
 
+	/** Method Construct untuk menginisiasi class Admin */
 	public function __construct(){
 		parent:: __construct();
-		$this->load->model('m_admin');
+		$this->load->model('m_admin', 'admin');
 	}
 
+	/** Template untuk memanggil view */
 	private function _template($data, $view)
 	{
 		$this->load->view('admin/' . $view, $data);
 	}
 
+	/** Method untuk halaman Admin */
 	public function index()
 	{
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
@@ -47,6 +51,8 @@ class Admin extends CI_Controller {
 			$this->_template($data, $view);
 		}
 	}
+
+	/** Method untuk logout */
 	public function logout(){
 		$this->session->sess_destroy();
 		redirect(base_url('staff/login'));
@@ -57,14 +63,16 @@ class Admin extends CI_Controller {
 	#                               Ini adalah menu User                                      #
 	#                                                                                         #
 	###########################################################################################
-
+	/**
+	 * Method yang mengatur halaman user !
+	 */
 	public function user(){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$data['dataUser'] = $this->m_admin->tampil_user();
+			$data['dataUser'] = $this->admin->tampil_user();
 			$data['title'] = "Dashboard | Manthabill";
 			$view ='v_user';
 			$this->_template($data,$view);
@@ -72,15 +80,13 @@ class Admin extends CI_Controller {
 	}
 
 	/**
-	 *
 	 * Method untuk menambahkan user !
-	 *
 	 */
 
 	public function tambah_user(){
 		$this->load->helper('url');
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
@@ -98,29 +104,34 @@ class Admin extends CI_Controller {
 
 	public function detail_user($idx=null){
 		$id = decrypt_url($idx);
-		$cekDetail = $this->m_admin->cekDetailUser($id);
+		$cekDetail = $this->admin->cekDetailUser($id);
 		if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 			redirect('staff/admin/user');
 		} else {
 			$this->load->helper('url');
 			$hashSes = $this->session->userdata('token');
-			$hashKey = $this->m_admin->get_token($hashSes);
-			$b['idUser'] = $id;
-			$b['username'] = $this->m_admin->tampil_detailUser($id)->username;
-			$b['email'] = $this->m_admin->tampil_detailUser($id)->email;
-			$b['namaDepan'] = $this->m_admin->tampil_detailUser($id)->nama_depan;
-			$b['namaBelakang'] = $this->m_admin->tampil_detailUser($id)->nama_belakang;
-			$b['telepon'] = $this->m_admin->tampil_detailUser($id)->phone;
-			$b['alamat'] = $this->m_admin->tampil_detailUser($id)->alamat;
-			$b['alamat2'] = $this->m_admin->tampil_detailUser($id)->alamat2;
-			$b['kodepos'] = $this->m_admin->tampil_detailUser($id)->kodepos;
-			$b['kota'] = $this->m_admin->tampil_detailUser($id)->kota;
-			$b['provinsi'] = $this->m_admin->tampil_detailUser($id)->provinsi;
-			$b['negara'] = $this->m_admin->tampil_detailUser($id)->negara;
+			$hashKey = $this->admin->get_token($hashSes);
+			$data['idUser'] = $id;
+			$detailUser = $this->admin->tampil_detailUser($id);
+			foreach($detailUser->result_array() as $row){
+				$data['username'] = $row['username'];
+				$data['email'] = $row['email'];
+				$data['namaDepan'] = $row['nama_depan'];
+				$data['namaBelakang'] = $row['nama_belakang'];
+				$data['telepon'] = $row['phone'];
+				$data['alamat'] = $row['alamat'];
+				$data['alamat2'] = $row['alamat2'];
+				$data['kodepos'] = $row['kodepos'];
+				$data['kota'] = $row['kota'];
+				$data['provinsi'] = $row['provinsi'];
+				$data['negara'] = $row['negara'];
+			}
 			if ($hashKey==0){
 				redirect('staff/login');
 			} else{
-				$this->load->view('admin/v_detailuser',$b);
+				$data['title'] = "Dashboard | Manthabill";
+				$view ='v_detailuser';
+				$this->_template($data,$view);
 			}
 		}
 	}
@@ -131,13 +142,13 @@ class Admin extends CI_Controller {
 
 	public function checkEmail(){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
 			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 				$email = $this->input->post("email");
-				$cekEmail = $this->m_admin->Cek_Email($email);
+				$cekEmail = $this->admin->Cek_Email($email);
 				if ($cekEmail > 0){
 					echo "ok";
 				} 
@@ -169,7 +180,7 @@ class Admin extends CI_Controller {
 
 	public function simpan_user(){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
@@ -201,7 +212,7 @@ class Admin extends CI_Controller {
 					'status' => 2
 				);
 				//memasukkan data ke tbdetailuser
-				$idpengguna = $this->m_admin->simpan($data);
+				$idpengguna = $this->admin->simpan($data);
 				$data2 = array(
 					'id_user' => $idpengguna,
 					'nama_depan' => $firstname,
@@ -214,7 +225,7 @@ class Admin extends CI_Controller {
 					'kodepos' => $kodepos,
 					'phone' => $telp
 				);
-				$this->m_admin->simpan2($data2);
+				$this->admin->simpan2($data2);
 				$json = array(
                 'success' => 0,
                 'message' => 'Error occured',
@@ -230,7 +241,7 @@ class Admin extends CI_Controller {
                     Admin- www.adrihost.com
                 ";
 				//simpan data ke tbemail untuk email customer
-				$companyEmail = $this->m_admin->get_companyEmail()->email_hosting;
+				$companyEmail = $this->admin->get_companyEmail()->email_hosting;
 				$dataEmail = array(
 								'email_pengirim' => $companyEmail,
 								'email_tujuan' => $email,
@@ -239,7 +250,7 @@ class Admin extends CI_Controller {
 								'status' => 2	
 				);
 							
-				$this->m_admin->simpan_email($dataEmail);
+				$this->admin->simpan_email($dataEmail);
 				//simpan data ke tbemail untuk email admin
 				$dataEmail2 = array(
 								'email_pengirim' => $companyEmail,
@@ -248,7 +259,7 @@ class Admin extends CI_Controller {
 								'email_pesan' => $message,
 								'status' => 2	
 				);
-				$this->m_admin->simpan_email($dataEmail2);
+				$this->admin->simpan_email($dataEmail2);
 				//pesan berhasil disimpan
 				$this->session->set_flashdata('item', array('pesan' => 'Data berhasil ditambahkan!'));
 				redirect('staff/admin/user');
@@ -296,8 +307,8 @@ class Admin extends CI_Controller {
 						'kodepos' => $kodepos,
 						'phone' => $telp
 					); 
-					$this->m_admin->user_update($data,$idUser);
-					$this->m_admin->user_update2($data2,$idUser);
+					$this->admin->user_update($data,$idUser);
+					$this->admin->user_update2($data2,$idUser);
 					$this->session->set_flashdata('item', array('pesan' => 'Data berhasil diperbaharui!'));
 					redirect('staff/admin/user');
 				}
@@ -307,16 +318,16 @@ class Admin extends CI_Controller {
 	}
 	function hapus_user($id=null){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		$getId = $this->m_admin->get_idHapus($id);
+		$hashKey = $this->admin->get_token($hashSes);
+		$getId = $this->admin->get_idHapus($id);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
 			if (($id =="") OR ($id ==NULL) OR ($getId==0)){
 				redirect('staff/admin/user');
 			}else{
-				$getName = $this->m_admin->get_userHapus($id)->username;
-				$this->m_admin->hapusUser($id);
+				$getName = $this->admin->get_userHapus($id)->username;
+				$this->admin->hapusUser($id);
 				$this->session->set_flashdata('item2', array('pesan2' => 'Data '.$getName.' berhasil dihapus!'));
 				redirect('staff/admin/user');
 			}
@@ -331,11 +342,11 @@ class Admin extends CI_Controller {
 	###########################################################################################
 	function hosting(){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$x['data'] = $this->m_admin->tampil_hosting();
+			$x['data'] = $this->admin->tampil_hosting();
 			$this->load->view('admin/v_hosting',$x);
 		}
 	}
@@ -343,17 +354,17 @@ class Admin extends CI_Controller {
 	//untuk mengaktifkan hosting
 	function aktif_hosting($idHosting=NULL){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		$user = $this->session->userdata('username');
 		$statusLogin = $this->session->userdata('loginadmin');
 		if (($hashKey>0) && ($user === $statusLogin) && ($user==="admin") ){
-			$cekIdHosting = $this->m_admin->cek_idHosting($idHosting);
+			$cekIdHosting = $this->admin->cek_idHosting($idHosting);
 			if(($idHosting=="") OR ($idHosting==NULL) OR ($cekIdHosting==0)){
 				redirect('staff/admin/hosting');
 			} else {
-				$idUser = $this->m_admin->get_idByHosting($idHosting)->id_user;
-				$emailPengirim = $this->m_admin->get_companyEmail()->email_hosting;
-				$emailTujuan = $this->m_admin->get_emailUser($idUser)->email;
+				$idUser = $this->admin->get_idByHosting($idHosting)->id_user;
+				$emailPengirim = $this->admin->get_companyEmail()->email_hosting;
+				$emailTujuan = $this->admin->get_emailUser($idUser)->email;
 				$userCpanel = $this->input->post("userCpanel");
 				$passCpanel = $this->input->post("passCpanel");
 				$subyek = "Layanan Hosting Anda telah diaktifkan";
@@ -376,7 +387,7 @@ class Admin extends CI_Controller {
 				$dataUpdate = array(
 					'status_hosting' => 1
 				);
-				$this->m_admin->aktifkan_hosting($idHosting, $dataUpdate);
+				$this->admin->aktifkan_hosting($idHosting, $dataUpdate);
 				$this->session->set_flashdata('pesanSukses', 'Hosting telah diaktifkan!');
 				redirect('staff/admin/hosting');
 			}
@@ -387,19 +398,19 @@ class Admin extends CI_Controller {
 	//detail informasi hosting
 	function detail_hosting($idHosting=NULL){
 		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
+		$hashKey = $this->admin->get_token($hashSes);
 		$user = $this->session->userdata('username');
 		$statusLogin = $this->session->userdata('loginadmin');
 		if (($hashKey>0) && ($user === $statusLogin) && ($user==="admin") ){
-			$cekIdHosting = $this->m_admin->cek_idHosting($idHosting);
+			$cekIdHosting = $this->admin->cek_idHosting($idHosting);
 			if(($idHosting=="") OR ($idHosting==NULL) OR ($cekIdHosting==0)){
 				redirect('staff/admin/hosting');
 			} else {
-				$idUser = $this->m_admin->getIdUserHosting($idHosting)->id_user;
+				$idUser = $this->admin->getIdUserHosting($idHosting)->id_user;
 				$b['terDaftar'] = date("d-M-Y",strtotime($this->m_admin->getDetailUser($idUser)->date_create));
 				$b['idUser'] = $idUser;
 				$b['idHosting'] = $idHosting;
-				$b['namaDepan'] = $this->m_admin->getDetailUser($idUser)->nama_depan;
+				$b['namaDepan'] = $this->admin->getDetailUser($idUser)->nama_depan;
 				$b['namaBelakang'] = $this->m_admin->getDetailUser($idUser)->nama_belakang;
 				$b['emailUser'] = $this->m_admin->getDetailUser($idUser)->email;
 				$b['detailHosting'] = $this->m_admin->getDetailHosting($idHosting);

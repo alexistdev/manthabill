@@ -66,6 +66,5 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</div>
 	</section>
 	<!-- /.content -->
-
 </div>
 <!-- /.content-wrapper -->
