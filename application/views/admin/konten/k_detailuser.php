@@ -71,7 +71,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<h4>Aksi</h4>
 									<ul class="list-group">
 										<li class="list-group-item border-0">
-											<i class="fas fa-user-edit"></i> Edit Akun
+											<a href="<?= base_url('staff/Admin/edit_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-user-edit"></i> Edit Akun</a>
 										</li>
 										<li class="list-group-item border-0">
 											<i class="fas fa-envelope"></i> Kirim Pesan

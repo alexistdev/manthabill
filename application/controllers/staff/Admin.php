@@ -66,7 +66,8 @@ class Admin extends CI_Controller {
 	/**
 	 * Method yang mengatur halaman user !
 	 */
-	public function user(){
+	public function user()
+	{
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
@@ -97,39 +98,80 @@ class Admin extends CI_Controller {
 	}
 
 	/**
+	 * Private Method untuk mendapatkan data detail user !
+	 */
+
+	private function prepare_data($id)
+	{
+		$data=[];
+		$detailUser = $this->admin->tampil_detailUser($id);
+		foreach($detailUser->result_array() as $row){
+			$data['idUser'] = $id;
+			$data['username'] = $row['username'];
+			$data['email'] = $row['email'];
+			$data['namaDepan'] = $row['nama_depan'];
+			$data['namaBelakang'] = $row['nama_belakang'];
+			$data['namaBelakang'] = $row['nama_belakang'];
+			$data['namaUsaha'] = $row['nama_usaha'];
+			$data['telepon'] = $row['phone'];
+			$data['alamat'] = $row['alamat'];
+			$data['alamat2'] = $row['alamat2'];
+			$data['kodepos'] = $row['kodepos'];
+			$data['kota'] = $row['kota'];
+			$data['provinsi'] = $row['provinsi'];
+			$data['negara'] = $row['negara'];
+		};
+		return $data;
+	}
+
+	/**
+	 * Method untuk mengedit user !
+	 */
+
+
+	public function edit_user($idx=null)
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->cekDetailUser($id);
+			if (($id==NULL) || ($id=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/user');
+			} else {
+				$data = $this->prepare_data($id);
+				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
+				$view ='v_edituser';
+				$this->_template($data,$view);
+			}
+		}
+
+
+	}
+
+	/**
 	 *
 	 * Menampilkan halaman detail user !
 	 *
 	 */
 
 	public function detail_user($idx=null){
-		$id = decrypt_url($idx);
-		$cekDetail = $this->admin->cekDetailUser($id);
-		if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
-			redirect('staff/admin/user');
-		} else {
-			$this->load->helper('url');
-			$hashSes = $this->session->userdata('token');
-			$hashKey = $this->admin->get_token($hashSes);
-			$data['idUser'] = $id;
-			$detailUser = $this->admin->tampil_detailUser($id);
-			foreach($detailUser->result_array() as $row){
-				$data['username'] = $row['username'];
-				$data['email'] = $row['email'];
-				$data['namaDepan'] = $row['nama_depan'];
-				$data['namaBelakang'] = $row['nama_belakang'];
-				$data['telepon'] = $row['phone'];
-				$data['alamat'] = $row['alamat'];
-				$data['alamat2'] = $row['alamat2'];
-				$data['kodepos'] = $row['kodepos'];
-				$data['kota'] = $row['kota'];
-				$data['provinsi'] = $row['provinsi'];
-				$data['negara'] = $row['negara'];
-			}
-			if ($hashKey==0){
-				redirect('staff/login');
-			} else{
-				$data['title'] = "Dashboard | Manthabill";
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->cekDetailUser($id);
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/admin/user');
+			} else {
+				$data = $this->prepare_data($id);
+				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
 				$view ='v_detailuser';
 				$this->_template($data,$view);
 			}
