@@ -312,52 +312,162 @@ class Admin extends CI_Controller {
 			
 		}
 	}
-	function update_user($idUser=null){
-			$this->form_validation->set_rules('username','Username','required|min_length[4]');
-			$this->form_validation->set_rules('email','Email','required');
-			$password = $this->input->post("password");
-			$username = $this->input->post("username");
-			$firstname = $this->input->post("firstname");
-			$lastname = $this->input->post("lastname");
-			$email = $this->input->post("email");
-			$telp = $this->input->post("telpon");
-			$alamat = $this->input->post("alamat");
-			$alamat2 = $this->input->post("alamat2");
-			$kota = $this->input->post("kota");
-			$provinsi = $this->input->post("provinsi");
-			$negara = $this->input->post("negara");
-			$kodepos = $this->input->post("kodepos");
-			if($this->form_validation->run() != false){
-				if (empty($password)){
-					
+
+	/**
+	 * Method untuk mengupdate data user yang dikirimkan melalui Form Update User !
+	 *
+	 */
+
+	public function update_user($idx=null){
+		$id = decrypt_url($idx);
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$cekDetail = $this->admin->cekDetailUser($id);
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/admin/user');
+			} else {
+				$this->form_validation->set_rules(
+					'password',
+					'Password',
+					'trim'
+				);
+				$this->form_validation->set_rules(
+					'namaDepan',
+					'Nama Depan',
+					'trim|min_length[3]|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Nama depan maksimal 20 karakter!',
+						'min_length' => 'Panjang karakter Nama depan minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'namaBelakang',
+					'Nama Belakang',
+					'trim|min_length[3]|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Nama belakang maksimal 30 karakter!',
+						'min_length' => 'Panjang karakter Nama belakang minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'telepon',
+					'Telepon',
+					'trim|max_length[30]',
+					[
+						'max_length' => 'Panjang karakter Telepon maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'namaUsaha',
+					'Nama Usaha',
+					'trim|min_length[3]|max_length[50]',
+					[
+						'max_length' => 'Panjang karakter Nama usaha maksimal 50 karakter!',
+						'min_length' => 'Panjang karakter Nama usaha minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'alamat1',
+					'Alamat kolom 1',
+					'trim|min_length[5]|max_length[200]',
+					[
+						'max_length' => 'Panjang karakter Alamat di kolom 1 maksimal 200 karakter!',
+						'min_length' => 'Panjang karakter Alamat di kolom 1 minimal 5 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'alamat2',
+					'Alamat kolom 2',
+					'trim|min_length[5]|max_length[200]',
+					[
+						'max_length' => 'Panjang karakter Alamat di kolom 2 maksimal 200 karakter!',
+						'min_length' => 'Panjang karakter Alamat di kolom 2 minimal 5 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'kota',
+					'Kota',
+					'trim|min_length[3]|max_length[30]',
+					[
+						'max_length' => 'Panjang karakter Kota maksimal 30 karakter!',
+						'min_length' => 'Panjang karakter Kota minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'provinsi',
+					'Provinsi',
+					'trim|min_length[3]|max_length[50]',
+					[
+						'max_length' => 'Panjang karakter Provinsi maksimal 50 karakter!',
+						'min_length' => 'Panjang karakter Provinsi minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'kodepos',
+					'Kodepos',
+					'trim|min_length[3]|max_length[10]',
+					[
+						'max_length' => 'Panjang karakter Kodepos maksimal 10 karakter!',
+						'min_length' => 'Panjang karakter Kodepos minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'negara',
+					'Negara',
+					'trim|min_length[3]|max_length[30]',
+					[
+						'max_length' => 'Panjang karakter Negara maksimal 30 karakter!',
+						'min_length' => 'Panjang karakter Negara minimal 3 karakter!'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					redirect('staff/Admin/edit_user/'.encrypt_url($id));
 				} else {
-					$passwordEnc = sha1($password);
-					$data = array(
-					'username' => $username,
-					'password' => $passwordEnc,
-					'email' => $email,
-					'status' => 2
-					);
-					$data2 = array(
-						'nama_depan' => $firstname,
-						'nama_belakang' => $lastname,
-						'alamat' => $alamat,
+					$password = $this->input->post("password", TRUE);
+					$namaDepan = $this->input->post("namaDepan", TRUE);
+					$namaBelakang = $this->input->post("namaBelakang", TRUE);
+					$telepon = $this->input->post("telepon", TRUE);
+					$namaUsaha = $this->input->post("namaUsaha", TRUE);
+					$alamat1 = $this->input->post("alamat1", TRUE);
+					$alamat2 = $this->input->post("alamat2", TRUE);
+					$kota = $this->input->post("kota", TRUE);
+					$provinsi = $this->input->post("provinsi", TRUE);
+					$kodepos = $this->input->post("kodepos", TRUE);
+					$negara = $this->input->post("negara", TRUE);
+
+					if($password != ""){
+						//Mengupdate tabel tbuser
+						$dataUser = [
+							'password' => sha1($password)
+						];
+						$this->admin->user_update($dataUser,$id);
+					}
+					$dataDetail = [
+						'nama_depan' => $namaDepan,
+						'nama_belakang' => $namaBelakang,
+						'nama_usaha' => $namaUsaha,
+						'alamat' => $alamat1,
 						'alamat2' => $alamat2,
 						'kota' => $kota,
 						'provinsi' => $provinsi,
 						'negara' => $negara,
 						'kodepos' => $kodepos,
-						'phone' => $telp
-					); 
-					$this->admin->user_update($data,$idUser);
-					$this->admin->user_update2($data2,$idUser);
-					$this->session->set_flashdata('item', array('pesan' => 'Data berhasil diperbaharui!'));
-					redirect('staff/admin/user');
+						'phone' => $telepon
+					];
+					// mengupdate tabel tbdetailuser
+					$this->admin->user_update2($dataDetail,$id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data user telah diperbaharui!</div>');
+					redirect('staff/Admin/edit_user/'.encrypt_url($id));
 				}
-			} else{
-				redirect('staff/admin/user');
 			}
+		}
 	}
+	
 	function hapus_user($id=null){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);

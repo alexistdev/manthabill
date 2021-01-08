@@ -2,34 +2,34 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_admin extends CI_Model{	
-	function __construct(){
+	public function __construct(){
 		parent::__construct();
 	}
-	function cek_loginadmin($username,$password) {
+	public function cek_loginadmin($username,$password) {
         $this->db->where('username', $username);
         $this->db->where('password', $password);
         $query = $this->db->get('tbadmin');
         return $query->num_rows();
     }
-	function data_loginadmin($username,$password) {
+	public function data_loginadmin($username,$password) {
 		$this->db->where('username', $username);
         $this->db->where('password', $password);
         return $this->db->get('tbadmin')->row();
 	}
-	function get_token($key){
+	public function get_token($key){
 		$this->db->where('token', $key);
         $query = $this->db->get('tbtoken');
         return $query->num_rows();
 	}
-	function simpan_token($token){
+	public function simpan_token($token){
 		$this->db->insert('tbtoken',$token);
 	}
-	function get_idHapus($idHapus){
+	public function get_idHapus($idHapus){
 		$this->db->where('id_user', $idHapus);
         $query = $this->db->get('tbuser');
         return $query->num_rows();
 	}
-	function cekDetailUser($idUser) {
+	public function cekDetailUser($idUser) {
         $this->db->where('id_user', $idUser);
         $query = $this->db->get('tbuser');
         return $query->num_rows();
@@ -41,7 +41,7 @@ class M_admin extends CI_Model{
 	###########################################################################################
 	
 	//Menampilkan data hosting di menu user
-	function tampil_user(){
+	public function tampil_user(){
 		$this->db->select("*");
 		$this->db->from("tbdetailuser as a");
 		$this->db->join("tbuser as b", "a.id_user = b.id_user");
@@ -49,7 +49,7 @@ class M_admin extends CI_Model{
 		$hasil = $this->db->get();
 		return $hasil;
 	}
-	function tampil_detailUser($idUser){
+	public function tampil_detailUser($idUser){
 		$this->db->select("*");
 		$this->db->from("tbdetailuser as a");
 		$this->db->join("tbuser as b", "a.id_user = b.id_user");
@@ -57,16 +57,16 @@ class M_admin extends CI_Model{
 		$detail = $this->db->get();
 		return $detail;
 	}
-	function get_userHapus($idUserHapus){
+	public function get_userHapus($idUserHapus){
 		$this->db->select("username");
 		$this->db->where("id_user",$idUserHapus);
 		return $this->db->get('tbuser')->row();
 	}
-	function user_update($data,$idUser){
+	public function user_update($data,$idUser){
 		$this->db->where('id_user',$idUser);
 		$this->db->update('tbuser',$data);
 	}
-	function user_update2($data2,$idUser){
+	public function user_update2($data2,$idUser){
 		$this->db->where('id_user',$idUser);
 		$this->db->update('tbdetailuser',$data2);
 	}

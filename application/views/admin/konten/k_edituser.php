@@ -25,8 +25,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<?php
+					echo $this->session->flashdata('pesan');
+					echo $this->session->flashdata('pesan2'); ?>
+				</div>
+			</div>
 			<!-- Small boxes (Stat box) -->
-			<?= form_open('staff/Admin/testing');?>
+			<?= form_open('staff/Admin/update_user/'.encrypt_url($idUser));?>
 			<div class="row">
 				<!--	Form Ruas Kiri		-->
 				<div class="col-md-6">
@@ -55,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaDepan">Nama Depan</label>
-										<?= form_input(['name' => 'namaDepan', 'id'=>'namaDepan','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Depan', 'value' => cetak($namaDepan)]); ?>
+										<?= form_input(['name' => 'namaDepan', 'id'=>'namaDepan','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Depan', 'maxlength' => 20,'value' => cetak($namaDepan)]); ?>
 									</div>
 								</div>
 							</div>
@@ -64,7 +71,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaBelakang">Nama Belakang</label>
-										<?= form_input(['name' => 'namaBelakang', 'id'=>'namaBelakang','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Belakang', 'value' => cetak($namaBelakang)]); ?>
+										<?= form_input(['name' => 'namaBelakang', 'id'=>'namaBelakang','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Belakang','maxlength' => 30 ,'value' => cetak($namaBelakang)]); ?>
 									</div>
 								</div>
 							</div>
@@ -73,7 +80,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="telepon">Phone</label>
-										<?= form_input(['name' => 'telepon', 'id'=>'telepon','type' => 'text', 'class' => 'form-control','placeholder'=>'Nomor Telepon', 'value' => cetak($telepon)]); ?>
+										<?= form_input(['name' => 'telepon', 'id'=>'telepon','type' => 'text', 'class' => 'form-control','placeholder'=>'Nomor Telepon', 'maxlength' => 20,'value' => cetak($telepon)]); ?>
 									</div>
 								</div>
 							</div>
@@ -82,7 +89,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaUsaha">Nama Usaha</label>
-										<?= form_input(['name' => 'namaUsaha', 'id'=>'namaUsaha','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Usaha', 'value' => cetak($namaUsaha)]); ?>
+										<?= form_input(['name' => 'namaUsaha', 'id'=>'namaUsaha','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Usaha','maxlength' => 50, 'value' => cetak($namaUsaha)]); ?>
 									</div>
 								</div>
 							</div>
@@ -103,7 +110,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="alamat1">Alamat kolom 1</label>
-										<?= form_input(['name' => 'alamat1', 'id'=>'alamat1','type' => 'text', 'class' => 'form-control','placeholder'=>'Alamat kolom 1', 'value' => cetak($alamat)]); ?>
+										<?= form_input(['name' => 'alamat1', 'id'=>'alamat1','type' => 'text', 'class' => 'form-control','placeholder'=>'Alamat kolom 1', 'maxlength' => 200,'value' => cetak($alamat)]); ?>
 									</div>
 								</div>
 							</div>
@@ -112,7 +119,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="alamat2">Alamat kolom 2</label>
-										<?= form_input(['name' => 'alamat2', 'id'=>'alamat2','type' => 'text', 'class' => 'form-control','placeholder'=>'Alamat kolom 2', 'value' => cetak($alamat2)]); ?>
+										<?= form_input(['name' => 'alamat2', 'id'=>'alamat2','type' => 'text', 'class' => 'form-control','placeholder'=>'Alamat kolom 2', 'maxlength' => 200,'value' => cetak($alamat2)]); ?>
 									</div>
 								</div>
 							</div>
@@ -121,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="kota">Kota</label>
-										<?= form_input(['name' => 'kota', 'id'=>'kota','type' => 'text', 'class' => 'form-control','placeholder'=>'Kota', 'value' => cetak($kota)]); ?>
+										<?= form_input(['name' => 'kota', 'id'=>'kota','type' => 'text', 'class' => 'form-control','placeholder'=>'Kota', 'maxlength' => 30,'value' => cetak($kota)]); ?>
 									</div>
 								</div>
 							</div>
@@ -130,7 +137,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="provinsi">Provinsi</label>
-										<?= form_input(['name' => 'provinsi', 'id'=>'provinsi','type' => 'text', 'class' => 'form-control','placeholder'=>'Provinsi', 'value' => cetak($provinsi)]); ?>
+										<?= form_input(['name' => 'provinsi', 'id'=>'provinsi','type' => 'text', 'class' => 'form-control','placeholder'=>'Provinsi', 'maxlength' => 50,'value' => cetak($provinsi)]); ?>
 									</div>
 								</div>
 							</div>
@@ -139,7 +146,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="kodepos">Kodepos</label>
-										<?= form_input(['name' => 'kodepos', 'id'=>'kodepos','type' => 'text', 'class' => 'form-control','placeholder'=>'Kodepos', 'value' => cetak($kodepos)]); ?>
+										<?= form_input(['name' => 'kodepos', 'id'=>'kodepos','type' => 'text', 'class' => 'form-control','placeholder'=>'Kodepos', 'maxlength' => 10,'value' => cetak($kodepos)]); ?>
 									</div>
 								</div>
 							</div>
@@ -148,7 +155,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="negara">Negara</label>
-										<?= form_input(['name' => 'negara', 'id'=>'negara','type' => 'text', 'class' => 'form-control','placeholder'=>'Negara', 'value' => cetak($negara)]); ?>
+										<?= form_input(['name' => 'negara', 'id'=>'negara','type' => 'text', 'class' => 'form-control','placeholder'=>'Negara', 'maxlength' => 30,'value' => cetak($negara)]); ?>
 									</div>
 								</div>
 							</div>

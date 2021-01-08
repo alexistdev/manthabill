@@ -23,6 +23,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/demo.js"></script>
 	<!-- pace-progress -->
 	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
+	<!-- custom javascript	-->
+	<script>
+		$(window).bind("load", function() {
+			window.setTimeout(function() {
+				$(".alert").fadeTo(500, 0).slideUp(500, function() {
+					$(this).remove();
+				});
+			}, 2000);
+		});
+	</script>
 </div>
 
 </body>
