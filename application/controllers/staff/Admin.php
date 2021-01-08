@@ -91,9 +91,58 @@ class Admin extends CI_Controller {
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			$data['title'] = "Dashboard | Manthabill";
-			$view ='v_tambahuser';
-			$this->_template($data,$view);
+			$this->form_validation->set_rules(
+				'email',
+				'Email',
+				'required',
+				[
+					'required' => 'Email harus diisi!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'password',
+				'Password',
+				'trim|min_length[6]|max_length[50]',
+				[
+					'max_length' => 'Panjang karakter Password maksimal 50 karakter!',
+					'min_length' => 'Panjang karakter Password minimal 6 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'password2',
+				'Ulangi Password',
+				'trim|required|matches[password]',
+				[
+					'required' => 'Konfirmasi password harus diisi!',
+					'matches' => 'Password tidak sama!'
+				]
+			);
+			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+			if ($this->form_validation->run() === false) {
+				$this->session->set_flashdata('pesan', validation_errors());
+				$data['title'] = "Dashboard | Manthabill";
+				$view ='v_tambahuser';
+				$this->_template($data,$view);
+			} else {
+				$email = $this->input->post("email", TRUE);
+				$password = $this->input->post("password", TRUE);
+				$tanggalDibuat = date("Y-m-d");
+				echo $tanggalDibuat;
+				$dataUser = [
+					'password' => sha1($password),
+					'email' => $email,
+					'date_create' => $tanggalDibuat,
+					'status' => 1
+				];
+				$idpengguna = $this->admin->simpan($dataUser);
+				//memasukkan data ke tbdetailuser
+				$dataDetail = [
+					'id_user' => $idpengguna
+				];
+				$this->admin->simpan2($dataDetail);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data user berhasil ditambahkan!</div>');
+				redirect('staff/Admin/user');
+			}
 		}
 	}
 
@@ -107,7 +156,6 @@ class Admin extends CI_Controller {
 		$detailUser = $this->admin->tampil_detailUser($id);
 		foreach($detailUser->result_array() as $row){
 			$data['idUser'] = $id;
-			$data['username'] = $row['username'];
 			$data['email'] = $row['email'];
 			$data['namaDepan'] = $row['nama_depan'];
 			$data['namaBelakang'] = $row['nama_belakang'];
@@ -467,7 +515,7 @@ class Admin extends CI_Controller {
 			}
 		}
 	}
-	
+
 	function hapus_user($id=null){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);

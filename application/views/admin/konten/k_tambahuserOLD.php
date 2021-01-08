@@ -3,14 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div id="content">
   <div id="content-header">
-    <div id="breadcrumb"> <a href="<?php echo base_url('staff/admin');?>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a><a href="<?php echo base_url('staff/admin/user');?>">Managemen User</a><a href="#" class="current">Detail User</a></div>
-	 <h1>Detail User</h1>
+    <div id="breadcrumb"> <a href="<?php echo base_url('staff/admin');?>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a><a href="<?php echo base_url('staff/admin/user');?>">Managemen User</a><a href="#" class="current">Tambah User</a></div>
+	 <h1>Daftar User</h1>
   </div>
   
   <div class="container-fluid">
-    <div class="row-fluid">
+
 		<!-- FORM -->
-		<form name="myform" id="myform" action="<?php echo base_url('staff/admin/update_user/'.$idUser);?>" method="post" class="form-horizontal">
+
+		<?php
+			$attributes = array('name' => 'myform', 'id' => 'myform', 'class'=>'form-horizontal');
+			echo form_open('staff/admin/simpan_user',$attributes);
+		?>
+	  	<div class="row-fluid">
+
 			<!-- FORM KIRI-->
 			<div class="span6">
 				<div class="widget-box">
@@ -18,39 +24,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<h5>Personal-info</h5>
 					</div>
 					<div class="widget-content nopadding">
-						<!-- Email -->
-						<div class="control-group">											
+						<div class="control-group">
+							<!-- CSRF Token -->
+							<?= form_input(['name' => $this->security->get_csrf_token_name(),'id'=>'csrftoken', 'type' => 'hidden', 'class' => 'token_csrf', 'value' => $this->security->get_csrf_hash()]); ?>
 							<label class="control-label" >Email<span style="color:red">*</span></label>
-							<div id="err2" class="controls control-group error">
-								<input type="email" id="email" class="span6" name="email"  value="<?php echo htmlentities($email, ENT_QUOTES, 'UTF-8');?>" readonly="readonly">
-								</br><label class="control-label text-error">** Email tidak dapat dirubah</label>
-							</div>
-
-
+							<div id="err2" class="controls">
+								<?= form_input(['name' => 'email', 'id'=>'email','type' => 'email', 'class' => 'span6', 'placeholder' => 'john.smith@gmail.com', 'value' => set_value('email'), 'required' => 'required']); ?>
+								<span id="email_result"></span>
+							</div>				
 						</div>
 						<div class="control-group">											
 							<label class="control-label" >Password<span style="color:red">*</span></label>
 							<div class="controls">
-								<input type="password" class="span4" name="password" placeholder="******" >
+								<?= form_input(['name' => 'password','type' => 'password', 'class' => 'span4', 'placeholder' => '******', 'required' => 'required']); ?>
 								<p>Panjang karakter minimal 4.</p>
 							</div> 	
 						</div>
 						<div class="control-group">											
 							<label class="control-label" >Nama Depan</label>
 							<div class="controls">
-								<input type="text" class="span6" name="firstname" placeholder="John" value="<?php echo htmlentities($namaDepan, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'firstname','type' => 'text', 'class' => 'span6', 'placeholder' => 'Firstname', 'value' => set_value('firstname')]); ?>
 							</div>				
 						</div>
 						<div class="control-group">											
 							<label class="control-label" >Nama Belakang</label>
 							<div class="controls">
-								<input type="text" class="span6" name="lastname" placeholder="Smith" value="<?php echo htmlentities($namaBelakang, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'lastname','type' => 'text', 'class' => 'span6', 'placeholder' => 'Firstname', 'value' => set_value('lastname')]); ?>
 							</div>			
 						</div>		
 						<div class="control-group">											
 							<label class="control-label" >Telepon</label>
 							<div class="controls">
-								<input type="text" class="span6" name="telpon" placeholder="0856123456" value="<?php echo htmlentities($telepon, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'telpon','type' => 'text', 'class' => 'span6', 'placeholder' => '0856123456', 'value' => set_value('telpon')]); ?>
 							</div>
 						</div>
 					</div>
@@ -67,50 +72,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<div class="control-group">											
 							<label class="control-label" >Alamat</label>
 							<div class="controls">
-								<input type="text" class="span6" name="alamat" placeholder="alamat lengkap baris 1" value="<?php echo htmlentities($alamat, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'alamat','type' => 'text', 'class' => 'span6', 'placeholder' => 'alamat lengkap baris 1', 'value' => set_value('alamat')]); ?>
 							</div>				
 						</div>
 						<div class="control-group">												
 							<div class="controls">
-								<input type="text" class="span6" name="alamat2" placeholder="alamat baris 2" value="<?php echo htmlentities($alamat2, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'alamat2','type' => 'text', 'class' => 'span6', 'placeholder' => 'alamat lengkap baris 2', 'value' => set_value('alamat')]); ?>
 							</div>			
 						</div>
 						<div class="control-group">											
 							<label class="control-label">Kodepos</label>
 							<div class="controls">
-								<input type="text" class="span4" name="kodepos" placeholder="55574" value="<?php echo htmlentities($kodepos, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'kodepos','type' => 'text', 'class' => 'span4', 'placeholder' => '55574', 'value' => set_value('kodepos')]); ?>
 							</div>				
 						</div>
 						<div class="control-group">											
 							<label class="control-label">Kota</label>
 							<div class="controls">
-								<input type="text" class="span4" name="kota" placeholder="kota" value="<?php echo htmlentities($kota, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'kota','type' => 'text', 'class' => 'span4', 'placeholder' => 'kota', 'value' => set_value('kota')]); ?>
 							</div>				
 						</div>
 						<div class="control-group">											
 							<label class="control-label">Provinsi</label>
 							<div class="controls">
-								<input type="text" class="span4" name="provinsi" placeholder="provinsi" value="<?php echo htmlentities($provinsi, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'provinsi','type' => 'text', 'class' => 'span4', 'placeholder' => 'provinsi', 'value' => set_value('provinsi')]); ?>
 							</div>				
 						</div>
 						<div class="control-group">											
 							<label class="control-label">Negara</label>
 							<div class="controls">
-								<input type="text" class="span4" name="negara" placeholder="negara" value="<?php echo htmlentities($negara, ENT_QUOTES, 'UTF-8');?>">
+								<?= form_input(['name' => 'negara','type' => 'text', 'class' => 'span4', 'placeholder' => 'negara', 'value' => set_value('negara')]); ?>
 							</div>		
 						</div>
 						<div class="form-actions">
-							<input type ="submit" id="submit_btn" class="btn btn-primary" value="Save" >
+							<?= form_input(['name' => 'submit', 'type' => 'submit','id'=>'submit_btn', 'class' => 'btn btn-primary', 'value' => 'Save']); ?>
 							<a href="<?php echo site_url('staff/admin/user'); ?>" class="btn btn-default" > Cancel</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- END FORM KANAN-->
-			</form>
+
 			<!-- FORM -->
 				
-			</div>	
+			</div>
+	  <?= form_close() ?>
 		</div>
     </div>   
   </div>

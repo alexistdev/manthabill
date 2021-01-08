@@ -23,6 +23,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6">
+					<?php
+					echo $this->session->flashdata('pesan');
+					echo $this->session->flashdata('pesan2'); ?>
+				</div>
+			</div>
 			<!-- Small boxes (Stat box) -->
 			<div class="row">
 				<!-- Khusus Personal Hosting -->
@@ -30,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<div class="card card-dark">
 						<div class="card-header">
 							<h3 class="card-title">Daftar Clients Hosting</h3>
-							<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button>
+							<a href="<?= base_url('staff/Admin/tambah_user'); ?>"><button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button></a>
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">

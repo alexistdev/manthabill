@@ -70,16 +70,8 @@ class M_admin extends CI_Model{
 		$this->db->where('id_user',$idUser);
 		$this->db->update('tbdetailuser',$data2);
 	}
-	/*function checkUserexist($userName) {
-			return $this->db->get_where('tbuser', ['username' => $userName])->num_rows();
-	}*/
-	//ini adalah pengecekan dengan ajax
-	function CekName($username) {
-		$this->db->where('username',$username);
-		$query = $this->db->get('tbuser');
-		return $query->num_rows();
-	}
-	function Cek_Email($email) {
+
+	public function Cek_Email($email) {
 		$this->db->where('email',$email);
 		$query = $this->db->get('tbuser');
 		return $query->num_rows();
@@ -91,20 +83,23 @@ class M_admin extends CI_Model{
 		$this->db->insert('tbuser',$data);
 		return $this->db->insert_id();
 	}
-	function get_companyEmail(){
-		$this->db->select('email_hosting');
-		$this->db->from('tbsetting');
-		$result= $this->db->get()->row();
-		return $result;
-	}
-	function simpan_email($email){
-		$this->db->insert('tbemail',$email);
-	}
-	//menghapus user
-	function hapusUser($id){
-		$this->db->delete('tbuser',array('id_user' => $id));
-		$this->db->delete('tbdetailuser',array('id_user' => $id));
-	}
+
+//
+//
+//	function get_companyEmail(){
+//		$this->db->select('email_hosting');
+//		$this->db->from('tbsetting');
+//		$result= $this->db->get()->row();
+//		return $result;
+//	}
+//	function simpan_email($email){
+//		$this->db->insert('tbemail',$email);
+//	}
+//	//menghapus user
+//	function hapusUser($id){
+//		$this->db->delete('tbuser',array('id_user' => $id));
+//		$this->db->delete('tbdetailuser',array('id_user' => $id));
+//	}
 	###########################################################################################
 	#                                                                                         #
 	#                             Ini adalah menu Hosting                                     #

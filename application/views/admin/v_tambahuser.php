@@ -1,76 +1,93 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
+<?php $this->load->view('user/template/header_v') ?>
 
-<head>
-	<?php $this->load->view('admin/template/header');?>
-</head>
-<body>
-<?php $this->load->view('admin/template/topheader');?>
-<?php $this->load->view('admin/template/menu_kedua');?>
-<?php $this->load->view('admin/konten/k_tambahuser');?>
+<body class="hold-transition sidebar-mini pace-danger">
 
-<!-- Footer -->
-<?php $this->load->view('admin/template/footer');?>
-<!-- /Footer -->
-
-<script src="<?php echo base_url('assets/admin2/js/bootstrap.min.js');?>"></script> 
-<script src="<?php echo base_url('assets/admin2/js/jquery.min.js');?>"></script> 
-<script type="text/javascript"> 
-
-/** Ajax untuk generate CSRF setiap kali mengecek email */
-$(document).ready(function() {
-	function generate_csrf()
-	{
-		$.ajax({
-			type: "GET",
-			dataType: 'json',
-			url: "<?= base_url('daftar/get_csrf'); ?>", //replace with your domain
-			success: function (data) {
-				csrf_name = data.csrf_name;
-				csrf_token = data.csrf_token;
-				$('#csrftoken').attr('name', csrf_name);
-				$('#csrftoken').val(csrf_token);
-			}
+<!-- Site wrapper -->
+<div class="wrapper">
+	<?php $this->load->view('user/template/navbar_v') ?>
+	<?php $this->load->view('admin/template/admin_sidebar') ?>
+	<?php $this->load->view('admin/konten/k_tambahuser') ?>
+	<?php $this->load->view('user/template/footer_v') ?>
+	<!-- jQuery -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/demo.js"></script>
+	<!-- pace-progress -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
+	<!-- DataTables -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+	<script>
+		$(window).bind("load", function() {
+			window.setTimeout(function() {
+				$(".alert").fadeTo(500, 0).slideUp(500, function() {
+					$(this).remove();
+				});
+			}, 2000);
 		});
-	}
-	/** Ajax untuk mengecek email apakah sudah ada atau belum */
-	$('#email').blur(function() {
-		var csrfName = $('.token_csrf').attr('name');
-		var csrfHash = $('.token_csrf').val();
-		var email = $('#email').val();
-		$.ajax({
-			type: "POST",
-			url: "<?= base_url('staff/admin/checkEmail'); ?>",
-			data: {
-				[csrfName]: csrfHash,
-				email: email
-			},
-			success: function(data) {
-				if (data == "ok") {
-					$('#email_result').html('<img src="<?php echo base_url('assets/img/not.png');?>" width="5%"> tidak tersedia');
-					$("#err2").removeClass("controls").addClass("controls control-group error");
-					$('#email').focus();
-					generate_csrf();
-				} else {
-					if (email.length == 0) {
-						$('#email_result').html('');
-						$("#err2").removeClass("controls control-group error").addClass("controls");
-						generate_csrf();
-					} else {
-						$('#email_result').html('<img src="<?php echo base_url('assets/img/oke.png');?>" width="10%">');
-						$("#err2").removeClass("controls control-group error").addClass("controls");
-						generate_csrf();
+		/** Ajax untuk generate CSRF setiap kali mengecek email */
+		$(document).ready(function() {
+			function generate_csrf()
+			{
+				$.ajax({
+					type: "GET",
+					dataType: 'json',
+					url: "<?= base_url('daftar/get_csrf'); ?>", //replace with your domain
+					success: function (data) {
+						csrf_name = data.csrf_name;
+						csrf_token = data.csrf_token;
+						$('#csrftoken').attr('name', csrf_name);
+						$('#csrftoken').val(csrf_token);
 					}
-				}
+				});
 			}
-		});
-	});
+			/** Ajax untuk mengecek email apakah sudah ada atau belum */
+			$('#email').blur(function() {
+				var csrfName = $('.token_csrf').attr('name');
+				var csrfHash = $('.token_csrf').val();
+				var email = $('#email').val();
+				$.ajax({
+					type: "POST",
+					url: "<?= base_url('daftar/checkEmail'); ?>",
+					data: {
+						[csrfName]: csrfHash,
+						email: email
+					},
+					success: function(data) {
+						if (data == "ok") {
+							$('#username_result2').html('<img src="<?php echo base_url('assets/img/not.png'); ?>" width="2%"> <font color="red">pernah terdaftar</font>');
+							$("#email").removeClass("form-control is-valid").addClass("form-control is-invalid");
+							$('#email').focus();
+							generate_csrf();
+						} else {
+							if (email.length == 0) {
+								$('#username_result2').html('');
+								$("#email").removeClass("form-control is-invalid").addClass("form-control");
+								$("#email").removeClass("form-control is-valid").addClass("form-control");
+								generate_csrf();
+							} else {
+								$('#username_result2').html('');
+								$("#email").removeClass("form-control is-invalid").addClass("form-control is-valid");
+								generate_csrf();
+							}
+						}
+					}
+				});
+			});
 
-});
-</script>
+		});
+	</script>
+</div>
+
 </body>
 
 </html>
