@@ -8,13 +8,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-					<h1>Edit Paket <span class="text-primary font-weight-bold"><?= cetak($namaProduct); ?></span></h1>
+					<h1>Tambah Paket <span class="text-primary font-weight-bold">Shared Hosting</span></h1>
 				</div>
 				<div class="col-sm-6">
 					<ol class="breadcrumb float-sm-right">
 						<li class="breadcrumb-item"><a href="<?= base_url('staff/Admin') ?>">Home</a></li>
 						<li class="breadcrumb-item"><a href="<?= base_url('staff/Admin/paket') ?>">Paket Shared Hosting</a></li>
-						<li class="breadcrumb-item active">Edit Paket</li>
+						<li class="breadcrumb-item active">Tambah Paket</li>
 					</ol>
 				</div>
 			</div>
@@ -32,7 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</div>
 			</div>
 			<!-- Small boxes (Stat box) -->
-			<?= form_open('staff/Admin/update_paket/'.encrypt_url($idProduct));?>
+			<?= form_open('staff/Admin/tambah_shared');?>
 			<div class="row">
 				<!--	Form Ruas Kiri		-->
 				<div class="col-md-6">
@@ -43,7 +43,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaPaket">Nama Paket <span class="text-danger">*</span></label>
-										<?= form_input(['name' => 'namaPaket', 'id'=>'namaPaket','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Paket', 'maxlength' => 50,'value' => cetak($namaProduct), 'required'=>'required']); ?>
+										<?= form_input(['name' => 'namaPaket', 'id'=>'namaPaket','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Paket', 'maxlength' => 50,'value' => set_value('namaPaket'), 'required'=>'required']); ?>
+										<?php echo form_error('namaPaket'); ?>
 									</div>
 								</div>
 							</div>
@@ -57,7 +58,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 											'1'      => 'Tipe 1',
 											'2'      => 'Tipe 2'
 										]; ?>
-										<?= form_dropdown('tipePaket',$options,cetak($typeProduct),['class'=>'form-control','required'=>'required','id'=>'tipePaket']); ?>
+										<?= form_dropdown('tipePaket',$options,set_value('tipePaket'),['class'=>'form-control','required'=>'required','id'=>'tipePaket']); ?>
+										<?php echo form_error('tipePaket'); ?>
 									</div>
 								</div>
 							</div>
@@ -66,7 +68,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label id="paket">Harga Paket / Bulan<span class="text-danger">*</span></label>
-										<?= form_input(['name' => 'hargaPaket', 'id'=>'hargaPaket','type' => 'number', 'class' => 'form-control','placeholder'=>'Harga Paket', 'value' => cetak($harga), 'required' => 'required']); ?>
+										<?= form_input(['name' => 'hargaPaket', 'id'=>'hargaPaket','type' => 'number', 'class' => 'form-control','placeholder'=>'Harga Paket', 'value' => set_value('hargaPaket'), 'required' => 'required']); ?>
+										<?php echo form_error('hargaPaket'); ?>
 									</div>
 								</div>
 							</div>
@@ -75,7 +78,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="kapasitas">Kapasitas <span class="text-danger">*</span></label>
-										<?= form_input(['name' => 'kapasitas', 'id'=>'kapasitas','type' => 'text', 'class' => 'form-control','placeholder'=>'500 mb', 'maxlength' => 20,'value' => cetak($kapasitas), 'required'=>'required']); ?>
+										<?= form_input(['name' => 'kapasitas', 'id'=>'kapasitas','type' => 'text', 'class' => 'form-control','placeholder'=>'500 mb', 'maxlength' => 20,'value' => set_value('kapasitas'), 'required'=>'required']); ?>
+										<?php echo form_error('kapasitas'); ?>
 									</div>
 								</div>
 							</div>
@@ -84,7 +88,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="bandwith">Bandwith</label>
-										<?= form_input(['name' => 'bandwith', 'id'=>'bandwith','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => cetak($bandwith)]); ?>
+										<?= form_input(['name' => 'bandwith', 'id'=>'bandwith','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => set_value('bandwith')]); ?>
+										<?php echo form_error('bandwith'); ?>
 									</div>
 								</div>
 							</div>
@@ -93,7 +98,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="addon">Addon Domain</label>
-										<?= form_input(['name' => 'addon', 'id'=>'addon','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => cetak($addon)]); ?>
+										<?= form_input(['name' => 'addon', 'id'=>'addon','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => set_value('addon')]); ?>
+										<?php echo form_error('addon'); ?>
 									</div>
 								</div>
 							</div>
@@ -102,7 +108,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="email">Email Account</label>
-										<?= form_input(['name' => 'email', 'id'=>'email','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => cetak($email)]); ?>
+										<?= form_input(['name' => 'email', 'id'=>'email','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => set_value('email')]); ?>
+										<?php echo form_error('email'); ?>
 									</div>
 								</div>
 							</div>
@@ -122,7 +129,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="dbAccount">Database Account</label>
-										<?= form_input(['name' => 'dbAccount', 'id'=>'dbAccount','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 10,'value' => cetak($dbAccount)]); ?>
+										<?= form_input(['name' => 'dbAccount', 'id'=>'dbAccount','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 10,'value' => set_value('dbAccount')]); ?>
+										<?php echo form_error('dbAccount'); ?>
 									</div>
 								</div>
 							</div>
@@ -131,7 +139,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="ftpAccount">FTP Account</label>
-										<?= form_input(['name' => 'ftpAccount', 'id'=>'ftpAccount','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => cetak($ftpAccount)]); ?>
+										<?= form_input(['name' => 'ftpAccount', 'id'=>'ftpAccount','type' => 'text', 'class' => 'form-control','placeholder'=>'unlimited', 'maxlength' => 20,'value' => set_value('ftpAccount')]); ?>
+										<?php echo form_error('ftpAccount'); ?>
 									</div>
 								</div>
 							</div>
@@ -140,7 +149,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="pilihan1">Optional 1</label>
-										<?= form_input(['name' => 'pilihan1', 'id'=>'pilihan1','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 1', 'maxlength' => 20,'value' => cetak($pilihan1)]); ?>
+										<?= form_input(['name' => 'pilihan1', 'id'=>'pilihan1','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 1', 'maxlength' => 20,'value' => set_value('pilihan1')]); ?>
+										<?php echo form_error('pilihan1'); ?>
 									</div>
 								</div>
 							</div>
@@ -149,7 +159,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="pilihan2">Optional 2</label>
-										<?= form_input(['name' => 'pilihan2', 'id'=>'pilihan2','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 2', 'maxlength' => 20,'value' => cetak($pilihan2)]); ?>
+										<?= form_input(['name' => 'pilihan2', 'id'=>'pilihan2','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 2', 'maxlength' => 20,'value' => set_value('pilihan2')]); ?>
+										<?php echo form_error('pilihan2'); ?>
 									</div>
 								</div>
 							</div>
@@ -158,7 +169,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="pilihan3">Optional 3</label>
-										<?= form_input(['name' => 'pilihan3', 'id'=>'pilihan3','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 3', 'maxlength' => 20,'value' => cetak($pilihan3)]); ?>
+										<?= form_input(['name' => 'pilihan3', 'id'=>'pilihan3','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 3', 'maxlength' => 20,'value' => set_value('pilihan3')]); ?>
+										<?php echo form_error('pilihan3'); ?>
 									</div>
 								</div>
 							</div>
@@ -167,7 +179,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="pilihan4">Optional 4</label>
-										<?= form_input(['name' => 'pilihan4', 'id'=>'pilihan4','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 4', 'maxlength' => 20,'value' => cetak($pilihan4)]); ?>
+										<?= form_input(['name' => 'pilihan4', 'id'=>'pilihan4','type' => 'text', 'class' => 'form-control','placeholder'=>'Optional 4', 'maxlength' => 20,'value' => set_value('pilihan4')]); ?>
+										<?php echo form_error('pilihan4'); ?>
 									</div>
 								</div>
 							</div>
@@ -175,7 +188,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
-										<button type="submit" name="submit" class="btn btn-primary">Update</button>
+										<button type="submit" name="submit" class="btn btn-primary">Tambah</button>
 										<a href="<?= base_url('staff/Admin/paket'); ?>"><button type="button" class="btn btn-danger">Batal</button></a>
 									</div>
 								</div>

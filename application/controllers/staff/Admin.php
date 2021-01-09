@@ -424,24 +424,25 @@ class Admin extends CI_Controller {
 		}
 	}
 
-//	function hapus_user($id=null){
-//		$hashSes = $this->session->userdata('token');
-//		$hashKey = $this->admin->get_token($hashSes);
-//		$getId = $this->admin->get_idHapus($id);
-//		if ($hashKey==0){
-//			redirect('staff/login');
-//		} else{
-//			if (($id =="") OR ($id ==NULL) OR ($getId==0)){
-//				redirect('staff/admin/user');
-//			}else{
-//				$getName = $this->admin->get_userHapus($id)->username;
-//				$this->admin->hapusUser($id);
-//				$this->session->set_flashdata('item2', array('pesan2' => 'Data '.$getName.' berhasil dihapus!'));
-//				redirect('staff/admin/user');
-//			}
-//		}
-//
-//	}
+	public function hapus_user($idx=NULL)
+	{
+		$id = decrypt_url($idx);
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$cekDetail = $this->admin->cekDetailUser($id);
+			if (($id == NULL) or ($id == "") or ($cekDetail < 1)) {
+				redirect('staff/admin/user');
+			} else {
+				$getName = $this->admin->get_data_user($id)->email;
+				$this->admin->hapus_user($id);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
+				redirect('staff/Admin/user');
+			}
+		}
+	}
 
 	###########################################################################################
 	#                                                                                         #
@@ -488,6 +489,168 @@ class Admin extends CI_Controller {
 				$data = array_merge($data,$judul);
 				$view ='v_editpaket';
 				$this->_template($data,$view);
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan tambah paket hosting !
+	 */
+	public function tambah_shared()
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$this->form_validation->set_rules(
+				'namaPaket',
+				'Nama Paket',
+				'trim|min_length[3]|max_length[50]|required',
+				[
+					'max_length' => 'Panjang karakter Nama paket maksimal 50 karakter!',
+					'min_length' => 'Panjang karakter Nama paket minimal 3 karakter!',
+					'required' => 'Nama Paket harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'tipePaket',
+				'Tipe Paket',
+				'trim|max_length[1]|required',
+				[
+					'max_length' => 'Tipe Paket Invalid , silahkan refresh halaman ini!',
+					'required' => 'Tipe Paket harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'hargaPaket',
+				'Harga Paket',
+				'trim|numeric|required',
+				[
+					'numeric' => 'Format harus berupa angka!',
+					'required' => 'Nama Paket harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'kapasitas',
+				'Kapasitas Paket',
+				'trim|min_length[3]|max_length[20]|required',
+				[
+					'max_length' => 'Panjang karakter Kapasitas Paket maksimal 20 karakter!',
+					'min_length' => 'Panjang karakter Kapasitas Paket minimal 3 karakter!',
+					'required' => 'Kapasitas Paket harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'bandwith',
+				'Bandwith',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Bandwith maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'addon',
+				'Addon Domain',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Addon Domain maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'email',
+				'Jumlah Email',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Jumlah Email maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'dbAccount',
+				'Akun Database',
+				'trim|max_length[10]',
+				[
+					'max_length' => 'Panjang karakter Akun Database maksimal 10 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'ftpAccount',
+				'Akun Ftp',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Akun FTP maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'pilihan1',
+				'Optional 1',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Optional 1 maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'pilihan2',
+				'Optional 2',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Optional 2 maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'pilihan3',
+				'Optional 3',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Optional 3 maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'pilihan4',
+				'Optional 4',
+				'trim|max_length[20]',
+				[
+					'max_length' => 'Panjang karakter Optional 4 maksimal 20 karakter!'
+				]
+			);
+			$this->form_validation->set_error_delimiters('<span class="text-danger text-sm">', '</span>');
+			if ($this->form_validation->run() === false) {
+				$data['title'] = "Tambah Paket | Administrator Billing System Manthabill V.2.0";
+				$view ='v_tambahpaket';
+				$this->_template($data,$view);
+			} else {
+				$namaPaket = $this->input->post("namaPaket", TRUE);
+				$tipePaket = $this->input->post("tipePaket", TRUE);
+				$hargaPaket = $this->input->post("hargaPaket", TRUE);
+				$kapasitas = $this->input->post("kapasitas", TRUE);
+				$bandwith = $this->input->post("bandwith", TRUE);
+				$addon = $this->input->post("addon", TRUE);
+				$email = $this->input->post("email", TRUE);
+				$dbAccount = $this->input->post("dbAccount", TRUE);
+				$ftpAccount = $this->input->post("ftpAccount", TRUE);
+				$pilihan1 = $this->input->post("pilihan1", TRUE);
+				$pilihan2 = $this->input->post("pilihan2", TRUE);
+				$pilihan3 = $this->input->post("pilihan3", TRUE);
+				$pilihan4 = $this->input->post("pilihan4", TRUE);
+
+				$dataProduk = [
+					'nama_product' => $namaPaket,
+					'type_product' => $tipePaket,
+					'harga' => $hargaPaket,
+					'kapasitas' => $kapasitas,
+					'bandwith' => $bandwith,
+					'addon_domain' => $addon,
+					'email_account' => $email,
+					'database_account' => $dbAccount,
+					'ftp_account' => $ftpAccount,
+					'pilihan_1' => $pilihan1,
+					'pilihan_2' => $pilihan2,
+					'pilihan_3' => $pilihan3,
+					'pilihan_4' => $pilihan4
+				];
+				$this->admin->simpan_data_paket($dataProduk);
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data paket telah ditambahkan!</div>');
+				redirect('staff/Admin/paket');
 			}
 		}
 	}

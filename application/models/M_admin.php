@@ -24,22 +24,27 @@ class M_admin extends CI_Model{
 	public function simpan_token($token){
 		$this->db->insert('tbtoken',$token);
 	}
-	public function get_idHapus($idHapus){
-		$this->db->where('id_user', $idHapus);
-        $query = $this->db->get('tbuser');
-        return $query->num_rows();
-	}
-	public function cekDetailUser($idUser) {
-        $this->db->where('id_user', $idUser);
-        $query = $this->db->get('tbuser');
-        return $query->num_rows();
-    }
+
+
 	###########################################################################################
 	#                                                                                         #
 	#                             Ini adalah menu User                                        #
 	#                                                                                         #
 	###########################################################################################
-	
+
+	/** Mendapatkan data dari tbuser */
+	public function get_data_user($id){
+		$this->db->where("id_user",$id);
+		return $this->db->get('tbuser')->row();
+	}
+
+	/** mengecek id_user di tbuser */
+	public function cekDetailUser($idUser) {
+		$this->db->where('id_user', $idUser);
+		$query = $this->db->get('tbuser');
+		return $query->num_rows();
+	}
+
 	//Menampilkan data hosting di menu user
 	public function tampil_user(){
 		$this->db->select("*");
@@ -57,11 +62,7 @@ class M_admin extends CI_Model{
 		$detail = $this->db->get();
 		return $detail;
 	}
-	public function get_userHapus($idUserHapus){
-		$this->db->select("username");
-		$this->db->where("id_user",$idUserHapus);
-		return $this->db->get('tbuser')->row();
-	}
+
 	public function user_update($data,$idUser){
 		$this->db->where('id_user',$idUser);
 		$this->db->update('tbuser',$data);
@@ -84,22 +85,12 @@ class M_admin extends CI_Model{
 		return $this->db->insert_id();
 	}
 
-//
-//
-//	function get_companyEmail(){
-//		$this->db->select('email_hosting');
-//		$this->db->from('tbsetting');
-//		$result= $this->db->get()->row();
-//		return $result;
-//	}
-//	function simpan_email($email){
-//		$this->db->insert('tbemail',$email);
-//	}
-//	//menghapus user
-//	function hapusUser($id){
-//		$this->db->delete('tbuser',array('id_user' => $id));
-//		$this->db->delete('tbdetailuser',array('id_user' => $id));
-//	}
+	public function hapus_user($id)
+	{
+		$this->db->where('id_user', $id);
+		$this->db->delete('tbuser');
+	}
+
 	###########################################################################################
 	#                                                                                         #
 	#                             Ini adalah menu Paket Hosting                               #
@@ -128,6 +119,10 @@ class M_admin extends CI_Model{
 		$this->db->update('tbproduct',$dataProduk);
 	}
 
+	/** Menyimpan data paket */
+	public function simpan_data_paket($data){
+		$this->db->insert('tbproduct',$data);
+	}
 
 	###########################################################################################
 	#                                                                                         #

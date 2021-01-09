@@ -32,9 +32,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				});
 			}, 2000);
 		});
+		function cek_paket(pilihan){
+			if (pilihan == 1) {
+				$("#paket").html("Harga Paket / Bulan<span class='text-danger'>*</span>");
+			} else if (pilihan == 2) {
+				$("#paket").html("Harga Paket / Tahun<span class='text-danger'>*</span>");
+			} else {
+				$("#paket").html("Harga Paket / Bulan<span class='text-danger'>*</span>");
+			}
+		}
+		$(document).ready(function() {
+			var pilihan = $("#tipePaket").val();
+			cek_paket(pilihan);
+			$("#tipePaket").change(function () {
+				var pilihan = $("#tipePaket").val();
+				cek_paket(pilihan);
+			});
+		});
+
 	</script>
 </div>
-
 </body>
-
 </html>
