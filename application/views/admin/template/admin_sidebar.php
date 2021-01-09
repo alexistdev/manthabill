@@ -31,6 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 						</p>
 					</a>
 				</li>
+				<!-- Sidebar Clients	-->
 				<li class="nav-item">
 					<a href="<?= base_url('staff/Admin/user') ?>" class="nav-link">
 						<i class="nav-icon fas fa-users"></i>
@@ -39,6 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 						</p>
 					</a>
 				</li>
+				<!-- Sidebar Paket Hosting	-->
 				<li class="nav-item has-treeview">
 					<a href="#" class="nav-link">
 						<i class="nav-icon fas fa-box"></i>
@@ -55,6 +57,23 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							</a>
 						</li>
 					</ul>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link">
+								<i class="nav-icon fas fa-database"></i>
+								<p>VPS</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<!-- Sidebar Domain	-->
+				<li class="nav-item">
+					<a href="<?= base_url('staff/Admin/domain') ?>" class="nav-link">
+						<i class="nav-icon fas fa-globe"></i>
+						<p>
+							Domain
+						</p>
+					</a>
 				</li>
 			</ul>
 		</nav>

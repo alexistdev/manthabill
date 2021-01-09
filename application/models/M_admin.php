@@ -138,6 +138,43 @@ class M_admin extends CI_Model{
 
 	###########################################################################################
 	#                                                                                         #
+	#                             Ini adalah menu Domain                                      #
+	#                                                                                         #
+	###########################################################################################
+
+	/** Menampilkan data domain dari tabel tbtld */
+	public function tampil_domain($id=null){
+		if($id!=null || $id!=""){
+			$this->db->where('id_tld',$id);
+		}
+		$this->db->order_by('default ASC','id_tld DESC');
+		return $this->db->get('tbtld');
+	}
+
+	/** Mengecek apakah ada id paket yang dimaksud */
+	public function cekDomain($idDomain) {
+		$this->db->where('id_tld', $idDomain);
+		$query = $this->db->get('tbtld');
+		return $query->num_rows();
+	}
+
+	/** Menghapus status default dari domain di tabel tbtld */
+	public function hapus_default($dataDefault)
+	{
+		$this->db->where('default =',1);
+		$this->db->update('tbtld',$dataDefault);
+	}
+
+	/** Mengupdate data domain */
+	public function update_data_domain($dataDomain,$id)
+	{
+		$this->db->where('id_tld ',$id);
+		$this->db->update('tbtld',$dataDomain);
+	}
+
+
+	###########################################################################################
+	#                                                                                         #
 	#                             Ini adalah menu Hosting                                     #
 	#                                                                                         #
 	###########################################################################################

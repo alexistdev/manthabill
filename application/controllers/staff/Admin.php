@@ -856,12 +856,12 @@ class Admin extends CI_Controller {
 
 	public function hapus_paket($idx=NULL)
 	{
-		$id = decrypt_url($idx);
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey == 0) {
 			redirect('staff/login');
 		} else {
+			$id = decrypt_url($idx);
 			$cekDetail = $this->admin->cekDetailPaket($id);
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 				redirect('staff/admin/paket');
@@ -870,6 +870,136 @@ class Admin extends CI_Controller {
 				$this->admin->hapus_paket($id);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data paket ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
 				redirect('staff/Admin/paket');
+			}
+		}
+	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Domain                                      #
+	#                                                                                         #
+	###########################################################################################
+	/**
+	 * Method yang menampilkan halaman domain !
+	 */
+	public function domain()
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Dashboard | Manthabill";
+			$data['dataDomain'] = $this->admin->tampil_domain();
+			$view = "v_domain";
+			$this->_template($data, $view);
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan edit domain !
+	 */
+
+	public function edit_domain($idx=null)
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$id = decrypt_url($idx);
+			$cekDomain = $this->admin->cekDomain($id);
+			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+				redirect('staff/Admin/domain');
+			} else {
+				$data = $this->prepare_data_domain($id);
+				$judul['title'] = "Edit Domain | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
+				$view ='v_editdomain';
+				$this->_template($data,$view);
+			}
+		}
+	}
+
+	/**
+	 * Private Method untuk mendapatkan data detail paket shared hosting !
+	 */
+
+	private function prepare_data_domain($id)
+	{
+		$data=[];
+		$detailDomain = $this->admin->tampil_domain($id);
+		foreach($detailDomain->result_array() as $row){
+			$data['idTld'] = $id;
+			$data['tld'] = $row['tld'];
+			$data['hargaTld'] = $row['harga_tld'];
+			$data['status'] = $row['status_tld'];
+			$data['default'] = $row['default'];
+		};
+		return $data;
+	}
+
+	/**
+	 * Method untuk mengupdate paket domain !
+	 */
+
+	public function update_domain($idx=null)
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$id = decrypt_url($idx);
+			$cekDomain = $this->admin->cekDomain($id);
+			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+				redirect('staff/Admin/domain');
+			} else {
+				$this->form_validation->set_rules(
+					'namaDomain',
+					'Nama Domain',
+					'trim|min_length[2]|max_length[6]|required',
+					[
+						'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
+						'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
+						'required' => 'Nama Domain harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'hargaDomain',
+					'Harga Domain',
+					'trim|numeric|required',
+					[
+						'numeric' => 'Format harus berupa angka!',
+						'required' => 'Harga Domain harus diisi !'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
+				} else {
+					$tld = $this->input->post("namaDomain", TRUE);
+					$hargaDomain = $this->input->post("hargaDomain", TRUE);
+					$default = $this->input->post("default", TRUE);
+					$status = $this->input->post("status", TRUE);
+					//jika diset default , maka akan menghapus semua status default di tabel tbtld
+					if($default == 1){
+						$dataDefault =[
+							'default' => 2
+						];
+						$this->admin->hapus_default($dataDefault);
+					}
+					$dataDomain =[
+						'tld' => strtolower($tld),
+						'harga_tld' => $hargaDomain,
+						'status_tld' => $status,
+						'default' => $default,
+					];
+					$this->admin->update_data_domain($dataDomain,$id);
+					$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain telah diperbaharui!</div>');
+					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
+				}
 			}
 		}
 	}
