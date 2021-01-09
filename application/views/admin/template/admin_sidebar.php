@@ -39,45 +39,22 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 						</p>
 					</a>
 				</li>
-				<li class="nav-item">
-					<a href="<?= base_url('domain') ?>" class="nav-link">
-						<i class="nav-icon fas fa-globe"></i>
+				<li class="nav-item has-treeview">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-box"></i>
 						<p>
-							Domain
+							Paket Hosting
+							<i class="fas fa-angle-left right"></i>
 						</p>
 					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?= base_url('service') ?>" class="nav-link">
-						<i class="nav-icon fas fa-book"></i>
-						<p>
-							Service
-						</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?= base_url('invoice') ?>" class="nav-link">
-						<i class="nav-icon fas fa-credit-card"></i>
-						<p>
-							Invoice
-						</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?= base_url('ticket') ?>" class="nav-link">
-						<i class="nav-icon fas fa-bullhorn"></i>
-						<p>
-							Ticket
-						</p>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="<?= base_url('setting') ?>" class="nav-link">
-						<i class="nav-icon fas fa-cog"></i>
-						<p>
-							Setting
-						</p>
-					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link">
+								<i class="nav-icon fas fa-coins"></i>
+								<p>Shared Hosting</p>
+							</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</nav>

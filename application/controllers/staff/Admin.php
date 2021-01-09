@@ -25,6 +25,7 @@ class Admin extends CI_Controller {
 	public $input;
 	public $form_validation;
 	public $email;
+	public $security;
 
 	/** Method Construct untuk menginisiasi class Admin */
 	public function __construct(){
@@ -126,8 +127,15 @@ class Admin extends CI_Controller {
 			} else {
 				$email = $this->input->post("email", TRUE);
 				$password = $this->input->post("password", TRUE);
+				$kirimEmail = $this->input->post("kirimEmail", TRUE);
+
 				$tanggalDibuat = date("Y-m-d");
-				echo $tanggalDibuat;
+				//simpan kirim email
+				if($kirimEmail == 1){
+					$this->load->model('m_daftar', 'daftar');
+					simpan_email($email,$password);
+				}
+				//simpan ke tabel tbuser
 				$dataUser = [
 					'password' => sha1($password),
 					'email' => $email,
@@ -196,8 +204,6 @@ class Admin extends CI_Controller {
 				$this->_template($data,$view);
 			}
 		}
-
-
 	}
 
 	/**
@@ -260,104 +266,6 @@ class Admin extends CI_Controller {
 			echo json_encode($csrf);
 		} else {
 			redirect('Login');
-		}
-	}
-
-	/**
-	 * Method untuk menyimpan data user yang dikirimkan melalui Form Tambah User !
-	 *
-	 */
-
-	public function simpan_user(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			//validasi form sebelum form dikirimkan
-			$json = array();
-			$this->form_validation->set_rules('username','Username','required|min_length[4]');
-			$this->form_validation->set_rules('email','Email','required');
-			$this->form_validation->set_rules('password','Password','required|min_length[4]');
-			if($this->form_validation->run() != false){
-				$username = $this->input->post("username");
-				$password = sha1($this->input->post("password"));
-				$firstname = $this->input->post("firstname");
-				$lastname = $this->input->post("lastname");
-				$email = $this->input->post("email");
-				$tglDaftar = date("Y-m-d");
-				$telp = $this->input->post("telpon");
-				$alamat = $this->input->post("alamat");
-				$alamat2 = $this->input->post("alamat2");
-				$kota = $this->input->post("kota");
-				$provinsi = $this->input->post("provinsi");
-				$negara = $this->input->post("negara");
-				$kodepos = $this->input->post("kodepos");
-				//memasukkan data ke tbuser
-				$data = array(
-					'username' => $username,
-					'password' => $password,
-					'email' => $email,
-					'date_create' => $tglDaftar,
-					'status' => 2
-				);
-				//memasukkan data ke tbdetailuser
-				$idpengguna = $this->admin->simpan($data);
-				$data2 = array(
-					'id_user' => $idpengguna,
-					'nama_depan' => $firstname,
-					'nama_belakang' => $lastname,
-					'alamat' => $alamat,
-					'alamat2' => $alamat2,
-					'kota' => $kota,
-					'provinsi' => $provinsi,
-					'negara' => $negara,
-					'kodepos' => $kodepos,
-					'phone' => $telp
-				);
-				$this->admin->simpan2($data2);
-				$json = array(
-                'success' => 0,
-                'message' => 'Error occured',
-                'error' => $this->form_validation->error_array()
-            );
-				//mengirimkan email notifikasi
-				 $message="
-                    Kami telah memperbaharui informasi akun anda di adrihost.com , berikut informasi akun anda:<br><br>
-                    Username: ".$username." <br>
-                    Password: ".$this->input->post('password')." <br><br>
-					Anda bisa login di www.adrihost.com<br><br>
-                    Regards<br>
-                    Admin- www.adrihost.com
-                ";
-				//simpan data ke tbemail untuk email customer
-				$companyEmail = $this->admin->get_companyEmail()->email_hosting;
-				$dataEmail = array(
-								'email_pengirim' => $companyEmail,
-								'email_tujuan' => $email,
-								'subyek' => 'Informasi Akun di Adrihost',
-								'email_pesan' => $message,
-								'status' => 2	
-				);
-							
-				$this->admin->simpan_email($dataEmail);
-				//simpan data ke tbemail untuk email admin
-				$dataEmail2 = array(
-								'email_pengirim' => $companyEmail,
-								'email_tujuan' => 'alexistdev@gmail.com',
-								'subyek' => 'Informasi Akun di Adrihost',
-								'email_pesan' => $message,
-								'status' => 2	
-				);
-				$this->admin->simpan_email($dataEmail2);
-				//pesan berhasil disimpan
-				$this->session->set_flashdata('item', array('pesan' => 'Data berhasil ditambahkan!'));
-				redirect('staff/admin/user');
-			}else{
-				$this->session->set_flashdata('item2', array('pesan2' => validation_errors()));
-				redirect('staff/admin/user',$data);
-			}
-			
 		}
 	}
 
@@ -516,24 +424,269 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	function hapus_user($id=null){
+//	function hapus_user($id=null){
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		$getId = $this->admin->get_idHapus($id);
+//		if ($hashKey==0){
+//			redirect('staff/login');
+//		} else{
+//			if (($id =="") OR ($id ==NULL) OR ($getId==0)){
+//				redirect('staff/admin/user');
+//			}else{
+//				$getName = $this->admin->get_userHapus($id)->username;
+//				$this->admin->hapusUser($id);
+//				$this->session->set_flashdata('item2', array('pesan2' => 'Data '.$getName.' berhasil dihapus!'));
+//				redirect('staff/admin/user');
+//			}
+//		}
+//
+//	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                          Ini adalah menu Paket Hosting                                  #
+	#                                                                                         #
+	###########################################################################################
+
+	/**
+	 * Method untuk menampilkan daftar paket hosting !
+	 */
+
+	public function paket()
+	{
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);
-		$getId = $this->admin->get_idHapus($id);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
-			if (($id =="") OR ($id ==NULL) OR ($getId==0)){
-				redirect('staff/admin/user');
-			}else{
-				$getName = $this->admin->get_userHapus($id)->username;
-				$this->admin->hapusUser($id);
-				$this->session->set_flashdata('item2', array('pesan2' => 'Data '.$getName.' berhasil dihapus!'));
-				redirect('staff/admin/user');
+			$data['title'] = "Dashboard | Manthabill";
+			$data['dataPaket'] = $this->admin->tampil_paket();
+			$view = "v_paket";
+			$this->_template($data, $view);
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan edit paket hosting !
+	 */
+
+	public function edit_paket($idx=null)
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->cekDetailPaket($id);
+			if (($id==NULL) || ($id=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/paket');
+			} else {
+				$data = $this->prepare_data_paket($id);
+				$judul['title'] = "Edit Paket | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
+				$view ='v_editpaket';
+				$this->_template($data,$view);
 			}
 		}
-		
 	}
+
+	/**
+	 * Private Method untuk mendapatkan data detail paket !
+	 */
+
+	private function prepare_data_paket($id)
+	{
+		$data=[];
+		$detailPaket = $this->admin->tampil_paket($id);
+		foreach($detailPaket->result_array() as $row){
+			$data['idProduct'] = $id;
+			$data['namaProduct'] = $row['nama_product'];
+			$data['typeProduct'] = $row['type_product'];
+			$data['harga'] = $row['harga'];
+			$data['kapasitas'] = $row['kapasitas'];
+			$data['bandwith'] = $row['bandwith'];
+			$data['addon'] = $row['addon_domain'];
+			$data['email'] = $row['email_account'];
+			$data['dbAccount'] = $row['database_account'];
+			$data['ftpAccount'] = $row['ftp_account'];
+			$data['pilihan1'] = $row['pilihan_1'];
+			$data['pilihan2'] = $row['pilihan_2'];
+			$data['pilihan3'] = $row['pilihan_3'];
+			$data['pilihan4'] = $row['pilihan_4'];
+		};
+		return $data;
+	}
+
+	/**
+	 * Method untuk mengupdate paket !
+	 */
+
+	public function update_paket($idx=null)
+	{
+		$id = decrypt_url($idx);
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$cekDetail = $this->admin->cekDetailPaket($id);
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/admin/paket');
+			} else {
+				$this->form_validation->set_rules(
+					'namaPaket',
+					'Nama Paket',
+					'trim|min_length[3]|max_length[50]|required',
+					[
+						'max_length' => 'Panjang karakter Nama paket maksimal 50 karakter!',
+						'min_length' => 'Panjang karakter Nama paket minimal 3 karakter!',
+						'required' => 'Nama Paket harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'tipePaket',
+					'Tipe Paket',
+					'trim|max_length[1]|required',
+					[
+						'max_length' => 'Tipe Paket Invalid , silahkan refresh halaman ini!',
+						'required' => 'Tipe Paket harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'hargaPaket',
+					'Harga Paket',
+					'trim|numeric|required',
+					[
+						'numeric' => 'Format harus berupa angka!',
+						'required' => 'Nama Paket harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'kapasitas',
+					'Kapasitas Paket',
+					'trim|min_length[3]|max_length[20]|required',
+					[
+						'max_length' => 'Panjang karakter Kapasitas Paket maksimal 20 karakter!',
+						'min_length' => 'Panjang karakter Kapasitas Paket minimal 3 karakter!',
+						'required' => 'Kapasitas Paket harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'bandwith',
+					'Bandwith',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Bandwith maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'addon',
+					'Addon Domain',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Addon Domain maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'email',
+					'Jumlah Email',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Jumlah Email maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'dbAccount',
+					'Akun Database',
+					'trim|max_length[10]',
+					[
+						'max_length' => 'Panjang karakter Akun Database maksimal 10 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'ftpAccount',
+					'Akun Ftp',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Akun FTP maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'pilihan1',
+					'Optional 1',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Optional 1 maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'pilihan2',
+					'Optional 2',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Optional 2 maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'pilihan3',
+					'Optional 3',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Optional 3 maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'pilihan4',
+					'Optional 4',
+					'trim|max_length[20]',
+					[
+						'max_length' => 'Panjang karakter Optional 4 maksimal 20 karakter!'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					redirect('staff/Admin/edit_paket/'.encrypt_url($id));
+				} else {
+					$namaPaket = $this->input->post("namaPaket", TRUE);
+					$tipePaket = $this->input->post("tipePaket", TRUE);
+					$hargaPaket = $this->input->post("hargaPaket", TRUE);
+					$kapasitas = $this->input->post("kapasitas", TRUE);
+					$bandwith = $this->input->post("bandwith", TRUE);
+					$addon = $this->input->post("addon", TRUE);
+					$email = $this->input->post("email", TRUE);
+					$dbAccount = $this->input->post("dbAccount", TRUE);
+					$ftpAccount = $this->input->post("ftpAccount", TRUE);
+					$pilihan1 = $this->input->post("pilihan1", TRUE);
+					$pilihan2 = $this->input->post("pilihan2", TRUE);
+					$pilihan3 = $this->input->post("pilihan3", TRUE);
+					$pilihan4 = $this->input->post("pilihan4", TRUE);
+
+					$dataProduk = [
+						'nama_product' => $namaPaket,
+						'type_product' => $tipePaket,
+						'harga' => $hargaPaket,
+						'kapasitas' => $kapasitas,
+						'bandwith' => $bandwith,
+						'addon_domain' => $addon,
+						'email_account' => $email,
+						'database_account' => $dbAccount,
+						'ftp_account' => $ftpAccount,
+						'pilihan_1' => $pilihan1,
+						'pilihan_2' => $pilihan2,
+						'pilihan_3' => $pilihan3,
+						'pilihan_4' => $pilihan4
+					];
+					$this->admin->update_data_paket($dataProduk, $id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data paket telah diperbaharui!</div>');
+					redirect('staff/Admin/edit_paket/'.encrypt_url($id));
+				}
+			}
+		}
+	}
+
 	
 	###########################################################################################
 	#                                                                                         #

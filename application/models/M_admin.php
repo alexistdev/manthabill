@@ -102,6 +102,35 @@ class M_admin extends CI_Model{
 //	}
 	###########################################################################################
 	#                                                                                         #
+	#                             Ini adalah menu Paket Hosting                               #
+	#                                                                                         #
+	###########################################################################################
+
+	/** Menampilkan data dari tabel tbproduct */
+	public function tampil_paket($id=null)
+	{
+		if($id!=null || $id!=""){
+			$this->db->where('id_product',$id);
+		}
+		$this->db->order_by('type_product', 'ASC');
+		return $this->db->get('tbproduct');
+	}
+
+	/** Mengecek apakah ada id paket yang dimaksud */
+	public function cekDetailPaket($idProduk) {
+		$this->db->where('id_product', $idProduk);
+		$query = $this->db->get('tbproduct');
+		return $query->num_rows();
+	}
+	/** Mengupdate data paket */
+	public function update_data_paket($dataProduk, $id){
+		$this->db->where('id_product ',$id);
+		$this->db->update('tbproduct',$dataProduk);
+	}
+
+
+	###########################################################################################
+	#                                                                                         #
 	#                             Ini adalah menu Hosting                                     #
 	#                                                                                         #
 	###########################################################################################
