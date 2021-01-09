@@ -446,12 +446,12 @@ class Admin extends CI_Controller {
 
 	###########################################################################################
 	#                                                                                         #
-	#                          Ini adalah menu Paket Hosting                                  #
+	#                      Ini adalah menu Paket Shared Hosting                               #
 	#                                                                                         #
 	###########################################################################################
 
 	/**
-	 * Method untuk menampilkan daftar paket hosting !
+	 * Method untuk menampilkan daftar paket shared hosting !
 	 */
 
 	public function paket()
@@ -469,7 +469,7 @@ class Admin extends CI_Controller {
 	}
 
 	/**
-	 * Method untuk menampilkan edit paket hosting !
+	 * Method untuk menampilkan edit paket shared hosting !
 	 */
 
 	public function edit_paket($idx=null)
@@ -494,7 +494,7 @@ class Admin extends CI_Controller {
 	}
 
 	/**
-	 * Method untuk menampilkan tambah paket hosting !
+	 * Method untuk menampilkan tambah paket shared hosting !
 	 */
 	public function tambah_shared()
 	{
@@ -656,7 +656,7 @@ class Admin extends CI_Controller {
 	}
 
 	/**
-	 * Private Method untuk mendapatkan data detail paket !
+	 * Private Method untuk mendapatkan data detail paket shared hosting !
 	 */
 
 	private function prepare_data_paket($id)
@@ -683,7 +683,7 @@ class Admin extends CI_Controller {
 	}
 
 	/**
-	 * Method untuk mengupdate paket !
+	 * Method untuk mengupdate paket shared hosting !
 	 */
 
 	public function update_paket($idx=null)
@@ -846,6 +846,30 @@ class Admin extends CI_Controller {
 					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data paket telah diperbaharui!</div>');
 					redirect('staff/Admin/edit_paket/'.encrypt_url($id));
 				}
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menghapus paket shared hosting!
+	 */
+
+	public function hapus_paket($idx=NULL)
+	{
+		$id = decrypt_url($idx);
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$cekDetail = $this->admin->cekDetailPaket($id);
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/admin/paket');
+			} else {
+				$getName = $this->admin->get_data_paket($id)->nama_product;
+				$this->admin->hapus_paket($id);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data paket ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
+				redirect('staff/Admin/paket');
 			}
 		}
 	}

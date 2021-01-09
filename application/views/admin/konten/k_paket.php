@@ -64,7 +64,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<td class="text-center"><?= cetak($row['kapasitas']) ?></td>
 										<td class="text-center">
 											<a class="btn btn-primary btn-sm" href='<?= base_url("staff/admin/edit_paket/".encrypt_url($row['id_product'])); ?>'>Edit</a>
-											<a href="#myAlert" data-toggle="modal" class="btn btn-danger btn-sm">Hapus</a>
+											<button type="button" id="tombolHapus" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalHapus" data-id="<?= cetak(encrypt_url($row['id_product'])); ?>">Hapus</button>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -77,3 +77,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<!--	Modal Hapus	-->
+<div class="modal fade" id="modalHapus" tabindex="-1" aria-labelledby="modalHapusLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
+			</div>
+			<div class="modal-body">
+				Apakah anda yakin ingin menghapus data ini ?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<a href="" id="urlHapus"><button type="button" class="btn btn-danger">Hapus</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+<!--	/Modal Hapus	-->
