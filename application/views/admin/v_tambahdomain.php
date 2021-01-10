@@ -11,7 +11,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="wrapper">
 	<?php $this->load->view('user/template/navbar_v') ?>
 	<?php $this->load->view('admin/template/admin_sidebar') ?>
-	<?php $this->load->view('admin/konten/k_domain') ?>
+	<?php $this->load->view('admin/konten/k_tambahdomain') ?>
 	<?php $this->load->view('user/template/footer_v') ?>
 	<!-- jQuery -->
 	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/jquery/jquery.min.js"></script>
@@ -23,13 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/demo.js"></script>
 	<!-- pace-progress -->
 	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
-	<!-- DataTables -->
-	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.js"></script>
-	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 	<script>
-		$(document).ready( function () {
-			$('#tabelUser').DataTable();
-		} );
 		$(window).bind("load", function() {
 			window.setTimeout(function() {
 				$(".alert").fadeTo(500, 0).slideUp(500, function() {
@@ -37,15 +31,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				});
 			}, 2000);
 		});
-
-		$(document).on("click", "#tombolHapus", function () {
-			var domainID = $(this).data('id');
-			var newUrl = "<?= base_url('/staff/Admin/hapus_domain/'); ?>" + domainID;
-			$("#urlHapus").attr('href', newUrl);
+		function cek_paket(pilihan){
+			if (pilihan == 1) {
+				$("#paket").html("Harga Paket / Bulan<span class='text-danger'>*</span>");
+			} else if (pilihan == 2) {
+				$("#paket").html("Harga Paket / Tahun<span class='text-danger'>*</span>");
+			} else {
+				$("#paket").html("Harga Paket / Bulan<span class='text-danger'>*</span>");
+			}
+		}
+		$(document).ready(function() {
+			var pilihan = $("#tipePaket").val();
+			cek_paket(pilihan);
+			$("#tipePaket").change(function () {
+				var pilihan = $("#tipePaket").val();
+				cek_paket(pilihan);
+			});
 		});
 	</script>
 </div>
-
 </body>
-
 </html>

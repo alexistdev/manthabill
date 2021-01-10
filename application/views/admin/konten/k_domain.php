@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<div class="card card-dark">
 						<div class="card-header">
 							<h3 class="card-title">Daftar Domain</h3>
-							<a href="<?= base_url('staff/Admin/tambah_shared'); ?>"><button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button></a>
+							<a href="<?= base_url('staff/Admin/tambah_domain'); ?>"><button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button></a>
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">

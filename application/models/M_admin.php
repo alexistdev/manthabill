@@ -142,6 +142,12 @@ class M_admin extends CI_Model{
 	#                                                                                         #
 	###########################################################################################
 
+	/** Mendapatkan data dari tbproduct */
+	public function get_data_domain($id){
+		$this->db->where("id_tld",$id);
+		return $this->db->get('tbtld')->row();
+	}
+
 	/** Menampilkan data domain dari tabel tbtld */
 	public function tampil_domain($id=null){
 		if($id!=null || $id!=""){
@@ -172,6 +178,18 @@ class M_admin extends CI_Model{
 		$this->db->update('tbtld',$dataDomain);
 	}
 
+	/** Menyimpan data domain */
+	public function simpan_data_domain($dataDomain)
+	{
+		$this->db->insert('tbtld',$dataDomain);
+	}
+
+	/** Menghapus data domain */
+	public function hapus_domain($id)
+	{
+		$this->db->where('id_tld', $id);
+		$this->db->delete('tbtld');
+	}
 
 	###########################################################################################
 	#                                                                                         #

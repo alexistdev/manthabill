@@ -8,13 +8,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-					<h1>Edit Domain <span class="text-primary font-weight-bold"><?= strtoupper(cetak($tld)); ?></span></h1>
+					<h1>Tambah Domain</h1>
 				</div>
 				<div class="col-sm-6">
 					<ol class="breadcrumb float-sm-right">
 						<li class="breadcrumb-item"><a href="<?= base_url('staff/Admin') ?>">Home</a></li>
 						<li class="breadcrumb-item"><a href="<?= base_url('staff/Admin/domain') ?>">Daftar Domain</a></li>
-						<li class="breadcrumb-item active">Edit Domain</li>
+						<li class="breadcrumb-item active">Tambah Domain</li>
 					</ol>
 				</div>
 			</div>
@@ -32,7 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</div>
 			</div>
 			<!-- Small boxes (Stat box) -->
-			<?= form_open('staff/Admin/update_domain/'. encrypt_url(cetak($idTld)));?>
+			<?= form_open('staff/Admin/tambah_domain');?>
 			<div class="row">
 				<!--	Form Ruas Kiri		-->
 				<div class="col-md-6">
@@ -43,7 +43,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaDomain">Nama Domain <span class="text-danger">*</span></label>
-										<?= form_input(['name' => 'namaDomain', 'onkeyup'=> 'forceLower(this)','id'=>'namaDomain','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Domain', 'maxlength' => 6,'value' => strtolower(cetak($tld)), 'required'=>'required']); ?>
+										<?= form_input(['name' => 'namaDomain', 'onkeyup'=> 'forceLower(this)','id'=>'namaDomain','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Domain', 'maxlength' => 6,'value' => set_value('namaDomain'), 'required' => 'required']); ?>
 									</div>
 								</div>
 							</div>
@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label>Harga<span class="text-danger">*</span></label>
-										<?= form_input(['name' => 'hargaDomain', 'id'=>'hargaDomain','type' => 'number', 'class' => 'form-control','placeholder'=>'Harga Domain', 'value' => cetak($hargaTld), 'required' => 'required']); ?>
+										<?= form_input(['name' => 'hargaDomain', 'id'=>'hargaDomain','type' => 'number', 'class' => 'form-control','placeholder'=>'Harga Domain', 'value' => set_value('hargaDomain'), 'required' => 'required']); ?>
 									</div>
 								</div>
 							</div>
@@ -63,14 +63,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<div class="col-md-6">
 											<div class="form-check">
 												<?php
-												(cetak($status) == 1 )? $statusAktif= TRUE : $statusAktif=FALSE;
+
 												$checkStatus = [
 													'name'        => 'status',
 													'id'		=> 'status',
 													'type'		=> 'checkbox',
 													'class'     => 'form-check-input',
 													'value'       => 1,
-													'checked'     => set_checkbox('status', 1, $statusAktif),
+													'checked'     => set_checkbox('status', 1, false),
 												];
 												?>
 												<?= form_checkbox($checkStatus); ?>
@@ -80,14 +80,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<div class="col-md-6">
 											<div class="form-check">
 												<?php
-												(cetak($default) == 1 )? $statusDefault= TRUE : $statusDefault=FALSE;
 												$checkDefault = [
 													'name'        => 'default',
 													'id'		=> 'default',
 													'type'		=> 'checkbox',
 													'class'     => 'form-check-input',
 													'value'       => 1,
-													'checked'     => set_checkbox('default', 1, $statusDefault),
+													'checked'     => set_checkbox('default', 1, false),
 												];
 												?>
 												<?= form_checkbox($checkDefault); ?>
@@ -102,7 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="row mt-5">
 								<div class="col-md-12">
 									<div class="form-group">
-										<button type="submit" name="submit" class="btn btn-primary">Update</button>
+										<button type="submit" name="submit" class="btn btn-primary">Tambah</button>
 										<a href="<?= base_url('staff/Admin/domain'); ?>"><button type="button" class="btn btn-danger">Batal</button></a>
 									</div>
 								</div>

@@ -989,6 +989,12 @@ class Admin extends CI_Controller {
 							'default' => 2
 						];
 						$this->admin->hapus_default($dataDefault);
+						$status = 1;
+					} else {
+						$default = 2;
+					}
+					if($status == ''){
+						$status = 2;
 					}
 					$dataDomain =[
 						'tld' => strtolower($tld),
@@ -1000,6 +1006,96 @@ class Admin extends CI_Controller {
 					$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain telah diperbaharui!</div>');
 					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
 				}
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menampilkan tambah domain !
+	 */
+	public function tambah_domain()
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$this->form_validation->set_rules(
+				'namaDomain',
+				'Nama Domain',
+				'trim|min_length[2]|max_length[6]|required',
+				[
+					'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
+					'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
+					'required' => 'Nama Domain harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'hargaDomain',
+				'Harga Domain',
+				'trim|numeric|required',
+				[
+					'numeric' => 'Format harus berupa angka!',
+					'required' => 'Harga Domain harus diisi !'
+				]
+			);
+			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+			if ($this->form_validation->run() === false) {
+				$this->session->set_flashdata('pesan', validation_errors());
+				$data['title'] = "Tambah Domain | Administrator Billing System Manthabill V.2.0";
+				$view ='v_tambahdomain';
+				$this->_template($data,$view);
+			} else {
+				$tld = $this->input->post("namaDomain", TRUE);
+				$hargaDomain = $this->input->post("hargaDomain", TRUE);
+				$default = $this->input->post("default", TRUE);
+				$status = $this->input->post("status", TRUE);
+				//jika diset default , maka akan menghapus semua status default di tabel tbtld
+				if($default == 1){
+					$dataDefault =[
+						'default' => 2
+					];
+					$this->admin->hapus_default($dataDefault);
+					$status = 1;
+				} else {
+					$default = 2;
+				}
+				if($status == ''){
+					$status = 2;
+				}
+				$dataDomain =[
+					'tld' => strtolower($tld),
+					'harga_tld' => $hargaDomain,
+					'status_tld' => $status,
+					'default' => $default,
+				];
+				$this->admin->simpan_data_domain($dataDomain);
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain baru telah ditambahkan!</div>');
+				redirect('staff/Admin/domain');
+			}
+		}
+	}
+
+	/**
+	 * Method untuk menghapus paket domain!
+	 */
+
+	public function hapus_domain($idx=NULL)
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey == 0) {
+			redirect('staff/login');
+		} else {
+			$id = decrypt_url($idx);
+			$cekDomain = $this->admin->cekDomain($id);
+			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+				redirect('staff/Admin/domain');
+			} else {
+				$getName = $this->admin->get_data_domain($id)->tld;
+				$this->admin->hapus_domain($id);
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Data domain ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
+				redirect('staff/Admin/domain');
 			}
 		}
 	}
