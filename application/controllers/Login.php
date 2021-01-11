@@ -7,10 +7,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Login extends CI_Controller
 {
+	public $input;
+	public $load;
+	public $session;
+	public $form_validation;
+	public $login;
+
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('m_login');
+		$this->load->model('m_login', 'login');
 		if ($this->session->userdata('is_login_in') == TRUE) {
 			redirect('member');
 		}
@@ -51,7 +58,7 @@ class Login extends CI_Controller
 	//validasi mengecek email apakah sudah terdaftar
 	public function _check_email($email)
 	{
-		$cekEmailAda = $this->m_login->CekEmail($email);
+		$cekEmailAda = $this->login->CekEmail($email);
 		if ($cekEmailAda > 0) {
 			return true;
 		} else {
@@ -92,32 +99,36 @@ class Login extends CI_Controller
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
 		if ($this->form_validation->run() === false) {
 			$data['image'] = $this->_create_captcha();
-			$data['title'] = $this->m_login->getCompany()->nama_hosting;
+			$data['title'] = $this->login->get_data_setting()->nama_hosting;
 			$this->session->set_flashdata('pesan', validation_errors());
 			$this->load->view('user/login/v_login', $data);
 		} else {
 			$username = $this->input->post('email', TRUE);
 			$password = sha1($this->input->post('password', TRUE));
-			$cekLogin = $this->m_login->cek_login($username, $password);
+			$cekLogin = $this->login->cek_login($username, $password);
+
 			$waktu = date('Y-m-d H:i:s');
 			$key = sha1($waktu);
 			$logTime = strtotime($waktu);
+
 			if ($cekLogin > 0) {
-				$row = $this->m_login->data_login($username, $password);
+				$row = $this->login->data_login($username, $password);
 				//mempersiapkan data untuk session
 				$data_session = array(
 					'id_user' => $row->id_user,
 					'token' => $key,
 					'is_login_in' => TRUE
 				);
+
 				//mempersiapkan data untuk token
 				$hashkey = array(
 					'id_user' => $row->id_user,
 					'token' => $key,
 					'time' => $logTime
 				);
+
 				//simpan data token
-				$this->m_login->simpan_token($hashkey);
+				$this->login->simpan_token($hashkey);
 				//mengeset data session
 				$this->session->set_userdata($data_session);
 				redirect("member");

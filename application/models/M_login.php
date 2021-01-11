@@ -3,27 +3,61 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_login extends CI_Model
 {
-    function __construct()
+	/**
+	 * Ada 3 tabel digunakan:
+	 * tbuser
+	 * tbsetting
+	 * tbemail
+	 */
+    public function __construct()
     {
         parent::__construct();
         $this->load->database();
     }
 
-    public function get_token($key)
-    {
-        $this->db->where('token', $key);
-        $query = $this->db->get('tbtoken');
-        return $query->num_rows();
-    }
-    public function getCompany()
-    {
-        $hasil = $this->db->get('tbsetting');
-        return $hasil->row();
-    }
+	####################################################################################
+	#                                Tabel tbtoken                                     #
+	####################################################################################
+	/** Simpan data token */
+	public function simpan_token($token)
+	{
+		$this->db->insert('tbtoken', $token);
+	}
+
+	####################################################################################
+	#                                Tabel tbSetting                                   #
+	####################################################################################
+	/** Untuk mendapatkan data Perusahaan untuk title saat login */
+	public function get_data_setting()
+	{
+		return $this->db->get('tbsetting')->row();
+	}
+
+	/** Untuk mendapatkan data Perusahaan untuk title saat login */
+	public function get_companyEmail()
+	{
+		$this->db->select('email_hosting');
+		$this->db->from('tbsetting');
+		$result = $this->db->get()->row();
+		return $result;
+	}
+
+    ####################################################################################
+	#                                Tabel tbuser                                      #
+	####################################################################################
+    /** Untuk mendapatkan token */
+//    public function get_token($key)
+//    {
+//        $this->db->where('token', $key);
+//        $query = $this->db->get('tbtoken');
+//        return $query->num_rows();
+//    }
+
+
+
     //validasi username dan password
     public function cek_login($username, $password)
     {
-        //$this->db->where("(username = '$username' OR email = '$username' )");
         $this->db->where('email', $username);
         $this->db->where('password', $password);
         $query = $this->db->get('tbuser');
@@ -39,16 +73,11 @@ class M_login extends CI_Model
     //data untuk disimpan di session
     public function data_login($username, $password)
     {
-        $this->db->where('username', $username);
-        $this->db->or_where('email', $username);
+        $this->db->where('email', $username);
         $this->db->where('password', $password);
         return $this->db->get('tbuser')->row();
     }
-    //simpan data token
-    public function simpan_token($token)
-    {
-        $this->db->insert('tbtoken', $token);
-    }
+
     //mengecek apakah sudah ada token permintaan password sebelumnya
     public function get_detailUser($email)
     {
@@ -61,19 +90,8 @@ class M_login extends CI_Model
         $this->db->where('email', $email);
         $this->db->update('tbuser', $dataToken);
     }
-    //mendapatkan data untuk email
-    public function get_companyEmail()
-    {
-        $this->db->select('email_hosting');
-        $this->db->from('tbsetting');
-        $result = $this->db->get()->row();
-        return $result;
-    }
-    //menyimpan ke dalam tabel email
-    public function simpan_email($email)
-    {
-        $this->db->insert('tbemail', $email);
-    }
+
+
     //mengecek benar atau tidak token nya valid
     public function cek_idReset($idReq)
     {

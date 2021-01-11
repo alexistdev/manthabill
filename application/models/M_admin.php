@@ -30,7 +30,7 @@ class M_admin extends CI_Model{
 	}
 
 	/** Mendapatkan prefix dari setting */
-	public function get_prefix()
+	public function get_setting()
 	{
 		return $this->db->get('tbsetting')->row();
 	}

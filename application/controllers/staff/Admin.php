@@ -134,7 +134,7 @@ class Admin extends CI_Controller {
 
 				############### Menambahkan data client id untuk perhitungan #############
 				/*Mendapatkan data prefix dari halaman setting*/
-				$prefix = $this->admin->get_prefix()->prefix;
+				$prefix = $this->admin->get_setting()->prefix;
 				if($prefix == 0){
 					$prefix += 1;
 				}
@@ -148,9 +148,18 @@ class Admin extends CI_Controller {
 				###############                    end                        #############
 				$tanggalDibuat = date("Y-m-d");
 				//simpan kirim email
+				$namaHosting = $this->admin->get_setting()->nama_hosting;
 				if($kirimEmail == 1){
-					$this->load->model('m_daftar', 'daftar');
-					simpan_email($email,$password);
+					$judul = "Anda berhasil mendaftar akun di ". $namaHosting;
+					$message = "
+							Selamat anda telah berhasil mendaftar akun di ".$namaHosting." , berikut informasi akun anda:<br><br>
+							Username: " . $email . " <br>
+							Password: " . $password . " <br><br>
+							Anda bisa login di " . base_url() . "<br><br>
+							Regards<br>
+							Admin
+						";
+					kirim_email($email, $message, $judul);
 				}
 				//simpan ke tabel tbuser
 				$dataUser = [

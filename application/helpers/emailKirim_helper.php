@@ -1,5 +1,26 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+/**
+ *
+ * Mengirimkan email dengan menyimpan terlebih dahulu ke dalam tabel email
+ * Status 1= reset, 2= invoice, 3=registrasi
+ *
+ */
+function kirim_email($emailTujuan, $pesan, $judul){
+	$ci = get_instance();
+	$companyEmail = $ci->m_email->get_email()->email_hosting;
+	$dataEmail = [
+		'email_pengirim' => $companyEmail,
+		'email_tujuan' => $emailTujuan,
+		'subyek' => $judul,
+		'email_pesan' => $pesan,
+		'status' => 2
+	];
+	//simpan data ke tbemail
+	$ci->m_email->simpan_email($dataEmail);
+}
+
 function email_reset($keyReq, $email)
 {
     $ci = get_instance(); //hmemanggil library CI disini, agar bisa pakai object $ci
@@ -15,24 +36,24 @@ function email_reset($keyReq, $email)
 				Admin
  ";
     $companyEmail = $ci->m_login->get_companyEmail()->email_hosting;
-    $dataEmail = array(
-        'email_pengirim' => $companyEmail,
-        'email_tujuan' => $email,
-        'subyek' => 'Anda telah meminta reset password',
-        'email_pesan' => $message,
-        'status' => 2
-    );
+    $dataEmail = [
+		'email_pengirim' => $companyEmail,
+		'email_tujuan' => $email,
+		'subyek' => 'Anda telah meminta reset password',
+		'email_pesan' => $message,
+		'status' => 2
+	];
     //simpan data ke tbemail
-    $ci->m_login->simpan_email($dataEmail);
+    $ci->m_email->simpan_email($dataEmail);
 }
 
 function kirim_emailInvoice($email, $message)
 {
-    $ci = get_instance(); //hmemanggil library CI disini, agar bisa pakai object $ci
+    $ci = get_instance(); //memanggil library CI disini, agar bisa pakai object $ci
     //email yang akan dikirimkan
     $subyek = "Layanan Anda telah dibuat";
 
-    $companyEmail = $ci->member->getSetting()->email_hosting;
+    $companyEmail = $ci->login->get_data_setting()->email_hosting;
     $dataEmail = array(
         'email_pengirim' => $companyEmail,
         'email_tujuan' => $email,
@@ -41,34 +62,10 @@ function kirim_emailInvoice($email, $message)
         'status' => 2
     );
     //simpan data ke tbemail
-    $ci->member->simpan_email($dataEmail);
+    $ci->m_email->simpan_email($dataEmail);
 }
 
-/** Kirim Email Saat Registrasi */
-function simpan_email($emailTujuan,$password)
-{
-	$ci = get_instance();
-	$hosting = $ci->daftar->getCompany()->nama_hosting;
-	$companyEmail = $ci->daftar->get_companyEmail()->email_hosting;
-	$message = "
-							Selamat anda telah berhasil mendaftar akun di adrihost.com , berikut informasi akun anda:<br><br>
-							Username: " . $emailTujuan . " <br>
-							Password: " . $password . " <br><br>
-							Anda bisa login di " . $hosting . "<br><br>
-							Regards<br>
-							Admin
-						";
-	//mempersiapkan data untuk disimpan ke tabel email
-	$dataEmail = array(
-		'email_pengirim' => $companyEmail,
-		'email_tujuan' => $emailTujuan,
-		'subyek' => 'Akun Anda Berhasil Dibuat',
-		'email_pesan' => $message,
-		'status' => 2
-	);
-	//simpan data ke tbemail
-	$ci->daftar->simpan_email($dataEmail);
-}
+
 function konversiTanggal($date)
 {
     $tanggalKonversi = date("d-m-Y", strtotime($date));
