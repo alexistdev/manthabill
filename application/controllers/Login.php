@@ -2,7 +2,19 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Class Login
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
  */
 
 class Login extends CI_Controller
@@ -13,7 +25,7 @@ class Login extends CI_Controller
 	public $form_validation;
 	public $login;
 
-
+	/** Constructor dari Class Login */
 	public function __construct()
 	{
 		parent::__construct();
@@ -26,17 +38,7 @@ class Login extends CI_Controller
 	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
-		$config = array(
-			'img_url' => base_url() . 'captcha/',
-			'img_path' => './captcha/',
-			'img_height' =>  50,
-			'word_length' => 5,
-			'img_width' => 150,
-			'font_size' => 10,
-			'expiration' => 300,
-			'pool' => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
-		);
-		$cap = create_captcha($config);
+		$cap = create_captcha(config_captcha());
 		$image = $cap['image'];
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
@@ -53,9 +55,7 @@ class Login extends CI_Controller
 		}
 	}
 
-
-
-	//validasi mengecek email apakah sudah terdaftar
+	/** validasi mengecek email apakah sudah terdaftar */
 	public function _check_email($email)
 	{
 		$cekEmailAda = $this->login->CekEmail($email);
@@ -67,8 +67,7 @@ class Login extends CI_Controller
 		}
 	}
 
-
-
+	/** Method index dari halaman login */
 	public function index()
 	{
 		$this->form_validation->set_rules(
@@ -106,27 +105,26 @@ class Login extends CI_Controller
 			$username = $this->input->post('email', TRUE);
 			$password = sha1($this->input->post('password', TRUE));
 			$cekLogin = $this->login->cek_login($username, $password);
-
+			/* Membuat key token untuk disimpan di database */
 			$waktu = date('Y-m-d H:i:s');
 			$key = sha1($waktu);
 			$logTime = strtotime($waktu);
 
 			if ($cekLogin > 0) {
 				$row = $this->login->data_login($username, $password);
-				//mempersiapkan data untuk session
-				$data_session = array(
+				/* mempersiapkan data untuk session */
+				$data_session = [
 					'id_user' => $row->id_user,
 					'token' => $key,
 					'is_login_in' => TRUE
-				);
+				];
 
-				//mempersiapkan data untuk token
-				$hashkey = array(
+				/* mempersiapkan data untuk token */
+				$hashkey = [
 					'id_user' => $row->id_user,
 					'token' => $key,
 					'time' => $logTime
-				);
-
+				];
 				//simpan data token
 				$this->login->simpan_token($hashkey);
 				//mengeset data session

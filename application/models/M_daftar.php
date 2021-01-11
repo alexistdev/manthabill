@@ -7,56 +7,60 @@ class M_daftar extends CI_Model
     {
         parent::__construct();
         $this->load->database();
-    }
-    //validasi apakah sudah login
-    public function get_token($key)
-    {
-        $this->db->where('token', $key);
-        $query = $this->db->get('tbtoken');
-        return $query->num_rows();
-    }
-    //cek username dengan ajax
-    public function CekName($username)
-    {
-        $this->db->where('username', $username);
-        $query = $this->db->get('tbuser');
-        return $query->num_rows();
-    }
-    //cek email dengan ajax
-    public function CekEmail($email)
-    {
-        $this->db->where('email', $email);
-        $query = $this->db->get('tbuser');
-        return $query->num_rows();
-    }
-    //menyimpan data pengguna ke tabel user dan mendapatkan id nya
-    public function simpan_daftar($data)
-    {
-        $this->db->insert('tbuser', $data);
-        return $this->db->insert_id();
-    }
-    //mendapatkan data email hosting untuk digunakan sebagai sender
-    public function get_companyEmail()
-    {
-        $this->db->select('email_hosting');
-        $this->db->from('tbsetting');
-        $result = $this->db->get()->row();
-        return $result;
-    }
-    public function getCompany()
-    {
-        $hasil = $this->db->get('tbsetting');
-        return $hasil->row();
+		$this->tableUser = 'tbuser';
+		$this->tableDetail = 'tbdetailuser';
+		$this->tableSetting = 'tbsetting';
+
     }
 
-    //menyimpan data ke detail/profil user
-    public function simpan_detail($det)
-    {
-        $this->db->insert('tbdetailuser', $det);
-    }
-    //menyimpan ke dalam tabel email
-    public function simpan_email($email)
-    {
-        $this->db->insert('tbemail', $email);
-    }
+	###########################################################################################
+	#                                                                                         #
+	#                        Ini adalah bagian untuk handle tbsetting                         #
+	#                                                                                         #
+	###########################################################################################
+
+	/** Mendapatkan prefix dari setting */
+	public function get_setting()
+	{
+		return $this->db->get($this->tableSetting)->row();
+	}
+
+
+	###########################################################################################
+	#                                                                                         #
+	#                        Ini adalah bagian untuk handle tbuser                            #
+	#                                                                                         #
+	###########################################################################################
+
+	/** Mendapatkan data nomor client terbaru */
+	public function get_data_user($email=null )
+	{
+		if($email != null || $email != ''){
+			$this->db->where('email', $email);
+			return $this->db->get($this->tableUser)->num_rows();
+		} else {
+			$this->db->select_max('client');
+			return $this->db->get($this->tableUser)->row();
+		}
+	}
+
+	/** menyimpan data pengguna ke tabel user dan mendapatkan id nya */
+	public function simpan_daftar($data)
+	{
+		$this->db->insert($this->tableUser, $data);
+		return $this->db->insert_id();
+	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                     Ini adalah bagian untuk handle tbdetailuser                         #
+	#                                                                                         #
+	###########################################################################################
+
+	/** menyimpan data ke detailprofil user */
+	public function simpan_detail($det)
+	{
+		$this->db->insert($this->tableDetail, $det);
+	}
+
 }

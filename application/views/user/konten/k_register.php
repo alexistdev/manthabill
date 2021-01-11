@@ -33,7 +33,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
     <div class="icheck-primary">
       <?= form_input(['name' => 'tos', 'type' => 'checkbox', 'id' => 'agreeTerms', 'value' => '1']) ?>
       <label for="agreeTerms">
-        Setuju <a href="https://adrihost.com/term-and-condition-of-services/">T.O.S</a>
+        Setuju <a href="<?= cetak($tos); ?>" target="_blank">T.O.S</a>
       </label>
     </div>
   </div>
@@ -61,4 +61,4 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="col-md-12 mt-3">
   Sudah Memiliki Akun?
 </div>
-<a href="../login"><button type="submit" class="btn btn-primary btn-block btn-flat">Login</button></a>
+<a href="<?= base_url(); ?>"><button type="submit" class="btn btn-primary btn-block btn-flat">Login</button></a>

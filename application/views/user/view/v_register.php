@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>  Buat Akun</title>
+    <title><?= cetak($title); ?></title>
     <meta name="description" content="AdriHost WebHosting Solution">
     <meta name="author" content="AlexistDev">
     <!-- Tell the browser to be responsive to screen width -->
@@ -32,7 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <b><?= cetak($title) ?> </b> Daftar
+            <b><?= cetak($namaHosting) ?> </b> Daftar
         </div>
         <!-- /.login-logo -->
         <div class="card">
@@ -111,7 +111,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 						},
                         success: function(data) {
                             if (data == "ok") {
-                                $('#username_result2').html('<img src="<?php echo base_url('assets/img/not.png'); ?>" width="5%"> <font color="red">pernah terdaftar</font>');
+                                $('#username_result2').html('<img src="<?php echo base_url('gambar/remove.png'); ?>" width="5%"> <font color="red">pernah terdaftar</font>');
 								$("#email").removeClass("form-control is-valid").addClass("form-control is-invalid");
                                 $('#email').focus();
 								generate_csrf();

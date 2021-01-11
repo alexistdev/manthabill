@@ -61,7 +61,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					},
 					success: function(data) {
 						if (data == "ok") {
-							$('#username_result2').html('<img src="<?php echo base_url('assets/img/not.png'); ?>" width="2%"> <font color="red">pernah terdaftar</font>');
+							$('#username_result2').html('<img src="<?php echo base_url('gambar/remove.png'); ?>" width="2%"> <font color="red">pernah terdaftar</font>');
 							$("#email").removeClass("form-control is-valid").addClass("form-control is-invalid");
 							$('#email').focus();
 							generate_csrf();

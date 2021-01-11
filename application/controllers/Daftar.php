@@ -1,42 +1,57 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 
 class Daftar extends CI_Controller
 {
 	public $form_validation;
 	public $session;
-	public $m_daftar;
+	public $daftar;
 	public $load;
 	public $input;
 	public $security;
 
-	function __construct()
+
+	/** Constructor dari Class Daftar */
+	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('m_daftar');
+		$this->load->model('m_daftar', 'daftar');
 		if ($this->session->userdata('is_login_in') == TRUE) {
 			redirect('member');
 		}
 	}
-	//khusus membuat captcha dan cek validasi captcha
+
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('user/view/' . $view, $data);
+	}
+
+	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
-		$config = array(
-			'img_url' => base_url() . 'captcha/',
-			'img_path' => './captcha/',
-			'img_height' =>  50,
-			'word_length' => 5,
-			'img_width' => 150,
-			'font_size' => 10,
-			'expiration' => 300,
-			'pool' => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
-		);
-		$cap = create_captcha($config);
+		$cap = create_captcha(config_captcha());
 		$image = $cap['image'];
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
 	}
 
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
 	public function _check_captcha($string)
 	{
 		if ($string == $this->session->userdata('captchaword')) {
@@ -47,6 +62,7 @@ class Daftar extends CI_Controller
 		}
 	}
 
+	/** Method untuk menjalankan halaman daftar */
 	public function index()
 	{
 		$this->form_validation->set_rules(
@@ -92,10 +108,13 @@ class Daftar extends CI_Controller
 			]
 		);
 		if ($this->form_validation->run() === false) {
-			$data['image'] = $this->_create_captcha();
-			$data['title'] = $this->m_daftar->getCompany()->nama_hosting;
 			$this->session->set_flashdata('pesan', validation_errors());
-			$this->load->view('user/v_register', $data);
+			$data['image'] = $this->_create_captcha();
+			$data['namaHosting'] = $this->daftar->get_setting()->nama_hosting;
+			$data['tos'] = $this->daftar->get_setting()->tos;
+			$data['title'] = "Daftar Akun | ". $this->daftar->get_setting()->judul_hosting;
+			$view ='v_register';
+			$this->_template($data,$view);
 		} else {
 			$email = $this->input->post('email', TRUE);
 			$password = $this->input->post('password', TRUE);
@@ -103,24 +122,51 @@ class Daftar extends CI_Controller
 			$inPass = sha1($password);
 			$dateCreate = date("Y-m-d");
 
-			//mempersiapkan data user untuk disimpan di tabel user
-			$dataPengguna = array(
+			############### Menambahkan data client id untuk perhitungan #############
+			/*Mendapatkan data prefix dari halaman setting*/
+			$prefix = $this->daftar->get_setting()->prefix;
+			if($prefix == 0){
+				$prefix += 1;
+			}
+			/*Mendapatkan data id client terakhir*/
+			$getMaxClient = $this->daftar->get_data_user()->client;
+			if($getMaxClient == '' || $getMaxClient == NULL){
+				$preSimpan = $prefix;
+			} else {
+				$preSimpan = $getMaxClient +1;
+			}
+			###############
+
+			/* Menyimpan data ke tbuser */
+			$dataPengguna = [
+				'client' => $preSimpan,
 				'password' => $inPass,
 				'email' => $email,
 				'date_create' => $dateCreate,
 				'ip' => $ip,
 				'status' => 2
-			);
-			//proses simpan data ke tabel tbuser
-			$idIduser = $this->m_daftar->simpan_daftar($dataPengguna);
+			];
+			$idIduser = $this->daftar->simpan_daftar($dataPengguna);
 
-			//menyimpan data ke detail/profil user ke tabel tbdetailuser
-			$dataDetail = array(
+			/* Menyimpan data ke tbdetailuser */
+			$dataDetail = [
 				'id_user' => $idIduser,
 				'gambar' => 'default.jpg'
-			);
-			$this->m_daftar->simpan_detail($dataDetail);
-			simpan_email($email,$password);
+			];
+			$this->daftar->simpan_detail($dataDetail);
+
+			/* Mengirimkan Email ke Member Daftar */
+			$namaHosting = $this->daftar->get_setting()->nama_hosting;
+			$judul = "Anda berhasil mendaftar akun di ". $namaHosting;
+			$message = "
+							Selamat anda telah berhasil mendaftar akun di ".$namaHosting." , berikut informasi akun anda:<br><br>
+							Username: " . $email . " <br>
+							Password: " . $password . " <br><br>
+							Anda bisa login di " . base_url() . "<br><br>
+							Regards<br>
+							Admin
+						";
+			kirim_email($email, $message, $judul);
 			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
 			redirect('login');
 		}
@@ -130,11 +176,14 @@ class Daftar extends CI_Controller
 	#                                                                         #
 	#                       Validasi Email dengan Ajax                        #
 	###########################################################################
+	/**
+	 * Method untuk mengecek email dengan ajax
+	 */
 	public function checkEmail()
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$email = $this->input->post("email");
-			$cekEmail = $this->m_daftar->CekEmail($email);
+			$cekEmail = $this->daftar->get_data_user($email);
 			if ($cekEmail > 0) {
 				echo "ok";
 			}
@@ -143,6 +192,9 @@ class Daftar extends CI_Controller
 		}
 	}
 
+	/**
+	 * Method untuk mengirimkan token csrf via ajax
+	 */
 	public function get_csrf()
 	{
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
