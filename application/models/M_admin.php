@@ -29,6 +29,18 @@ class M_admin extends CI_Model{
 		$this->db->insert('tbtoken',$token);
 	}
 
+	/** Mendapatkan prefix dari setting */
+	public function get_prefix()
+	{
+		return $this->db->get('tbsetting')->row();
+	}
+
+	public function get_max_client()
+	{
+		$this->db->select_max('client');
+		return $this->db->get('tbuser')->row();
+	}
+
 
 	###########################################################################################
 	#                                                                                         #

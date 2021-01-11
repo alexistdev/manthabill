@@ -35,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="card-body box-profile">
 									<h3 class="profile-username text-center">
 										<?php if(cetak($namaDepan) == "" && cetak($namaBelakang) == ""){
-											echo "Member";
+											echo "Member #".cetak($client);
 										} else {
 											echo ucwords(cetak($namaDepan))." ".ucwords(cetak($namaBelakang));
 										}?>

@@ -132,6 +132,20 @@ class Admin extends CI_Controller {
 				$password = $this->input->post("password", TRUE);
 				$kirimEmail = $this->input->post("kirimEmail", TRUE);
 
+				############### Menambahkan data client id untuk perhitungan #############
+				/*Mendapatkan data prefix dari halaman setting*/
+				$prefix = $this->admin->get_prefix()->prefix;
+				if($prefix == 0){
+					$prefix += 1;
+				}
+				/*Mendapatkan data id client terakhir*/
+				$getMaxClient = $this->admin->get_max_client()->client;
+				if($getMaxClient == '' || $getMaxClient == NULL){
+					$preSimpan = $prefix;
+				} else {
+					$preSimpan = $getMaxClient +1;
+				}
+				###############                    end                        #############
 				$tanggalDibuat = date("Y-m-d");
 				//simpan kirim email
 				if($kirimEmail == 1){
@@ -140,6 +154,7 @@ class Admin extends CI_Controller {
 				}
 				//simpan ke tabel tbuser
 				$dataUser = [
+					'client' => $preSimpan,
 					'password' => sha1($password),
 					'email' => $email,
 					'date_create' => $tanggalDibuat,
@@ -167,6 +182,7 @@ class Admin extends CI_Controller {
 		$detailUser = $this->admin->tampil_detailUser($id);
 		foreach($detailUser->result_array() as $row){
 			$data['idUser'] = $id;
+			$data['client'] = $row['client'];
 			$data['email'] = $row['email'];
 			$data['namaDepan'] = $row['nama_depan'];
 			$data['namaBelakang'] = $row['nama_belakang'];
