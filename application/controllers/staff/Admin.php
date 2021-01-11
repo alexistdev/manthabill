@@ -55,6 +55,9 @@ class Admin extends CI_Controller {
 
 	/** Method untuk logout */
 	public function logout(){
+		$hashSes = $this->session->userdata('token');
+		//hapus token sebelum logout
+		$this->admin->hapus_token($hashSes);
 		$this->session->sess_destroy();
 		redirect(base_url('staff/login'));
 	}

@@ -21,6 +21,10 @@ class M_admin extends CI_Model{
         $query = $this->db->get('tbtoken');
         return $query->num_rows();
 	}
+	public function hapus_token($key){
+		$this->db->where('token', $key);
+		$this->db->delete('tbtoken');
+	}
 	public function simpan_token($token){
 		$this->db->insert('tbtoken',$token);
 	}
