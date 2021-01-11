@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 		<nav class="mt-2">
 			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 				<li class="nav-item">
-					<a href="<?= base_url('member') ?>" class="nav-link">
+					<a href="<?= base_url('staff/Admin/') ?>" class="nav-link">
 						<i class="nav-icon fas fa-tachometer-alt"></i>
 						<p>
 							Dashboard
@@ -33,15 +33,67 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 				</li>
 				<!-- Sidebar Clients	-->
 				<li class="nav-item">
-					<a href="<?= base_url('staff/Admin/user') ?>" class="nav-link">
+					<a href="<?= base_url('staff/Admin/user') ?>" class="nav-link <?= ($this->uri->segment(3) == 'user') ?'active':''; ?>">
 						<i class="nav-icon fas fa-users"></i>
 						<p>
 							Clients
 						</p>
 					</a>
 				</li>
+				<!-- Sidebar Service	-->
+				<li class="nav-item has-treeview <?= (($this->uri->segment(3) == 'shared_hosting') || ($this->uri->segment(3) == 'service_domain') || ($this->uri->segment(3) == 'vps_hosting')) ?'menu-open':''; ?>">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-box"></i>
+						<p>
+							Service
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview ">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/service_domain') ?>" class="nav-link <?= ($this->uri->segment(3) == 'service_domain') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
+								<p>Domain</p>
+							</a>
+						</li>
+					</ul>
+					<ul class="nav nav-treeview ">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/shared_hosting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'shared_hosting') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
+								<p>Shared Hosting</p>
+							</a>
+						</li>
+					</ul>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/vps_hosting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'vps_hosting') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
+								<p>VPS</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<!-- Sidebar Invoice	-->
+				<li class="nav-item">
+					<a href="<?= base_url('staff/Admin/invoice') ?>" class="nav-link <?= ($this->uri->segment(3) == 'invoice') ?'active':''; ?>">
+						<i class="nav-icon fas fa-credit-card"></i>
+						<p>
+							Invoice
+						</p>
+					</a>
+				</li>
+				<!-- Sidebar Inbox	-->
+				<li class="nav-item">
+					<a href="<?= base_url('staff/Admin/inbox') ?>" class="nav-link <?= ($this->uri->segment(3) == 'inbox') ?'active':''; ?>">
+						<i class="nav-icon fas fa-comments"></i>
+						<p>
+							Inbox
+						</p>
+					</a>
+				</li>
 				<!-- Sidebar Paket Hosting	-->
-				<li class="nav-item has-treeview">
+				<li class="nav-item has-treeview <?= ($this->uri->segment(3) == 'paket') ?'menu-open':''; ?>">
 					<a href="#" class="nav-link">
 						<i class="nav-icon fas fa-box"></i>
 						<p>
@@ -49,10 +101,10 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							<i class="fas fa-angle-left right"></i>
 						</p>
 					</a>
-					<ul class="nav nav-treeview">
+					<ul class="nav nav-treeview ">
 						<li class="nav-item">
-							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link">
-								<i class="nav-icon fas fa-coins"></i>
+							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link <?= ($this->uri->segment(3) == 'paket') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
 								<p>Shared Hosting</p>
 							</a>
 						</li>
@@ -60,7 +112,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
 							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link">
-								<i class="nav-icon fas fa-database"></i>
+								<i class="nav-icon far fa-circle"></i>
 								<p>VPS</p>
 							</a>
 						</li>
@@ -68,7 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 				</li>
 				<!-- Sidebar Domain	-->
 				<li class="nav-item">
-					<a href="<?= base_url('staff/Admin/domain') ?>" class="nav-link">
+					<a href="<?= base_url('staff/Admin/domain') ?>" class="nav-link <?= ($this->uri->segment(3) == 'domain') ?'active':''; ?>">
 						<i class="nav-icon fas fa-globe"></i>
 						<p>
 							Domain

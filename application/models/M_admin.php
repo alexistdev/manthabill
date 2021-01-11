@@ -190,6 +190,20 @@ class M_admin extends CI_Model{
 		$this->db->where('id_tld', $id);
 		$this->db->delete('tbtld');
 	}
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Service Domain                              #
+	#                                                                                         #
+	###########################################################################################
+
+	/** Menampilkan data domain dari tabel tbdomain */
+	public function tampil_domain_service($id=null){
+		if($id!=null || $id!=""){
+			$this->db->where('id_domain',$id);
+		}
+		$this->db->order_by('id_domain', 'DESC');
+		return $this->db->get('tbdomain');
+	}
 
 	###########################################################################################
 	#                                                                                         #

@@ -36,7 +36,7 @@ class Admin extends CI_Controller {
 	/** Template untuk memanggil view */
 	private function _template($data, $view)
 	{
-		$this->load->view('admin/' . $view, $data);
+		$this->load->view('admin/view/' . $view, $data);
 	}
 
 	/** Method untuk halaman Admin */
@@ -1099,7 +1099,110 @@ class Admin extends CI_Controller {
 			}
 		}
 	}
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Service Domain                              #
+	#                                                                                         #
+	###########################################################################################
 
+	/**
+	 * Method untuk menampilkan halaman service/domain!
+	 */
+	public function service_domain()
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Service Domain | Administrator Billing System Manthabill V.2.0";
+			$data['dataDomain'] = $this->admin->tampil_domain_service();
+			$view = "v_servicedomain";
+			$this->_template($data, $view);
+		}
+	}
+
+	/**
+	 * Method untuk menambahkan service/domain!
+	 */
+	public function tambah_service_domain()
+	{
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Tambah Service Domain | Administrator Billing System Manthabill V.2.0";
+			$view = "v_tambahservicedomain";
+			$this->_template($data, $view);
+		}
+	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Service Shared                              #
+	#                                                                                         #
+	###########################################################################################
+
+
+	/**
+	 * Method untuk menampilkan halaman service/shared hosting!
+	 */
+	public function shared_hosting(){
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Service Shared Hosting | Administrator Billing System Manthabill V.2.0";
+			$view = "v_sharedhosting";
+			$this->_template($data, $view);
+		}
+	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Service VPS                                 #
+	#                                                                                         #
+	###########################################################################################
+
+
+	/**
+	 * Method untuk menampilkan halaman service/vps hosting!
+	 */
+	public function vps_hosting(){
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Service VPS Hosting | Administrator Billing System Manthabill V.2.0";
+			$view = "v_vpshosting";
+			$this->_template($data, $view);
+		}
+	}
+
+	###########################################################################################
+	#                                                                                         #
+	#                             Ini adalah menu Invoice                                     #
+	#                                                                                         #
+	###########################################################################################
+
+
+	/**
+	 * Method untuk menampilkan halaman service/vps hosting!
+	 */
+	public function invoice(){
+		$hashSes = $this->session->userdata('token');
+		$hashKey = $this->admin->get_token($hashSes);
+		if ($hashKey==0){
+			redirect('staff/login');
+		} else{
+			$data['title'] = "Invoice | Administrator Billing System Manthabill V.2.0";
+			$view = "v_invoice";
+			$this->_template($data, $view);
+		}
+	}
 	
 	###########################################################################################
 	#                                                                                         #
@@ -1376,35 +1479,7 @@ class Admin extends CI_Controller {
         }
 	}
 	
-	
-	function invoice(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$this->load->view('admin/v_invoice');
-		}
-	}
-	function product(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$this->load->view('admin/v_admin');
-		}
-	}
 
-	function setting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$this->load->view('admin/v_admin');
-		}
-	}
 	###########################################################################################
 	#                                                                                         #
 	#                             Ini adalah menu License                                     #
