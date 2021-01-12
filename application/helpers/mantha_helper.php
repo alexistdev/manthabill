@@ -16,3 +16,10 @@ function config_captcha()
 	];
 	return $config;
 }
+
+/** Membatalkan session login */
+function _unlogin(){
+	$ci = get_instance();
+	$ci->session->set_userdata('is_login_in', FALSE);
+	redirect('Login');
+}

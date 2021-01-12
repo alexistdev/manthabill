@@ -3,23 +3,67 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_member extends CI_Model
 {
-    function __construct()
+	/**
+	 * Ada 3 tabel digunakan:
+	 * tbuser
+	 * tbsetting
+	 * tbtoken
+	 */
+
+	public function __construct()
     {
         parent::__construct();
         $this->load->database();
+		$this->tableUser = 'tbuser';
+		$this->tableDetailUser = 'tbdetailuser';
+		$this->tableSetting = 'tbsetting';
+		$this->tableToken = 'tbtoken';
     }
+
+	####################################################################################
+	#                                Tabel tbSetting                                   #
+	####################################################################################
+
+	/** Untuk mendapatkan data Perusahaan untuk title saat login */
+	public function get_setting()
+	{
+		return $this->db->get($this->tableSetting)->row();
+	}
+
+	####################################################################################
+	#                                Tabel tbToken                                     #
+	####################################################################################
+
+	/** Untuk mendapatkan data token */
+	public function get_data_token($key){
+		$this->db->where('token', $key);
+		return $this->db->get($this->tableToken);
+	}
+
+	####################################################################################
+	#                                Tabel tbUser                                      #
+	####################################################################################
+
+	####################################################################################
+	#                              Tabel tbdetailuser                                  #
+	####################################################################################
+
+	/** Mendapatkan data detail user */
+	public function get_data_detail($idUser=NULL)
+	{
+		if($idUser != NULL || $idUser !=''){
+			$this->db->where('id_user', $idUser);
+		}
+		return $this->db->get($this->tableDetailUser);
+
+	}
 
     ##############################################################
     #                                                            #
     #           Fungsi yang akan sering dipakai                  #
     #                                                            #
     ##############################################################
-    public function getProfilUser($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $hasil = $this->db->get('tbdetailuser');
-        return $hasil->row();
-    }
+
     public function getProduct($idProduct)
     {
         $this->db->where('id_product', $idProduct);
