@@ -33,9 +33,9 @@ class Member extends CI_Controller
 	}
 
 	/** Template untuk memanggil view */
-	private function _template($data)
+	private function _template($data, $view)
 	{
-		$this->load->view('user/view/v_member', $data);
+		$this->load->view('user/view/' . $view, $data);
 	}
 
 	/** Prepare data */
@@ -71,7 +71,8 @@ class Member extends CI_Controller
 		} else{
 			$idUser = $this->session->userdata('id_user');
 			$data = $this->_dataMember($idUser);
-			$this->_template($data);
+			$view = "v_member";
+			$this->_template($data, $view);
 		}
 	}
 

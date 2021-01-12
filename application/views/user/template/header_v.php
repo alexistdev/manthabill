@@ -9,7 +9,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Web Icon -->
-	<link rel="icon" href="<?= base_url('assets/img/') ?>myicon.png">
+	<link rel="icon" href="<?= base_url('gambar/') ?>myicon.png">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->

@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 class Product extends CI_Controller
 {
 	public $member;
@@ -9,7 +23,7 @@ class Product extends CI_Controller
 	public $form_validation;
 	public $input;
 
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
@@ -18,64 +32,54 @@ class Product extends CI_Controller
 		}
 	}
 
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('user/view/' . $view, $data);
+	}
+
+	/** Prepare data */
 	private function _dataMember($idUser)
 	{
 		$data['idUser'] = $idUser;
-		$data['tipe1'] = $this->member->product_tipe1();
-		$data['tipe2'] = $this->member->product_tipe2();
-		//nama dan gambar disidebar
-		$data['namaUser'] = $this->member->getProfilUser($idUser)->nama_depan;
-		$data['gambarUser'] = $this->member->getProfilUser($idUser)->gambar;
+		$data['tipe1'] = $this->member->get_data_product(TRUE);
+		$data['tipe2'] = $this->member->get_data_product(FALSE);
+
+		/* Nama dan Gambar di Sidebar */
+		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
+		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['title'] = "Dashboard | ". $this->member->get_setting()->judul_hosting;
 		return $data;
 	}
 
-	private function _template($data, $view)
-	{
-		$this->load->view('user/' . $view, $data);
-	}
 
-	private function _angkaUnik($length = 5)
-	{
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen($characters);
-		$randomString = '';
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
-		}
-		return $randomString;
-	}
-
-	private function _diskonUnik()
-	{
-		$digits = 3;
-		$hasil = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
-		return $hasil;
-	}
-
+	/** Method untuk halaman Product */
 	public function index()
 	{
 		$idUser = $this->session->userdata('id_user');
 		$data = $this->_dataMember($idUser);
-		$view = 'v_product';
+		$view = "v_product";
 		$this->_template($data, $view);
 	}
 
+	/** Method untuk halaman Beli */
 	public function beli($idProduct = NULL)
 	{
-		//cek idproduct apakah valid dan tersedia
-		$cekIdProduct = $this->member->cekIdProduct($idProduct);
+		$id = decrypt_url($idProduct);
+		/* Cek apakah idproduct tersedia */
+		$cekIdProduct = $this->member->get_product($id)->num_rows();
 		if ($cekIdProduct > 0) {
 			//mengecek dahulu apakah masih ada invoice yang pending
 			$idUser = $this->session->userdata('id_user');
-			$cekPendingInv = $this->member->cek_pendingInv($idUser);
+			$cekPendingInv = $this->member->cek_pending_inv($idUser);
 			if ($cekPendingInv > 0) {
-				$this->session->set_flashdata('item', array('pesan' => 'Silahkan anda selesaikan pembayaran invoice berikut!'));
+				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Silahkan anda selesaikan pembayaran invoice berikut!</div>');
 				redirect('invoice');
 			} else {
 				$data = $this->_dataMember($idUser);
-				$data['detailProduct'] = $this->member->detail_product($idProduct);
-				$data['tlD'] = $this->member->select_tld();
-				$data['diskonUnik'] = $this->_diskonUnik();
+				$data['detailProduct'] = $this->member->get_product($id);
+				$data['tlD'] = $this->member->get_data_tld();
+				$data['diskonUnik'] = diskonUnik();
 				$view = 'v_beli';
 				$this->_template($data, $view);
 			}

@@ -23,3 +23,22 @@ function _unlogin(){
 	$ci->session->set_userdata('is_login_in', FALSE);
 	redirect('Login');
 }
+
+/** Mendapatkan angka diskon unik */
+function diskonUnik()
+{
+	$digits = 3;
+	return rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+}
+
+/** Mendapatkan angka unik */
+function _angkaUnik($length = 5)
+{
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}

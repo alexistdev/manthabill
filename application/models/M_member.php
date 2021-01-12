@@ -8,6 +8,8 @@ class M_member extends CI_Model
 	 * tbuser
 	 * tbsetting
 	 * tbtoken
+	 * tbproduct
+	 * tbinvoice
 	 */
 
 	public function __construct()
@@ -18,6 +20,9 @@ class M_member extends CI_Model
 		$this->tableDetailUser = 'tbdetailuser';
 		$this->tableSetting = 'tbsetting';
 		$this->tableToken = 'tbtoken';
+		$this->tableProduct = 'tbproduct';
+		$this->tableInvoice = 'tbinvoice';
+		$this->tableTld = 'tbtld';
     }
 
 	####################################################################################
@@ -57,6 +62,51 @@ class M_member extends CI_Model
 		return $this->db->get($this->tableDetailUser);
 
 	}
+	####################################################################################
+	#                                Tabel tbproduct                                   #
+	####################################################################################
+	/** Mendapatkan data tbproduct tipe 1 atau tipe 2 */
+	public function get_data_product($tipe=true)
+	{
+		if($tipe){
+			$this->db->where('type_product', 1);
+		}else{
+			$this->db->where('type_product', 2);
+		}
+		return $this->db->get($this->tableProduct);
+	}
+
+	/** Mendapatkan data dari tbproduct	*/
+	public function get_product($id)
+	{
+		$this->db->where('id_product', $id);
+		return $this->db->get($this->tableProduct);
+	}
+
+
+	####################################################################################
+	#                                Tabel tbInvoice                                   #
+	####################################################################################
+	/** Mengecek id table invoice	*/
+	public function cek_pending_inv($id)
+	{
+		$this->db->where('id_user', $id);
+		$this->db->where('(status_inv=2 OR status_inv=3) ', NULL, FALSE);
+		return $this->db->get($this->tableInvoice)->num_rows();
+	}
+
+	####################################################################################
+	#                                Tabel tbTLD                                       #
+	####################################################################################
+	/** Mendapatkan data TLD	*/
+	public function get_data_tld($id=NULL)
+	{
+		if($id != NULL || $id != ''){
+			$this->db->where('id_tld', $id);
+		}
+		return $this->db->get($this->tableTld);
+	}
+
 
     ##############################################################
     #                                                            #
@@ -176,42 +226,11 @@ class M_member extends CI_Model
     #                Menangani halaman Product                   #
     #                                                            #
     ##############################################################
-    public function product_tipe1()
-    {
-        $this->db->where('type_product', 1);
-        $hasil = $this->db->get('tbproduct');
-        return $hasil;
-    }
-    public function product_tipe2()
-    {
-        $this->db->where('type_product', 2);
-        $hasil = $this->db->get('tbproduct');
-        return $hasil;
-    }
-    public function cekIdProduct($idProduct)
-    {
-        $this->db->where('id_product', $idProduct);
-        $hasil = $this->db->get('tbproduct');
-        return $hasil->num_rows();
-    }
-    public function cek_pendingInv($id)
-    {
-        $this->db->where('id_user', $id);
-        $this->db->where('(status_inv=2 OR status_inv=3) ', NULL, FALSE);
-        $query = $this->db->get('tbinvoice');
-        return $query->num_rows();
-    }
-    public function detail_product($idProduct)
-    {
-        $this->db->where('id_product', $idProduct);
-        $hasil = $this->db->get('tbproduct');
-        return $hasil;
-    }
-    public function select_tld()
-    {
-        //$this->db->order_by("id_tld", "DESC");
-        return $this->db->get('tbtld');
-    }
+
+
+
+
+
     public function simpan_hosting($dataHosting)
     {
         $this->db->insert('tbhosting', $dataHosting);
