@@ -10,6 +10,8 @@ class M_member extends CI_Model
 	 * tbtoken
 	 * tbproduct
 	 * tbinvoice
+	 * tbtld
+	 * tbhosting
 	 */
 
 	public function __construct()
@@ -23,6 +25,7 @@ class M_member extends CI_Model
 		$this->tableProduct = 'tbproduct';
 		$this->tableInvoice = 'tbinvoice';
 		$this->tableTld = 'tbtld';
+		$this->tableHosting = 'tbHosting';
     }
 
 	####################################################################################
@@ -84,6 +87,7 @@ class M_member extends CI_Model
 	}
 
 
+
 	####################################################################################
 	#                                Tabel tbInvoice                                   #
 	####################################################################################
@@ -93,6 +97,13 @@ class M_member extends CI_Model
 		$this->db->where('id_user', $id);
 		$this->db->where('(status_inv=2 OR status_inv=3) ', NULL, FALSE);
 		return $this->db->get($this->tableInvoice)->num_rows();
+	}
+
+	/** Menyimpan data ke tabel invoice */
+	public function simpan_invoice($data)
+	{
+		$this->db->insert($this->tableInvoice, $data);
+		return $this->db->insert_id();
 	}
 
 	####################################################################################
@@ -107,19 +118,25 @@ class M_member extends CI_Model
 		return $this->db->get($this->tableTld);
 	}
 
+	####################################################################################
+	#                                Tabel tbhosting                                   #
+	####################################################################################
 
-    ##############################################################
+	/** Menyimpan ke dalam tabel tbhosting	*/
+	public function simpan_hosting($dataHosting)
+	{
+		$this->db->insert($this->tableHosting, $dataHosting);
+		return $this->db->insert_id();
+	}
+
+
+	##############################################################
     #                                                            #
     #           Fungsi yang akan sering dipakai                  #
     #                                                            #
     ##############################################################
 
-    public function getProduct($idProduct)
-    {
-        $this->db->where('id_product', $idProduct);
-        $hasil = $this->db->get('tbproduct');
-        return $hasil->row();
-    }
+
     public function getUser($idUser)
     {
         $this->db->where('id_user', $idUser);
@@ -166,11 +183,7 @@ class M_member extends CI_Model
     {
         $this->db->insert('tbemail', $email);
     }
-    public function simpan_invoice($data)
-    {
-        $this->db->insert('tbinvoice', $data);
-        return $this->db->insert_id();
-    }
+
 
     ##############################################################
     #                                                            #
@@ -231,11 +244,6 @@ class M_member extends CI_Model
 
 
 
-    public function simpan_hosting($dataHosting)
-    {
-        $this->db->insert('tbhosting', $dataHosting);
-        return $this->db->insert_id();
-    }
 
     ##############################################################
     #                                                            #

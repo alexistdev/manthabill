@@ -32,8 +32,9 @@ function diskonUnik()
 }
 
 /** Mendapatkan angka unik */
-function _angkaUnik($length = 5)
+function _angkaUnik()
 {
+	$length = 5;
 	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$charactersLength = strlen($characters);
 	$randomString = '';
