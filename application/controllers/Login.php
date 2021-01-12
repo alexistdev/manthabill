@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 /**
  * ManthaBill V.2.0
  *
@@ -35,6 +34,12 @@ class Login extends CI_Controller
 		}
 	}
 
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('user/view/' . $view, $data);
+	}
+
 	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
@@ -58,7 +63,7 @@ class Login extends CI_Controller
 	/** validasi mengecek email apakah sudah terdaftar */
 	public function _check_email($email)
 	{
-		$cekEmailAda = $this->login->CekEmail($email);
+		$cekEmailAda = $this->login->cek_email($email);
 		if ($cekEmailAda > 0) {
 			return true;
 		} else {
@@ -97,37 +102,49 @@ class Login extends CI_Controller
 		);
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
 		if ($this->form_validation->run() === false) {
-			$data['image'] = $this->_create_captcha();
-			$data['title'] = $this->login->get_data_setting()->nama_hosting;
 			$this->session->set_flashdata('pesan', validation_errors());
-			$this->load->view('user/login/v_login', $data);
+			$data['image'] = $this->_create_captcha();
+			$data['namaHosting'] = $this->login->get_setting()->nama_hosting;
+			$data['title'] = "Login | ". $this->login->get_setting()->judul_hosting;
+			$view ='v_login';
+			$this->_template($data,$view);
 		} else {
 			$username = $this->input->post('email', TRUE);
 			$password = sha1($this->input->post('password', TRUE));
-			$cekLogin = $this->login->cek_login($username, $password);
+			$cekLogin = $this->login->validasi_login($username, $password)->num_rows();
+
 			/* Membuat key token untuk disimpan di database */
 			$waktu = date('Y-m-d H:i:s');
 			$key = sha1($waktu);
 			$logTime = strtotime($waktu);
 
 			if ($cekLogin > 0) {
-				$row = $this->login->data_login($username, $password);
+				$idUser = $this->login->validasi_login($username, $password)->row()->id_user;
+
+				/* Cek apa token sudah ada apa belum, jika ada dihapus */
+				$cekToken = $this->login->cek_token($username);
+				if($cekToken > 0){
+					//jalankan hapus token
+					$this->login->hapus_token($idUser);
+				}
+
 				/* mempersiapkan data untuk session */
 				$data_session = [
-					'id_user' => $row->id_user,
+					'id_user' => $idUser,
 					'token' => $key,
 					'is_login_in' => TRUE
 				];
 
 				/* mempersiapkan data untuk token */
 				$hashkey = [
-					'id_user' => $row->id_user,
+					'id_user' => $idUser,
 					'token' => $key,
 					'time' => $logTime
 				];
-				//simpan data token
+
+				/* Menyimpan data token */
 				$this->login->simpan_token($hashkey);
-				//mengeset data session
+				/* Mengeset data session */
 				$this->session->set_userdata($data_session);
 				redirect("member");
 			} else {

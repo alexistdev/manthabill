@@ -15,6 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
     <title><?= cetak($title); ?></title>
     <meta name="description" content="AdriHost WebHosting Solution">
     <meta name="author" content="AlexistDev">
+	<link rel="icon" href="<?= base_url('assets/img/') ?>myicon.png">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
