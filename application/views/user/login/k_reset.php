@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 <?= form_open('reset_password', ['class' => 'form-horizontal']) ?>
 <div class="input-group mb-3">
-    <?= form_input(['name' => 'email', 'type' => 'email', 'class' => 'form-control', 'placeholder' => 'Email', 'required' => 'required']); ?>
+    <?= form_input(['name' => 'email', 'type' => 'email', 'class' => 'form-control', 'placeholder' => 'Email', 'value'=>set_value('email'),'required' => 'required']); ?>
     <div class="input-group-append">
         <div class="input-group-text">
             <span class="fas fa-envelope"></span>

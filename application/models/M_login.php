@@ -70,10 +70,10 @@ class M_login extends CI_Model
 	####################################################################################
 
 	/** cek email ada atau tidak */
-	public function cek_email($email)
+	public function get_data($email)
 	{
 		$this->db->where('email', $email);
-		return $this->db->get('tbuser')->num_rows();
+		return $this->db->get($this->tableUser);
 	}
 
 	/** Dapat data untuk disimpan di session */
@@ -84,47 +84,24 @@ class M_login extends CI_Model
 		return $this->db->get($this->tableUser);
 	}
 
+	/** Mengupdate data token permintaan password */
+	public function update_token($dataToken, $email)
+	{
+		$this->db->where('email', $email);
+		$this->db->update($this->tableUser, $dataToken);
+	}
 
+	/** mengecek benar atau tidak token nya valid */
+	public function cek_token_reset($idReq)
+	{
+		$this->db->where('token_req', $idReq);
+		return $this->db->get($this->tableUser)->num_rows();
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //mengecek apakah sudah ada token permintaan password sebelumnya
-    public function get_detailUser($email)
-    {
-        $this->db->where("email", $email);
-        return $this->db->get('tbuser')->row();
-    }
-    //mengupdate data token request password
-    public function update_token($dataToken, $email)
-    {
-        $this->db->where('email', $email);
-        $this->db->update('tbuser', $dataToken);
-    }
-
-
-    //mengecek benar atau tidak token nya valid
-    public function cek_idReset($idReq)
-    {
-        $this->db->where('token_req', $idReq);
-        $query = $this->db->get('tbuser');
-        return $query->num_rows();
-    }
-    //update password
-    function update_password($token, $newpass)
-    {
-        $this->db->where('token_req', $token);
-        $this->db->update('tbuser', $newpass);
-    }
+	/** Mengupdate password */
+	public function update_password($token, $newpass)
+	{
+		$this->db->where('token_req', $token);
+		$this->db->update($this->tableUser, $newpass);
+	}
 }

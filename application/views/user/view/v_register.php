@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page bg-dark">
     <div class="login-box">
         <div class="login-logo">
             <b><?= cetak($namaHosting) ?> </b> Daftar

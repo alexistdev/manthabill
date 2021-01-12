@@ -15,6 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
   <title><?= cetak($title) ?> | Reset Password</title>
   <meta name="description" content="AdriHost WebHosting Solution">
   <meta name="author" content="AlexistDev">
+	<link rel="icon" href="<?= base_url('assets/img/') ?>myicon.png">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -25,7 +26,8 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
   <link href="<?= base_url('assets/AdminLTE3') ?>/googleapis.css" rel="stylesheet">
 </head>
 
-<body class="hold-transition login-page">
+
+<body class="hold-transition login-page bg-dark">
   <div class="login-box">
     <div class="login-logo">
       <b>Reset Password</b>
@@ -36,10 +38,11 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
       <div class="card-body login-card-body">
         <!-- START PESAN -->
         <?= $this->session->flashdata('pesan'); ?>
+        <?= $this->session->flashdata('pesan2'); ?>
         <!-- END PESAN -->
 
         <!-- START FORM -->
-        <?php $this->load->view('user/login/k_ubahpassword'); ?>
+        <?php $this->load->view('user/login/k_reset'); ?>
         <!-- END FORM -->
 
         <!-- START KEMBALI KE HALAMAN LOGIN -->

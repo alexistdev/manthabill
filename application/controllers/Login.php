@@ -63,7 +63,7 @@ class Login extends CI_Controller
 	/** validasi mengecek email apakah sudah terdaftar */
 	public function _check_email($email)
 	{
-		$cekEmailAda = $this->login->cek_email($email);
+		$cekEmailAda = $this->login->get_data($email)->num_rows();
 		if ($cekEmailAda > 0) {
 			return true;
 		} else {

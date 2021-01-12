@@ -1,43 +1,55 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 class Reset_password extends CI_Controller
 {
-	function __construct()
+	public $load;
+	public $input;
+	public $login;
+	public $session;
+	public $form_validation;
+
+	/** Constructor dari Class Reset_password */
+	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('m_login');
+		//m_login sebelumnya
+		$this->load->model('m_login', 'login');
+		if ($this->session->userdata('is_login_in') == TRUE) {
+			redirect('member');
+		}
 	}
-	//khusus membuat captcha dan cek validasi captcha
+
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('user/view/' . $view, $data);
+	}
+
+	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
-		$config = array(
-			'img_url' => base_url() . 'captcha/',
-			'img_path' => './captcha/',
-			'img_height' =>  50,
-			'word_length' => 5,
-			'img_width' => 150,
-			'font_size' => 10,
-			'expiration' => 300,
-			'pool' => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
-		);
-		$cap = create_captcha($config);
+		$cap = create_captcha(config_captcha());
 		$image = $cap['image'];
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
 	}
-	//validasi mengecek email apakah sudah ada atau belum
-	public function _check_email($email)
-	{
-		$cekEmailAda = $this->m_login->CekEmail($email);
-		if ($cekEmailAda > 0) {
-			return true;
-		} else {
-			$this->form_validation->set_message('_check_email', 'Email belum terdaftar!');
-			return false;
-		}
-	}
-	//mengecek apakah captcha sudah benar diinput
+
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
 	public function _check_captcha($string)
 	{
 		if ($string == $this->session->userdata('captchaword')) {
@@ -47,10 +59,23 @@ class Reset_password extends CI_Controller
 			return FALSE;
 		}
 	}
-	//mengecek apakah sudah pernah meminta request password sebelumnya
+
+	/** validasi mengecek email apakah sudah terdaftar */
+	public function _check_email($email)
+	{
+		$cekEmailAda = $this->login->get_data($email)->num_rows();
+		if ($cekEmailAda > 0) {
+			return true;
+		} else {
+			$this->form_validation->set_message('_check_email', 'Email belum terdaftar!');
+			return false;
+		}
+	}
+
+	/** mengecek apakah sudah pernah meminta request password sebelumnya */
 	public function _check_request($email)
 	{
-		$getToken = $this->m_login->get_detailUser($email)->token_req;
+		$getToken = $this->login->get_data($email)->row()->token_req;
 		if ($getToken == "") {
 			return TRUE;
 		} else {
@@ -59,7 +84,8 @@ class Reset_password extends CI_Controller
 		}
 	}
 
-	function index()
+	/** Method index dari halaman reset password */
+	public function index()
 	{
 		$this->form_validation->set_rules(
 			'email',
@@ -79,47 +105,55 @@ class Reset_password extends CI_Controller
 			]
 		);
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_login->get_token($hashSes);
 		if ($this->form_validation->run() === false) {
-			if ($hashKey == 0) {
-				$data['image'] = $this->_create_captcha();
-				$data['title'] = $this->m_login->getCompany()->nama_hosting;
-				$this->session->set_flashdata('pesan', validation_errors());
-				$this->load->view('user/login/v_reset', $data);
-			} else {
-				redirect('member');
-			}
+			$this->session->set_flashdata('pesan', validation_errors());
+			$data['image'] = $this->_create_captcha();
+			$data['title'] = "Reset Password | ". $this->login->get_setting()->judul_hosting;
+			$view ='v_reset';
+			$this->_template($data,$view);
 		} else {
 			$email = $this->input->post('email', TRUE);
 			$reqTime = strtotime(date('Y-m-d H:i:s'));
 			$waktuReq = strtotime(time());
 			$keyReq = sha1($reqTime);
-			//dapatkan user dari email address
-			$dataToken = array(
+
+			/* Mengupdate token request password */
+			$dataToken = [
 				'time_req' => $waktuReq,
 				'token_req' => $keyReq
-			);
-			$this->m_login->update_token($dataToken, $email);
-			email_reset($keyReq, $email);
+			];
+			$this->login->update_token($dataToken, $email);
+			/* Mengirimkan Email Permintaan Lupa password */
+			$judul = "Permintaan Reset Password";
+			$pesan = "
+				Anda telah meminta reset password untuk akun anda, silahkan klik link dibawah ini:<br>
+				Reset Password: " .base_url(). "reset_password/konfirm/" . $keyReq . "<br>
+
+				Jika anda tidak merasa melakukan permintaan reset password, abaikan saja email ini. Email ini akan expired setelah 24 jam.<br>
+				<br>
+				Regards<br>
+				Admin
+ 			";
+			kirim_email($email, $pesan, $judul);
 			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert"> Permintaan Reset Password telah dikirimkan silahkan cek email anda!</div>');
-			redirect("reset_password");
+			redirect("Reset_password");
 		}
 	}
 
 	public function konfirm($idReq = NULL)
 	{
-		if (empty($idReq)) {
-			redirect("reset_password");
+		if (empty($idReq) || $idReq==NULL) {
+			redirect("Reset_password");
 		} else {
-
-			$cekReq = $this->m_login->cek_idReset($idReq);
+			/* Mengecek apakah token valid */
+			$cekReq = $this->login->cek_token_reset($idReq);
 			if ($cekReq > 0) {
 				$data['token'] = $idReq;
-				$data['title'] = $this->m_login->getCompany()->nama_hosting;
-				$this->load->view('user/login/v_ubahpasword', $data);
+				$data['title'] = "Ganti Password | ". $this->login->get_setting()->judul_hosting;
+				$view ='v_ubahpasword';
+				$this->_template($data,$view);
 			} else {
-				redirect("reset_password");
+				redirect("Reset_password");
 			}
 		}
 	}
@@ -150,21 +184,21 @@ class Reset_password extends CI_Controller
 			$token = $this->input->post('token', TRUE);
 			if ($this->form_validation->run() === false) {
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
-				redirect("reset_password/konfirm/$token");
+				redirect("Reset_password/konfirm/$token");
 			} else {
 				$password1 = sha1($this->input->post('password1', TRUE));
-				//update password
-				$dataNewPass = array(
+				/* Mengupdate password */
+				$dataNewPass = [
 					'password' => $password1,
 					'token_req' => ''
-				);
-				$this->m_login->update_password($token, $dataNewPass);
+				];
+				$this->login->update_password($token, $dataNewPass);
 				//pesan berhasil diupdate passwordnya
 				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Password anda berhasil diperbaharui!</div>');
-				redirect("login");
+				redirect("Login");
 			}
 		} else {
-			redirect("login");
+			redirect("Login");
 		}
 	}
 }

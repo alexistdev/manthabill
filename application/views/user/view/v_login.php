@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
     <link href="<?= base_url('assets/AdminLTE3/googleapis.css') ?>" rel="stylesheet">
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page bg-dark">
     <div class="login-box">
         <div class="login-logo">
             Login <b><?= cetak($namaHosting) ?></b>
@@ -40,17 +40,6 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     echo $this->session->flashdata('pesan');
                     echo $this->session->flashdata('pesan2');
                     echo $this->session->flashdata('pesan3');
-                    // $pesan2 = $this->session->flashdata('pesan2');
-                    // $pesan3 = $this->session->flashdata('pesan3');
-                    // if (!empty($pesan)) {
-                    //     echo '<div class="alert alert-danger" role="alert">' . $pesan  . '</div>';
-                    // } else if (!empty($pesan2)) {
-                    //     echo '<div class="alert alert-danger" role="alert">' . $pesan2  . '</div>';
-                    // } else if (!empty($pesan3)) {
-                    //     echo '<div class="alert alert-Success" role="alert">' . $pesan3 . '</div>';
-                    // } else {
-                    //     echo "";
-                    // }
                     ?>
                 </p>
                 <!-- END PESAN -->
@@ -61,10 +50,10 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
                 <!-- START LUPA PASSWORD DAN REGISTER -->
                 <p class="mb-1">
-                    <a href="<?php echo base_url('reset_password'); ?>">Lupa Password</a><br>
+                    <a href="<?php echo base_url('Reset_password'); ?>">Lupa Password</a><br>
                 </p>
                 <p class="mb-0">
-                    <a href="<?php echo base_url('daftar'); ?>" class="text-center">Daftar Akun Baru</a>
+                    <a href="<?php echo base_url('Daftar'); ?>" class="text-center">Daftar Akun Baru</a>
                 </p>
                 <!-- END LUPA PASSWORD DAN REGISTER -->
             </div>
