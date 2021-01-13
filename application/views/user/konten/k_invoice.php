@@ -12,7 +12,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="<?= base_url('member') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url('Member') ?>">Home</a></li>
+						<li class="breadcrumb-item"><a href="<?= base_url('Product'); ?>">Product</a></li>
                         <li class="breadcrumb-item active">Pembayaran</li>
                     </ol>
                 </div>
@@ -30,7 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <!-- BOX TABEL ATAS -->
                     <div class="card">
                         <div class="card-body">
-                            <h3>Terima kasih telah Memesan di <?php echo htmlentities($namaHosting, ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <h3>Terima kasih telah Memesan di <?= cetak($namaHosting); ?></h3>
                             <p>Ikuti petunjuk pembayaran di bawah ini agar layanan dapat aktif lebih cepat</p>
                         </div>
                     </div>
@@ -49,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="callout callout-danger mt-5">
                                     <dt>BERITA</dt>
                                     <dd>
-                                        <p>INV <?php echo htmlentities(strtoupper($NoInvoice), ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <p>INV <?= strtoupper(cetak($NoInvoice)); ?></p>
                                         <i>
                                             <small>
                                                 <p>*Ketikkan berita di atas pada saat Anda melakukan pembayaran melalui ATM Non-Tunai, setoran Bank, atau Internet Banking</p>
@@ -92,7 +93,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="alert alert-danger">
                             <p>**Lakukan pembayaran sesuai dengan jumlah yang tercantum di Invoice agar dapat terverifikasi dengan cepat</p>
                         </div>
-                        <a href="<?= base_url('invoice') ?>" class="btn btn-block btn-warning btn-lg">Halaman Invoice</a>
+                        <a href="<?= base_url('Invoice') ?>" class="btn btn-block btn-warning btn-lg">Halaman Invoice</a>
                     </div>
                 </div>
 

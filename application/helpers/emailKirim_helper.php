@@ -24,7 +24,7 @@ function kirim_emailInvoice($email, $message)
 {
     $ci = get_instance(); //memanggil library CI disini, agar bisa pakai object $ci
     //email yang akan dikirimkan
-    $subyek = "Layanan Anda telah dibuat";
+    $subyek = "";
 
     $companyEmail = $ci->login->get_data_setting()->email_hosting;
     $dataEmail = array(

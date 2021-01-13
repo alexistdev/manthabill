@@ -22,11 +22,18 @@ class Product extends CI_Controller
 	public $session;
 	public $form_validation;
 	public $input;
+	public $idUser;
+	public $token;
+	public $cekToken;
 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
+		/** Global scope idUser dan token */
+		$this->idUser = $this->session->userdata('id_user');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
@@ -39,11 +46,13 @@ class Product extends CI_Controller
 	}
 
 	/** Prepare data */
-	private function _dataMember($idUser)
+	private function _dataMember($idUser, $status=TRUE)
 	{
-		$data['idUser'] = $idUser;
-		$data['tipe1'] = $this->member->get_data_product(TRUE);
-		$data['tipe2'] = $this->member->get_data_product(FALSE);
+		if($status){
+			$data['idUser'] = $idUser;
+			$data['tipe1'] = $this->member->get_data_product(TRUE);
+			$data['tipe2'] = $this->member->get_data_product(FALSE);
+		}
 
 		/* Nama dan Gambar di Sidebar */
 		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
@@ -56,42 +65,50 @@ class Product extends CI_Controller
 	/** Method untuk halaman Product */
 	public function index()
 	{
-		$idUser = $this->session->userdata('id_user');
-		$data = $this->_dataMember($idUser);
-		$view = "v_product";
-		$this->_template($data, $view);
+		/** Login dengan Desain Pattern Singleton */
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
+		} else {
+			$data = $this->_dataMember($this->idUser, TRUE);
+			$view = "v_product";
+			$this->_template($data, $view);
+		}
 	}
 
 	/** Method untuk halaman Beli */
 	public function beli($idProduct = NULL)
 	{
-		$id = decrypt_url($idProduct);
-		/* Cek apakah idproduct tersedia */
-		$cekIdProduct = $this->member->get_product($id)->num_rows();
-		if ($cekIdProduct > 0) {
-			//mengecek dahulu apakah masih ada invoice yang pending
-			$idUser = $this->session->userdata('id_user');
-			$cekPendingInv = $this->member->cek_pending_inv($idUser);
-			if ($cekPendingInv > 0) {
-				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Silahkan anda selesaikan pembayaran invoice berikut!</div>');
-				redirect('Invoice');
-			} else {
-				$data = $this->_dataMember($idUser);
-				$data['detailProduct'] = $this->member->get_product($id);
-				$tlD = $this->member->get_data_tld();
-				foreach ($tlD->result_array() as $row) {
-					$options[cetak($row['tld'])] = strtoupper(cetak($row['tld']));
-				};
-				$attribut = [
-					"class" => "form-control"
-				];
-				$data['dataTLD'] = form_dropdown('tldName', $options,'',$attribut);
-				$data['diskonUnik'] = diskonUnik();
-				$view = 'v_beli';
-				$this->_template($data, $view);
-			}
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
 		} else {
-			redirect('Product');
+			$id = decrypt_url($idProduct);
+			/* Cek apakah idproduct tersedia */
+			$cekIdProduct = $this->member->get_product($id)->num_rows();
+			if ($cekIdProduct > 0) {
+				//mengecek dahulu apakah masih ada invoice yang pending
+				$idUser = $this->session->userdata('id_user');
+				$cekPendingInv = $this->member->cek_pending_inv($idUser);
+				if ($cekPendingInv > 0) {
+					$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Silahkan anda selesaikan pembayaran invoice berikut!</div>');
+					redirect('Invoice');
+				} else {
+					$data = $this->_dataMember($idUser);
+					$data['detailProduct'] = $this->member->get_product($id);
+					$tlD = $this->member->get_data_tld();
+					foreach ($tlD->result_array() as $row) {
+						$options[cetak($row['tld'])] = strtoupper(cetak($row['tld']));
+					};
+					$attribut = [
+						"class" => "form-control"
+					];
+					$data['dataTLD'] = form_dropdown('tldName', $options,'',$attribut);
+					$data['diskonUnik'] = diskonUnik();
+					$view = 'v_beli';
+					$this->_template($data, $view);
+				}
+			} else {
+				redirect('Product');
+			}
 		}
 	}
 
@@ -137,10 +154,11 @@ class Product extends CI_Controller
 		/* Menyimpan ke tbinvoice, sehingga terbentuk invoice pending */
 		$dateNowInv = date("Y-m-d");
 		$dueInv = date("Y-m-d", strtotime($startDate . ' + 3 days'));
+		$noInvoice = _angkaUnik();
 		$dataInvoice = array(
 			'id_user' => $idUser,
 			'id_hosting' => $idHosting,
-			'no_invoice' => _angkaUnik(),
+			'no_invoice' => $noInvoice,
 			'detail_produk' => $getDetailInvoice,
 			'total_jumlah' => $hargaSetelahDiskon,
 			'sub_total' => $getHarga,
@@ -151,10 +169,43 @@ class Product extends CI_Controller
 		);
 		$idInvoice = $this->member->simpan_invoice($dataInvoice);
 
+		/* Mengirimkan Email */
+		$judul = "Layanan Anda telah dibuat";
+		$message = "
+					Yth.Pelanggan , kami telah menambahkan satu layanan ke dalam akun anda, berikut informasi detailnya:<br><br>
 
+					Nama Produk:" . $getNamaProduct . " <br>
+					Harga: " . $hargaSetelahDiskon . " <br>
+					Durasi: " . $paket . " Bulan<br>
+					Invoice: " . $noInvoice . "<br>
+					Register: " . date("d-m-Y", strtotime($startDate)) . "<br>
+					Expired:  " . date("d-m-Y", strtotime($nextendDate)) . "<br>
+					Langkah selanjutnya adalah selesaikan pembayarannya sesuai dengan harga yang tercantum ke rekening kami.
+					<br><br>
+					Regards<br>
+					Admin<br>
+				";
+		$emailTujuan = $this->member->get_data_user($this->idUser)->email;
+		kirim_email($emailTujuan, $message, $judul);
+		/* mengarahkan ke halaman instruksi pembayaran */
+		$data = $this->_dataMember($this->idUser);
+
+		$data['telpHosting'] = $this->member->getSetting()->telp_hosting;
+		$data['namaHosting'] = $this->member->getSetting()->nama_hosting;
+		$totalBiaya = $this->member->getInvoice($idInvoice)->total_jumlah;
+		$data['namaProduk'] = $getNamaProduct;
+		$data['NoInvoice'] = $this->member->getInvoice($idInvoice)->no_invoice;
+		$data['namaBank'] = $this->member->getInfoBank()->nama_bank;
+		$data['nomorRekening'] = $this->member->getInfoBank()->no_rekening;
+		$data['namaPemilikRekening'] = $this->member->getInfoBank()->nama_pemilik;
+		$data['totalBiaya'] = $totalBiaya;
+		$data['formatSMS'] = "<b>BAYAR</b> [spasi] <b>INV</b> [spasi] <b>" .
+					htmlentities(strtoupper($data['NoInvoice']), ENT_QUOTES, 'UTF-8') .
+					"</b> [spasi] <b> " .
+					htmlentities($data['totalBiaya'], ENT_QUOTES, 'UTF-8') . "</b> [spasi] <b>[Nama Pengirim]</b>";
+		$view = 'v_invoice';
+		$this->_template($data, $view);
 	}
-
-
 
 
 	/** Method untuk menampilkan halaman invoice */
@@ -183,51 +234,6 @@ class Product extends CI_Controller
 				} else {
 					redirect('Product');
 				}
-
-
-
-
-
-//
-
-
-//
-//				//mengirimkan email invoice ke tabel email
-//				$email = $this->member->getUser($idUser)->email;
-//				$message = "
-//					Yth.Pelanggan , kami telah menambahkan satu layanan ke dalam akun anda, berikut informasi detailnya:<br><br>
-//
-//					Nama Produk:" . $getNamaProduct . " <br>
-//					Harga: " . $hargaSetelahDiskon . " <br>
-//					Durasi: " . $bulan . " Bulan<br>
-//					Invoice: " . $this->_angkaUnik() . "<br>
-//					Register: " . date("d-m-Y", strtotime($startDate)) . "<br>
-//					Expired:  " . date("d-m-Y", strtotime($nextendDate)) . "<br>
-//					Langkah selanjutnya adalah selesaikan pembayarannya sesuai dengan harga yang tercantum ke rekening kami.
-//					<br><br>
-//					Regards<br>
-//					Admin<br>
-//				";
-//
-//				kirim_emailInvoice($email, $message);
-//
-//				//mengarahkan ke halaman instruksi pembayaran
-//				$data = $this->_dataMember($idUser);
-//				$data['telpHosting'] = $this->member->getSetting()->telp_hosting;
-//				$data['namaHosting'] = $this->member->getSetting()->nama_hosting;
-//				$totalBiaya = $this->member->getInvoice($idInvoice)->total_jumlah;
-//				$data['namaProduk'] = $getNamaProduct;
-//				$data['NoInvoice'] = $this->member->getInvoice($idInvoice)->no_invoice;
-//				$data['namaBank'] = $this->member->getInfoBank()->nama_bank;
-//				$data['nomorRekening'] = $this->member->getInfoBank()->no_rekening;
-//				$data['namaPemilikRekening'] = $this->member->getInfoBank()->nama_pemilik;
-//				$data['totalBiaya'] = $totalBiaya;
-//				$data['formatSMS'] = "<b>BAYAR</b> [spasi] <b>INV</b> [spasi] <b>" .
-//					htmlentities(strtoupper($data['NoInvoice']), ENT_QUOTES, 'UTF-8') .
-//					"</b> [spasi] <b> " .
-//					htmlentities($data['totalBiaya'], ENT_QUOTES, 'UTF-8') . "</b> [spasi] <b>[Nama Pengirim]</b>";
-//				$view = 'v_invoice';
-//				$this->_template($data, $view);
 			}
 		}
 	}

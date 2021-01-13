@@ -48,10 +48,19 @@ class M_member extends CI_Model
 		return $this->db->get($this->tableToken);
 	}
 
+	/** Untuk mendapatkan data token */
+	public function get_token_byId($id){
+		$this->db->where('id_user', $id);
+		return $this->db->get($this->tableToken);
+	}
+
 	####################################################################################
 	#                                Tabel tbUser                                      #
 	####################################################################################
-
+	public function get_data_user($data){
+		$this->db->where('id_user', $data);
+		return $this->db->get($this->tableUser)->row();
+	}
 	####################################################################################
 	#                              Tabel tbdetailuser                                  #
 	####################################################################################
