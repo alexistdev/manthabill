@@ -39,6 +39,12 @@ class M_member extends CI_Model
 		return $this->db->get($this->tableSetting)->row();
 	}
 
+	/** Data tabel setting  */
+	public function get_data_setting()
+	{
+		return $this->db->get($this->tableSetting);
+	}
+
 	####################################################################################
 	#                                Tabel tbToken                                     #
 	####################################################################################
@@ -109,12 +115,15 @@ class M_member extends CI_Model
 	#                                Tabel tbInvoice                                   #
 	####################################################################################
 	/** Data dari table invoice	*/
-	public function get_data_invoice($data, $status=TRUE)
+	public function get_data_invoice($data, $status=TRUE, $type=TRUE)
 	{
 		if($status){
 			$this->db->where('id_user', $data);
 			$this->db->order_by('id_invoice', 'DESC');
 		} else {
+			if($type){
+				$this->db->where('status_inv',2);
+			}
 			$this->db->where('id_invoice', $data);
 		}
 		return $this->db->get('tbinvoice');

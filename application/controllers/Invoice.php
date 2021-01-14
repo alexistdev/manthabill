@@ -23,6 +23,7 @@ class Invoice extends CI_Controller
 	public $idUser;
 	public $tokenSession;
 	public $tokenServer;
+	public $judulHosting;
 
 	public function __construct()
 	{
@@ -32,6 +33,7 @@ class Invoice extends CI_Controller
 		$this->idUser = $this->session->userdata('id_user');
 		$this->tokenSession = $this->session->userdata('token');
 		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
+		$this->judulHosting = $this->member->get_setting()->judul_hosting;
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
@@ -40,7 +42,6 @@ class Invoice extends CI_Controller
 	/** Prepare data */
 	private function _dataMember($idUser)
 	{
-
 		//nama dan gambar disidebar
 		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
 		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
@@ -48,17 +49,30 @@ class Invoice extends CI_Controller
 	}
 	/** Prepare data detail Invoice */
 	private function _dataDetail($idUser,$idInv){
-		$data['namaUsaha'] = $this->member->get_setting()->judul_hosting;
-		$dataInvoice = $this->member->get_data_invoice($idInv,FALSE);
+		/* Data Setting */
+		$data['idInv'] = $idInv;
+		$dataSetting = $this->member->get_data_setting();
+		foreach($dataSetting->result_array() as $rowSetting){
+			$data['namaUsaha'] = $rowSetting['judul_hosting'];
+			$data['namaBank'] = $rowSetting['nama_bank'];
+			$data['nomorRekening'] = $rowSetting['no_rekening'];
+			$data['namaPemilikRekening'] = $rowSetting['nama_pemilik'];
+			$data['namaHosting'] = $rowSetting['nama_hosting'];
+			$data['telpHosting'] = $rowSetting['telp_hosting'];
+		}
+		/* Data Invoice */
+		$dataInvoice = $this->member->get_data_invoice($idInv,FALSE,FALSE);
 		foreach($dataInvoice->result_array() as $row){
 			$data['tanggalInvoice'] = cetak($row['inv_date']);
-			$data['noInv'] = cetak($row['no_invoice']);
+			$data['NoInvoice'] = cetak($row['no_invoice']);
 			$data['due'] = cetak($row['due']);
-			$data['deskripsi'] = cetak($row['detail_produk']);
+			$data['namaProduk'] = cetak($row['detail_produk']);
 			$data['subtotal'] = cetak($row['sub_total']);
 			$data['diskon'] = cetak($row['diskon_inv']);
-			$data['total'] = cetak($row['total_jumlah']);
+			$data['totalBiaya'] = cetak($row['total_jumlah']);
+			$data['statusInv'] = cetak($row['status_inv']);
 		}
+		/* Data User */
 		$dataUser = $this->member->get_all_datauser($idUser);
 		foreach($dataUser->result_array() as $rowUser){
 			$data['namaDepan'] = cetak($rowUser['nama_depan']);
@@ -70,6 +84,7 @@ class Invoice extends CI_Controller
 			$data['negara'] = cetak($rowUser['negara']);
 			$data['phone'] = cetak($rowUser['phone']);
 			$data['email'] = cetak($rowUser['email']);
+
 		}
 		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
 		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
@@ -90,8 +105,8 @@ class Invoice extends CI_Controller
 			_unlogin();
 		} else {
 			$data = $this->_dataMember($this->idUser);
-			$data['daftarInvoice'] = $this->member->get_data_invoice($this->idUser,TRUE);
-			$data['title'] = "Invoice | ". $this->member->get_setting()->judul_hosting;
+			$data['daftarInvoice'] = $this->member->get_data_invoice($this->idUser,TRUE,FALSE);
+			$data['title'] = "Invoice | ". $this->judulHosting;
 			$view = 'v_minvoice';
 			$this->_template($data, $view);
 		}
@@ -106,11 +121,11 @@ class Invoice extends CI_Controller
 				redirect('Invoice');
 			} else {
 				$id = decrypt_url($noInv);
-				$cekId = $this->member->get_data_invoice($id,FALSE)->num_rows();
+				$cekId = $this->member->get_data_invoice($id,FALSE,FALSE)->num_rows();
 				if($cekId != 0){
 					$view = 'v_detinvoice';
 					$data = $this->_dataDetail($this->idUser,$id);
-					$data['title'] = "Detail Invoice | ". $this->member->get_setting()->judul_hosting;
+					$data['title'] = "Detail Invoice | ". $this->judulHosting;
 					$this->_template($data, $view);
 				}else{
 					redirect('Invoice');
@@ -119,31 +134,31 @@ class Invoice extends CI_Controller
 		}
 
 	}
-//	function detail($noInv)
-//	{
-//		$hashSes = $this->session->userdata('token');
-//		$hashKey = $this->user->get_token($hashSes);
-//		$idUser = $this->session->userdata('id_user');
-//		$b['status'] = $this->session->userdata('status');
-//		//mengambil data hosting di database
-//		$b['user'] = $this->user->loginok($idUser);
-//
-//		if ($hashKey == 0) {
-//			redirect('login');
-//		} else {
-//			$cekInv = $this->user->cek_invoice($noInv, $idUser);
-//			if (($noInv == "") or ($noInv == NULL) or ($cekInv == 0)) {
-//				redirect('invoice');
-//			} else {
-//				$idUser = $this->session->userdata('id_user');
-//				$b['invoice'] = $this->user->get_invoiceByID($noInv);
-//				$b['user'] = $this->user->loginok($idUser);
-//				$b['customer'] = $this->user->get_customer($idUser);
-//				$b['company'] = $this->user->get_company();
-//				$this->load->view('user/v_detinvoice', $b);
-//			}
-//		}
-//	}
+
+	/** Method untuk menampilkan halaman instruksi pembayaran */
+	public function bayar($noInv=NULL){
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
+		} else {
+			$id = decrypt_url($noInv);
+			$cekId = $this->member->get_data_invoice($id,FALSE,TRUE)->num_rows();
+
+			if($cekId != 0){
+				/* mengarahkan ke halaman instruksi pembayaran */
+				$data = $this->_dataDetail($this->idUser,$id);
+				$data['formatSMS'] = "<b>BAYAR</b> [spasi] <b>INV</b> [spasi] <b>" .
+					htmlentities(strtoupper($data['NoInvoice']), ENT_QUOTES, 'UTF-8') .
+					"</b> [spasi] <b> " .
+					htmlentities($data['totalBiaya'], ENT_QUOTES, 'UTF-8') . "</b> [spasi] <b>[Nama Pengirim]</b>";
+				$data['title'] = "Instruksi Pembayaran | ". $this->judulHosting;
+				$view = 'v_invoice';
+				$this->_template($data, $view);
+			} else {
+				redirect('Invoice');
+			}
+		}
+	}
+
 //	function konfirmasi($noInv)
 //	{
 //		$hashSes = $this->session->userdata('token');

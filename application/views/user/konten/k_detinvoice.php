@@ -54,11 +54,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					</div>
 					<!-- /.col -->
 					<div class="col-md-4  offset-md-4 invoice-col">
-						<b>Invoice #<?= strtoupper(cetak($noInv)); ?></b><br>
+						<b>Invoice #<?= strtoupper(cetak($NoInvoice)); ?></b><br>
 						<br>
 						<b>Tanggal Invoice:</b> <?= konversiTanggal(cetak($tanggalInvoice)); ?><br>
 						<b>Expired:</b> <?= konversiTanggal(cetak($due)); ?><br>
 						<b>Status:</b>
+						<?php if ( $statusInv== 1) { ?>
+						<small class="badge badge-primary"> LUNAS </small>
+						<?php } else if ($statusInv == 2) { ?>
+						<small class="badge badge-warning"> PENDING </small>
+						<?php } else { ?>
+							<small class="badge badge-danger"> VOID </small>
+						<?php } ?>
 					</div>
 					<!-- /.col -->
 				</div>
@@ -69,17 +76,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<div class="col-12 table-responsive">
 						<table class="table table-success table-striped table-bordered">
 							<thead>
-							<tr>
-								<th width="80%">Deskripsi</th>
-								<th class="text-center" width="20%">Jumlah</th>
-							</tr>
+								<tr>
+									<th width="80%">Deskripsi</th>
+									<th class="text-center" width="20%">Jumlah</th>
+								</tr>
 							</thead>
 							<tbody>
-							<tr>
-								<td><?= cetak($deskripsi); ?></td>
-								<td class="text-center">Rp. <?= konversiRupiah(cetak($subtotal)); ?>,-</td>
-							</tr>
-
+								<tr>
+									<td><?= cetak($namaProduk); ?></td>
+									<td class="text-center">Rp. <?= konversiRupiah(cetak($subtotal)); ?>,-</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -91,12 +97,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<!-- accepted payments column -->
 					<div class="col-6">
 						<p class="lead font-weight-bold">Metode Pembayaran:</p>
-
-
+						<p>TRANSFER BANK</p>
 						<p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-							Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-							plugg
-							dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+							<?= cetak($namaBank); ?> <br>
+							No.Rek <?= cetak($nomorRekening); ?> <br>
+							A/n. <?= cetak($namaPemilikRekening); ?>
 						</p>
 					</div>
 					<!-- /.col -->
@@ -113,7 +118,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								</tr>
 								<tr>
 									<th>Total:</th>
-									<td>Rp. <?= konversiRupiah(cetak($total)); ?>,-</td>
+									<td>Rp. <?= konversiRupiah(cetak($totalBiaya)); ?>,-</td>
 								</tr>
 							</table>
 						</div>
@@ -126,8 +131,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<div class="row no-print">
 					<div class="col-12">
 						<a href="#" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-						<button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> BAYAR
-						</button>
+						<?php if($statusInv == 2) { ?>
+							<a href="<?= base_url('Invoice/bayar/'.encrypt_url(cetak($idInv))); ?>">
+								<button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> BAYAR
+								</button></a>
+						<?php } ?>
 						<a href="<?= base_url('Invoice'); ?>"><button type="button" class="btn btn-danger float-right" style="margin-right: 5px;">
 								<i class="fas fa-chevron-circle-left"></i> Kembali
 						</button></a>

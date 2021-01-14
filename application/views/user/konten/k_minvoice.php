@@ -54,12 +54,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                                     foreach ($daftarInvoice->result_array() as $row) :
 										$status = cetak($row['status_inv']);
-                                        if ( $status== 1) {
-                                            $statusInvoice = '<small class=\"badge badge-warning\"> AKTIF </small>';
+                                        if ($status== 1) {
+                                            $statusInvoice = "<small class=\"badge badge-primary\"> LUNAS </small>";
                                         } else if ($status == 2) {
-                                            $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                            $statusInvoice = "<small class=\"badge badge-warning\"> PENDING </small>";
                                         } else {
-                                            $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
+                                            $statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
                                         };
                                     ?>
                                         <tr>
@@ -79,7 +79,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 												<?php } else{;?>
 													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
 														<button class="btn bg-olive margin">VIEW</button></a>
-													<a href="<?php echo base_url('Invoice/konfirmasi/'.encrypt_url(cetak($row['id_invoice'])));?>">
+													<a href="<?php echo base_url('Invoice/bayar/'.encrypt_url(cetak($row['id_invoice'])));?>">
 														<button class="btn btn-danger">BAYAR</button></a>
 												<?php };?>
 
