@@ -10,9 +10,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="wrapper">
         <?php $this->load->view('user/template/navbar_v') ?>
         <?php $this->load->view('user/template/sidebar_v') ?>
-        <?php $this->load->view('user/k_minvoice') ?>
+        <?php $this->load->view('user/konten/k_minvoice') ?>
         <?php $this->load->view('user/template/footer_v') ?>
     </div>
+	<!-- jQuery -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/adminlte.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/dist/js/demo.js"></script>
+	<!-- pace-progress -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
+	<!-- DataTables -->
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <script>
         /** After window Load */
         $(window).bind("load", function() {

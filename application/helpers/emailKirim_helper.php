@@ -20,25 +20,6 @@ function kirim_email($emailTujuan, $pesan, $judul){
 	$ci->m_email->simpan_email($dataEmail);
 }
 
-function kirim_emailInvoice($email, $message)
-{
-    $ci = get_instance(); //memanggil library CI disini, agar bisa pakai object $ci
-    //email yang akan dikirimkan
-    $subyek = "";
-
-    $companyEmail = $ci->login->get_data_setting()->email_hosting;
-    $dataEmail = array(
-        'email_pengirim' => $companyEmail,
-        'email_tujuan' => $email,
-        'subyek' => $subyek,
-        'email_pesan' => $message,
-        'status' => 2
-    );
-    //simpan data ke tbemail
-    $ci->m_email->simpan_email($dataEmail);
-}
-
-
 function konversiTanggal($date)
 {
     $tanggalKonversi = date("d-m-Y", strtotime($date));

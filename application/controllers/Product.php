@@ -49,15 +49,15 @@ class Product extends CI_Controller
 	private function _dataMember($idUser, $status=TRUE)
 	{
 		if($status){
-			$data['idUser'] = $idUser;
 			$data['tipe1'] = $this->member->get_data_product(TRUE);
 			$data['tipe2'] = $this->member->get_data_product(FALSE);
 		}
 
 		/* Nama dan Gambar di Sidebar */
+		$data['idUser'] = $idUser;
 		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
 		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
-		$data['title'] = "Dashboard | ". $this->member->get_setting()->judul_hosting;
+		$data['title'] = "Product | ". $this->member->get_setting()->judul_hosting;
 		return $data;
 	}
 
@@ -212,7 +212,7 @@ class Product extends CI_Controller
 	public function invoice($idProduct = NULL)
 	{
 		if (($idProduct == "") or ($idProduct == NULL)) {
-			redirect('product');
+			redirect('Product');
 		} else {
 			$this->form_validation->set_rules(
 				'domain',

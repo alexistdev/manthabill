@@ -26,6 +26,7 @@ class M_member extends CI_Model
 		$this->tableInvoice = 'tbinvoice';
 		$this->tableTld = 'tbtld';
 		$this->tableHosting = 'tbHosting';
+		$this->join1 = 'tbdetailuser.id_user = tbuser.id_user';
     }
 
 	####################################################################################
@@ -57,9 +58,16 @@ class M_member extends CI_Model
 	####################################################################################
 	#                                Tabel tbUser                                      #
 	####################################################################################
+	/** Mendapatkan data dari tabel user */
 	public function get_data_user($data){
 		$this->db->where('id_user', $data);
 		return $this->db->get($this->tableUser)->row();
+	}
+
+	/** Mendapatkan data dari tabel user dan detail user */
+	public function get_all_datauser($id){
+		$this->db->join($this->tableDetailUser, $this->join1);
+		return $this->db->get($this->tableUser);
 	}
 	####################################################################################
 	#                              Tabel tbdetailuser                                  #
@@ -100,6 +108,18 @@ class M_member extends CI_Model
 	####################################################################################
 	#                                Tabel tbInvoice                                   #
 	####################################################################################
+	/** Data dari table invoice	*/
+	public function get_data_invoice($data, $status=TRUE)
+	{
+		if($status){
+			$this->db->where('id_user', $data);
+			$this->db->order_by('id_invoice', 'DESC');
+		} else {
+			$this->db->where('id_invoice', $data);
+		}
+		return $this->db->get('tbinvoice');
+	}
+
 	/** Mengecek id table invoice	*/
 	public function cek_pending_inv($id)
 	{
@@ -328,13 +348,7 @@ class M_member extends CI_Model
     #                Menangani halaman Invoice                   #
     #                                                            #
     ##############################################################
-    public function tampil_invoice($id)
-    {
-        $this->db->where('id_user', $id);
-        $this->db->order_by('id_invoice', 'DESC');
-        $result = $this->db->get('tbinvoice');
-        return $result;
-    }
+
 
     ##############################################################
     #                                                            #

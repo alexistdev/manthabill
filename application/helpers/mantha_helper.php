@@ -43,3 +43,8 @@ function _angkaUnik()
 	}
 	return $randomString;
 }
+/** Untuk mengkonversi format Rupiah */
+function konversiRupiah($angka)
+{
+	return number_format($angka, 0, ",", ".");
+}

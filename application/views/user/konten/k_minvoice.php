@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="<?= base_url('member') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url('Member') ?>">Home</a></li>
                         <li class="breadcrumb-item active">Invoice</li>
                     </ol>
                 </div>
@@ -51,32 +51,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <tbody>
                                     <?php
                                     $no = 1;
+
                                     foreach ($daftarInvoice->result_array() as $row) :
-                                        $idInvoice = $row['id_invoice'];
-                                        $noInvoice = strtoupper($row['no_invoice']);
-                                        $tanggal = konversiTanggal($row['inv_date']);
-                                        $expire = konversiTanggal($row['due']);
-                                        $totalJumlah = number_format($row['total_jumlah'], 0, ",", ".");
-                                        $status = htmlentities($row['status_inv'], ENT_QUOTES, 'UTF-8');
-                                        if ($status == 1) {
+										$status = cetak($row['status_inv']);
+                                        if ( $status== 1) {
                                             $statusInvoice = '<small class=\"badge badge-warning\"> AKTIF </small>';
                                         } else if ($status == 2) {
                                             $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
                                         } else {
                                             $statusInvoice = '<small class=\'badge badge-warning\'> PENDING </small>';
                                         };
-
                                     ?>
                                         <tr>
-                                            <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($noInvoice, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($tanggal, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($expire, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center">Rp. <?= htmlentities($totalJumlah, ENT_QUOTES, 'UTF-8') ?>, -</td>
+                                            <td class="text-center"><?= cetak($no++); ?></td>
+                                            <td class="text-center"><?= cetak(strtoupper($row['no_invoice'])); ?></td>
+                                            <td class="text-center"><?= konversiTanggal(cetak($row['inv_date'])); ?></td>
+                                            <td class="text-center"><?= konversiTanggal(cetak($row['due'])); ?></td>
+                                            <td class="text-center">Rp. <?= number_format(cetak($row['total_jumlah']), 0, ",", "."); ?>, -</td>
                                             <td class="text-center"><?= $statusInvoice ?></td>
+                                            <td class="text-center">
+												<?php if ($status ==1){;?>
+													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
+														<button class="btn bg-olive margin">VIEW</button></a>
+												<?php } else if($status ==3){;?>
+													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
+														<button class="btn bg-olive margin">VIEW</button></a>
+												<?php } else{;?>
+													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
+														<button class="btn bg-olive margin">VIEW</button></a>
+													<a href="<?php echo base_url('Invoice/konfirmasi/'.encrypt_url(cetak($row['id_invoice'])));?>">
+														<button class="btn btn-danger">BAYAR</button></a>
+												<?php };?>
 
-                                            <td class="text-center"><a class="btn btn-primary" href="">Detail</a></td>
-
+											</td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

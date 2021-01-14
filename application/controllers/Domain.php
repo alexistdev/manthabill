@@ -1,17 +1,40 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 class Domain extends CI_Controller
 {
-	function __construct()
+	public $load;
+	public $session;
+	public $member;
+
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
+		/** Global scope idUser dan token */
+		$this->idUser = $this->session->userdata('id_user');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
 	}
 
+	/** Prepare data */
 	private function _dataMember($idUser)
 	{
 		$data['idUser'] = $idUser;
@@ -21,11 +44,13 @@ class Domain extends CI_Controller
 		return $data;
 	}
 
+	/** Template untuk memanggil view */
 	private function _template($data, $view)
 	{
-		$this->load->view('user/' . $view, $data);
+		$this->load->view('user/view' . $view, $data);
 	}
 
+	/** Method untuk halaman Domain */
 	public function index()
 	{
 		$idUser = $this->session->userdata('id_user');

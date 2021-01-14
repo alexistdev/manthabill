@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="<?= base_url('member') ?>" class="nav-link">
+                    <a href="<?= base_url('Member') ?>" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -38,7 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('product') ?>" class="nav-link">
+                    <a href="<?= base_url('Product') ?>" class="nav-link">
                         <i class="nav-icon fas fa-server"></i>
                         <p>
                             Product
@@ -46,7 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('domain') ?>" class="nav-link">
+                    <a href="<?= base_url('Domain') ?>" class="nav-link">
                         <i class="nav-icon fas fa-globe"></i>
                         <p>
                             Domain
@@ -54,7 +54,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('service') ?>" class="nav-link">
+                    <a href="<?= base_url('Service') ?>" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Service
@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('invoice') ?>" class="nav-link">
+                    <a href="<?= base_url('Invoice') ?>" class="nav-link">
                         <i class="nav-icon fas fa-credit-card"></i>
                         <p>
                             Invoice
@@ -70,7 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('ticket') ?>" class="nav-link">
+                    <a href="<?= base_url('Ticket') ?>" class="nav-link">
                         <i class="nav-icon fas fa-bullhorn"></i>
                         <p>
                             Ticket
@@ -78,7 +78,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url('setting') ?>" class="nav-link">
+                    <a href="<?= base_url('Setting') ?>" class="nav-link">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Setting
