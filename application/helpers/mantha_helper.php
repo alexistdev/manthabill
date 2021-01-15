@@ -53,6 +53,12 @@ function konversiTanggal($date)
 	$tanggalKonversi = date("d-m-Y", strtotime($date));
 	return $tanggalKonversi;
 }
+/** Untuk mengkonversi tanggal untuk format manusia*/
+function konversiUnixTanggal ($date)
+{
+	$tanggalKonversi = date("d-m-Y", $date);
+	return $tanggalKonversi;
+}
 
 /** Untuk mengkonversi tanggal untuk format SQL*/
 function tanggalSQL($date)

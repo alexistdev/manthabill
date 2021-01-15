@@ -47,11 +47,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    foreach ($daftarTicket->result_array() as $row) :
-                                        $idTicket = $row['id_ticket'];
-                                        $tanggal = date("d-m-Y", $row['timeticket']);
-                                        $subyek = $row['subyek'];
-                                        $status = htmlentities($row['status'], ENT_QUOTES, 'UTF-8');
+                                    foreach ($daftarTicket->result_array() as $rowTicket) :
+                                        $status = htmlentities($rowTicket['status'], ENT_QUOTES, 'UTF-8');
                                         if ($status == 1) {
                                             $statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
                                         } else if ($status == 2) {
@@ -61,12 +58,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         };
                                     ?>
                                         <tr>
-                                            <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-center"><?= htmlentities($tanggal, ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td class="text-left"><?= htmlentities($subyek, ENT_QUOTES, 'UTF-8') ?></td>
+                                            <td class="text-center"><?= cetak($no++); ?></td>
+                                            <td class="text-center"><?= cetak(konversiUnixTanggal($rowTicket['time'])); ?></td>
+                                            <td class="text-left"><?= cetak($rowTicket['judul']); ?></td>
                                             <td class="text-center"><?= $statusPrint ?></td>
-
-
                                             <td class="text-center"><a class="btn btn-primary" href="">Detail</a></td>
 
                                         </tr>
