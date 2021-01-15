@@ -24,6 +24,10 @@ class Invoice extends CI_Controller
 	public $tokenSession;
 	public $tokenServer;
 	public $judulHosting;
+	public $namaUser;
+	public $gambarUser;
+	public $form_validation;
+	public $input;
 
 	public function __construct()
 	{
@@ -34,17 +38,22 @@ class Invoice extends CI_Controller
 		$this->tokenSession = $this->session->userdata('token');
 		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
 		$this->judulHosting = $this->member->get_setting()->judul_hosting;
+		/** Data User untuk Sidebar */
+		foreach($this->member->get_all_datauser($this->idUser)->result_array() as $rowUser){
+			$this->namaUser = $rowUser['nama_depan'];
+			$this->gambarUser = $rowUser['gambar'];
+		}
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
 	}
 
 	/** Prepare data */
-	private function _dataMember($idUser)
+	private function _dataMember()
 	{
 		//nama dan gambar disidebar
-		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
-		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
 		return $data;
 	}
 	/** Prepare data detail Invoice */
@@ -86,8 +95,23 @@ class Invoice extends CI_Controller
 			$data['email'] = cetak($rowUser['email']);
 
 		}
-		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
-		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
+		return $data;
+	}
+
+	/** Prepare data Konfirmasi */
+	private function _datakonfirmasi($idInv)
+	{
+		$dataInvoice = $this->member->get_data_invoice($idInv,FALSE,FALSE);
+		foreach($dataInvoice->result_array() as $row){
+			$data['NoInvoice'] = cetak($row['no_invoice']);
+			$data['totalBiaya'] = cetak($row['total_jumlah']);
+		}
+		$data['idInvoice'] = encrypt_url($idInv);
+		$data['namaUser'] = $this->namaUser;
+		$data['tanggal'] = date("d-m-Y");
+		$data['gambarUser'] = $this->gambarUser;
 		return $data;
 	}
 
@@ -104,7 +128,7 @@ class Invoice extends CI_Controller
 		if($this->tokenSession != $this->tokenServer){
 			_unlogin();
 		} else {
-			$data = $this->_dataMember($this->idUser);
+			$data = $this->_dataMember();
 			$data['daftarInvoice'] = $this->member->get_data_invoice($this->idUser,TRUE,FALSE);
 			$data['title'] = "Invoice | ". $this->judulHosting;
 			$view = 'v_minvoice';
@@ -142,7 +166,6 @@ class Invoice extends CI_Controller
 		} else {
 			$id = decrypt_url($noInv);
 			$cekId = $this->member->get_data_invoice($id,FALSE,TRUE)->num_rows();
-
 			if($cekId != 0){
 				/* mengarahkan ke halaman instruksi pembayaran */
 				$data = $this->_dataDetail($this->idUser,$id);
@@ -159,55 +182,95 @@ class Invoice extends CI_Controller
 		}
 	}
 
-//	function konfirmasi($noInv)
-//	{
-//		$hashSes = $this->session->userdata('token');
-//		$hashKey = $this->user->get_token($hashSes);
-//		$idUser = $this->session->userdata('id_user');
-//		if ($hashKey == 0) {
-//			redirect('login');
-//		} else {
-//			$cekInv = $this->user->cek_invByUser($noInv);
-//			if (($noInv == "") or ($noInv == NULL) or ($cekInv == 0)) {
-//				redirect('invoice');
-//			} else {
-//				$b['status'] = $this->session->userdata('status');
-//				$b['namaDepan'] = $this->user->get_userKonfirm($idUser)->nama_depan;
-//				$b['namaBelakang'] = $this->user->get_userKonfirm($idUser)->nama_belakang;
-//				//mengambil data hosting di database
-//				$b['invoice'] = $this->user->get_invKonfirmasi($noInv, $idUser);
-//				$b['user'] = $this->user->loginok($idUser);
-//				$b['idUser'] = $idUser;
-//				$this->load->view('user/v_konfirmasi', $b);
-//			}
-//		}
-//	}
-//	function bayar()
-//	{
-//		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//			$BankTujuan = $this->input->post("bankTujuan");
-//			$TglKonfirm = date("Y-m-d", strtotime($this->input->post("tanggal")));
-//			$Pengirim = $this->input->post("pengirim");
-//			$TotalBayar = $this->input->post("totalBayar");
-//			$idUser = $this->input->post("idUser");
-//			$noInv = $this->input->post("noInv");
-//			$idInv = $this->input->post("idInv");
-//			$dataKonfirmasi = array(
-//				'id_invoice' =>  $idInv,
-//				'id_user' => $idUser,
-//				'no_invoice' => $noInv,
-//				'tanggal_konfirmasi' => $TglKonfirm,
-//				'total_bayar' => $TotalBayar,
-//				'status' => 2
-//			);
-//			$dataUpdateInv = array(
-//				'status_inv' => 3
-//			);
-//			$this->m_user->simpan_konfirmasi($dataKonfirmasi);
-//			$this->m_user->update_invoice($dataUpdateInv, $idInv);
-//			redirect('invoice');
-//		} else {
-//			redirect('invoice');
-//		}
-//	}
+	/** Method untuk konfirmasi nomor invoice */
+	public function konfirmasi($noInv=NULL){
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
+		} else {
+			$id = decrypt_url($noInv);
+			$cekId = $this->member->get_data_invoice($id,FALSE,TRUE)->num_rows();
+			if($cekId != 0){
+				$this->form_validation->set_rules(
+					'nomorInvoice',
+					'Nomor Invoice',
+					'trim|required',
+					[
+						'required' => 'Nomor Invoice harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'jmlTransfer',
+					'Jumlah Transfer',
+					'trim|numeric|required',
+					[
+						'required' => 'Jumlah transfer harus diisi !',
+						'numeric' => 'Harus berupa angka!'
+					]
+				);
+				$this->form_validation->set_rules(
+					'tanggal',
+					'Tanggal',
+					'trim|required',
+					[
+						'required' => 'Tanggal harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'namaPengirim',
+					'Nama Pengirim',
+					'trim|min_length[3]|max_length[100]required',
+					[
+						'max_length' => 'Panjang karakter Nama Pengirim maksimal 100 karakter!',
+						'min_length' => 'Panjang karakter Nama Pengirim minimal 3 karakter!',
+						'required' => 'Nama Pengirim harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'namaBank',
+					'Nama Bank',
+					'trim|min_length[3]|max_length[50]required',
+					[
+						'max_length' => 'Panjang karakter Nama Bank maksimal 30 karakter!',
+						'min_length' => 'Panjang karakter Nama Bank minimal 3 karakter!',
+						'required' => 'Nama Bank harus diisi !'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<span class="text-danger text-sm">', '</span>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					$data = $this->_datakonfirmasi($id);
+					$data['title'] = "Konfirmasi Pembayaran | ". $this->judulHosting;
+					$view = 'v_konfirmasi';
+					$this->_template($data, $view);
+				} else {
+					$nomorInvoice = $this->input->post("nomorInvoice", TRUE);
+					$jmlTransfer = $this->input->post("jmlTransfer", TRUE);
+					$tanggal = $this->input->post("tanggal", TRUE);
+					$namaPengirim = $this->input->post("namaPengirim", TRUE);
+					$namaBank = $this->input->post("namaBank", TRUE);
+					$dataKonfirmasi = [
+						'id_invoice' => $id,
+						'id_user' => $this->idUser,
+						'nama_pengirim' => $namaPengirim,
+						'bank_pengirim' => $namaBank,
+						'no_invoice' => strtolower($nomorInvoice),
+						'tanggal_konfirmasi' => tanggalSQL($tanggal),
+						'total_bayar' => $jmlTransfer,
+						'status' => 2
+					];
+					$dataInvoice = [
+						'status_inv' => 3
+					];
+					$this->member->simpan_konfirmasi($dataKonfirmasi);
+					$this->member->update_invoice($dataInvoice, $id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Konfirmasi Anda telah dikirimkan, silahkan tunggu 1x24 jam!</div>');
+					redirect('Invoice');
+				}
+			}else{
+				redirect('Invoice');
+			}
+		}
+	}
+
+
 }

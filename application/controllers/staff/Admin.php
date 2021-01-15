@@ -406,7 +406,7 @@ class Admin extends CI_Controller {
 					]
 				);
 				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-				if ($this->form_validation->run() === false) {
+					if ($this->form_validation->run() === false) {
 					$this->session->set_flashdata('pesan', validation_errors());
 					redirect('staff/Admin/edit_user/'.encrypt_url($id));
 				} else {

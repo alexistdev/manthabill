@@ -148,6 +148,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <!-- end Profesional Hosting -->
+			</div>
+		</div>
+
     </section>
     <!-- /.content -->
 </div>

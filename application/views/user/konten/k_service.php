@@ -28,10 +28,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <!-- Khusus Personal Hosting -->
                 <div class="col-md-12">
                     <div class="card card-info">
+						<!-- Start Card-header -->
                         <div class="card-header">
                             <h3 class="card-title">Layanan Hosting Anda</h3>
                         </div>
                         <!-- /.card-header -->
+
+						<!-- Card Body	-->
                         <div class="card-body">
                             <table id="tabelku" class="table table-bordered table-hover">
                                 <thead>
@@ -78,8 +81,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </tbody>
                             </table>
                         </div>
+						<!-- /End Card Body	-->
                     </div>
                 </div>
+			</div>
+		</div>
     </section>
     <!-- /.content -->
 </div>

@@ -48,3 +48,16 @@ function konversiRupiah($angka)
 {
 	return number_format($angka, 0, ",", ".");
 }
+/** Untuk mengkonversi tanggal untuk format manusia*/
+function konversiTanggal($date)
+{
+	$tanggalKonversi = date("d-m-Y", strtotime($date));
+	return $tanggalKonversi;
+}
+
+/** Untuk mengkonversi tanggal untuk format SQL*/
+function tanggalSQL($date)
+{
+	$tanggalKonversi = date("Y-m-d", strtotime($date));
+	return $tanggalKonversi;
+}

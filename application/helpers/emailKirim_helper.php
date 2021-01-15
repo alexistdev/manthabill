@@ -20,8 +20,4 @@ function kirim_email($emailTujuan, $pesan, $judul){
 	$ci->m_email->simpan_email($dataEmail);
 }
 
-function konversiTanggal($date)
-{
-    $tanggalKonversi = date("d-m-Y", strtotime($date));
-    return $tanggalKonversi;
-}
+

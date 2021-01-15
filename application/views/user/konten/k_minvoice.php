@@ -23,15 +23,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
+            <!-- row -->
             <div class="row">
-                <!-- Khusus Personal Hosting -->
+                <!-- Col -->
                 <div class="col-md-12">
                     <div class="card card-info">
+						<!-- Card Header -->
                         <div class="card-header">
                             <h3 class="card-title">Daftar Invoice Anda</h3>
                         </div>
                         <!-- /.card-header -->
+
+						<!-- Card Body -->
                         <div class="card-body">
                             <!-- Start Pesan -->
                             <?= $this->session->flashdata('pesan'); ?>
@@ -58,9 +61,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             $statusInvoice = "<small class=\"badge badge-primary\"> LUNAS </small>";
                                         } else if ($status == 2) {
                                             $statusInvoice = "<small class=\"badge badge-warning\"> PENDING </small>";
+                                        } else if ($status == 3){
+                                            $statusInvoice = "<small class=\"badge badge-info\"> SEDANG DIREVIEW </small>";
                                         } else {
-                                            $statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
-                                        };
+											$statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
+										};
                                     ?>
                                         <tr>
                                             <td class="text-center"><?= cetak($no++); ?></td>
@@ -70,10 +75,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="text-center">Rp. <?= number_format(cetak($row['total_jumlah']), 0, ",", "."); ?>, -</td>
                                             <td class="text-center"><?= $statusInvoice ?></td>
                                             <td class="text-center">
-												<?php if ($status ==1){;?>
-													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
-														<button class="btn bg-olive margin">VIEW</button></a>
-												<?php } else if($status ==3){;?>
+												<?php if ($status != 2){;?>
 													<a href="<?php echo base_url('Invoice/detail/'.encrypt_url(cetak($row['id_invoice'])));?>">
 														<button class="btn bg-olive margin">VIEW</button></a>
 												<?php } else{;?>
@@ -89,8 +91,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </tbody>
                             </table>
                         </div>
+						<!-- /Ebd Card Body -->
                     </div>
                 </div>
+				<!-- /Col -->
+			</div>
+			<!-- /row -->
+		</div>
     </section>
     <!-- /.content -->
 </div>

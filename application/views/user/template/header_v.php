@@ -25,4 +25,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <!-- DataTables -->
     <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+
+	<!-- JQuery UI	-->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>

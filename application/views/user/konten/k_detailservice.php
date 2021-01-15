@@ -28,9 +28,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card card-dark">
+						<!-- Card Header -->
 						<div class="card-header">
 							<h3>Informasi Service</h3>
 						</div>
+						<!-- /End Card Header -->
+						<!-- Card Body -->
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-8">
@@ -69,6 +72,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								</div>
 							</div>
 						</div>
+						<!-- /End Card Body -->
 					</div>
 				</div>
 			</div>
@@ -77,9 +81,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<!--	Kolom Kiri	-->
 				<div class="col-md-4">
 					<div class="card card-dark">
+						<!-- Card Header -->
 						<div class="card-header">
 							<h3>Fitur</h3>
 						</div>
+						<!-- /End Card Header -->
+
+						<!-- Card Body -->
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-4">
@@ -98,11 +106,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								</div>
 							</div>
 						</div>
+						<!-- /End Card Body -->
 					</div>
 				</div>
+				<!--	/End Kolom Kiri	-->
+
 				<!--	Kolom Kanan	-->
 				<div class="col-md-8">
 					<div class="card card-dark">
+						<!--	Card Body	-->
 						<div class="card-body">
 							<div class="row">
 								<?php if($status == 1) { ?>
@@ -131,15 +143,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									</div>
 								<?php } ?>
 							</div>
-
-
-
-
 						</div>
+						<!--	/End Card Body	-->
 					</div>
 				</div>
+				<!--	/End Kolom Kanan	-->
 			</div>
-
 		</div>
 	</section>
 	<!-- /.content -->

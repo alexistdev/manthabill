@@ -158,7 +158,7 @@ class Product extends CI_Controller
 		$dataInvoice = array(
 			'id_user' => $idUser,
 			'id_hosting' => $idHosting,
-			'no_invoice' => $noInvoice,
+			'no_invoice' => strtolower($noInvoice),
 			'detail_produk' => $getDetailInvoice,
 			'total_jumlah' => $hargaSetelahDiskon,
 			'sub_total' => $getHarga,

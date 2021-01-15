@@ -23,9 +23,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <!-- Main content -->
     <section class="content">
-
+		<!-- Container -->
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
+            <!-- Row -->
             <div class="row">
                 <!-- Start Ruas Kiri -->
                 <div class="col-lg-7 col-md-7">
@@ -38,9 +38,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <?= form_open('product/invoice/' .encrypt_url(cetak($row['id_product']))) ?>
                         <!-- BOX TABLE -->
                         <div class="card card-olive">
+							<!-- Card Header -->
                             <div class="card-header">
                                 <h3 class="card-title">Pemilihan Paket</h3>
                             </div>
+							<!-- /End Card Header -->
+
+							<!-- Card Body -->
                             <div class="card-body">
                                 <div class="form-group col-md-12">
                                     <label>Paket</label>
@@ -76,11 +80,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     </div>
                                 </div>
                             </div>
+							<!-- /End Card Body -->
                         </div>
                         <!-- END BOX TABLE -->
-
                 </div>
                 <!-- End Ruas Kiri -->
+
                 <!-- Start Ruas Kanan -->
                 <div class="col-lg-5 col-md-5">
                     <!-- BOX TABLE -->
@@ -128,10 +133,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<?php endforeach ?>
                     <!-- END BOX TABLE -->
                     <?= form_close() ?>
-                    <!-- End Ruas Kanan -->
                 </div>
+				<!-- End Ruas Kanan -->
             </div>
+			<!-- /End Row -->
+		</div>
+		<!-- /End Container -->
     </section>
+	<!-- /End Main content -->
 </div>
 
 

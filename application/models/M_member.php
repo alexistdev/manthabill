@@ -25,7 +25,8 @@ class M_member extends CI_Model
 		$this->tableProduct = 'tbproduct';
 		$this->tableInvoice = 'tbinvoice';
 		$this->tableTld = 'tbtld';
-		$this->tableHosting = 'tbHosting';
+		$this->tableHosting = 'tbhosting';
+		$this->tableKonfirmasi = 'tbkonfirmasi';
 		$this->join1 = 'tbdetailuser.id_user = tbuser.id_user';
     }
 
@@ -144,6 +145,13 @@ class M_member extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	/** Update data ke tabel invoice */
+	public function update_invoice($data, $idInvoice)
+	{
+		$this->db->where('id_invoice', $idInvoice);
+		$this->db->update($this->tableInvoice, $data);
+	}
+
 	####################################################################################
 	#                                Tabel tbTLD                                       #
 	####################################################################################
@@ -167,60 +175,15 @@ class M_member extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	####################################################################################
+	#                              Tabel tbkonfirmasi                                  #
+	####################################################################################
 
-	##############################################################
-    #                                                            #
-    #           Fungsi yang akan sering dipakai                  #
-    #                                                            #
-    ##############################################################
-
-
-    public function getUser($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $hasil = $this->db->get('tbuser');
-        return $hasil->row();
-    }
-    public function getSetting()
-    {
-        $hasil = $this->db->get('tbsetting');
-        return $hasil->row();
-    }
-    public function getInvoice($idInvoice)
-    {
-        $this->db->where('id_invoice', $idInvoice);
-        $hasil = $this->db->get('tbinvoice');
-        return $hasil->row();
-    }
-    public function getInfoBank()
+	/** Menyimpan ke dalam tabel tbkonfirmasi	*/
+	public function simpan_konfirmasi($data)
 	{
-		$hasil = $this->db->get('tbsetting');
-		return $hasil->row();
+		$this->db->insert($this->tableKonfirmasi, $data);
 	}
-    public function getTld($idTld)
-    {
-        $this->db->where('id_tld', $idTld);
-        $hasil = $this->db->get('tbtld');
-        return $hasil->row();
-    }
-    public function getDomainTransit($idDom)
-    {
-        $this->db->where('id_domtrans', $idDom);
-        $hasil = $this->db->get('tbdomaintransit');
-        return $hasil->row();
-    }
-    public function getDetailUser($id)
-    {
-        $this->db->from('tbdetailuser as b');
-        $this->db->join('tbuser as a', 'a.id_user = b.id_user');
-        $this->db->where('b.id_user', $id);
-        $result = $this->db->get();
-        return $result->row();
-    }
-    public function simpan_email($email)
-    {
-        $this->db->insert('tbemail', $email);
-    }
 
 
     ##############################################################
@@ -272,15 +235,6 @@ class M_member extends CI_Model
         $hasil = $this->db->get('tbberita');
         return $hasil;
     }
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Product                   #
-    #                                                            #
-    ##############################################################
-
-
-
-
 
 
     ##############################################################
@@ -351,13 +305,6 @@ class M_member extends CI_Model
 
 		return $this->db->get()->result_array();
 	}
-
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Invoice                   #
-    #                                                            #
-    ##############################################################
-
 
     ##############################################################
     #                                                            #

@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
-			<!-- Main content -->
+			<!-- Invoice -->
 			<div class="invoice p-3 mb-3">
 				<!-- title row -->
 				<div class="row">
@@ -34,11 +34,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<small class="float-right">Date: <?= konversiTanggal(cetak($tanggalInvoice)); ?></small>
 						</h4>
 					</div>
-					<!-- /.col -->
 				</div>
+				<!-- /end title row -->
 				<!-- info row -->
 				<div class="row invoice-info">
-					<!-- /.col -->
 					<div class="col-sm-4 invoice-col">
 						Yth.
 						<address>
@@ -52,7 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<?= (cetak($email)!= '') ? 'Email: '.cetak($email).'<br>':''; ?>
 						</address>
 					</div>
-					<!-- /.col -->
+
 					<div class="col-md-4  offset-md-4 invoice-col">
 						<b>Invoice #<?= strtoupper(cetak($NoInvoice)); ?></b><br>
 						<br>
@@ -63,13 +62,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<small class="badge badge-primary"> LUNAS </small>
 						<?php } else if ($statusInv == 2) { ?>
 						<small class="badge badge-warning"> PENDING </small>
+						<?php } else if ($statusInv == 3){ ?>
+							<small class="badge badge-info"> SEDANG DIREVIEW </small>
 						<?php } else { ?>
 							<small class="badge badge-danger"> VOID </small>
 						<?php } ?>
 					</div>
-					<!-- /.col -->
 				</div>
-				<!-- /.row -->
+				<!-- /end info row -->
 
 				<!-- Table row -->
 				<div class="row">
@@ -89,12 +89,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</tbody>
 						</table>
 					</div>
-					<!-- /.col -->
 				</div>
 				<!-- /.row -->
 
 				<div class="row">
-					<!-- accepted payments column -->
+					<!-- Metode Pembayaran -->
 					<div class="col-6">
 						<p class="lead font-weight-bold">Metode Pembayaran:</p>
 						<p>TRANSFER BANK</p>
@@ -104,7 +103,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							A/n. <?= cetak($namaPemilikRekening); ?>
 						</p>
 					</div>
-					<!-- /.col -->
+					<!-- /End Pembayaran-->
+
+					<!-- Tabel Total-->
 					<div class="col-6">
 						<div class="table-responsive">
 							<table class="table">
@@ -123,11 +124,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</table>
 						</div>
 					</div>
-					<!-- /.col -->
+					<!-- /End Tabel Total-->
 				</div>
 				<!-- /.row -->
 
-				<!-- this row will not appear when printing -->
+				<!-- Tombol -->
 				<div class="row no-print">
 					<div class="col-12">
 						<a href="#" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
@@ -141,6 +142,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</button></a>
 					</div>
 				</div>
+				<!-- /End Tombol -->
 			</div>
 			<!-- /.invoice -->
 		</div>

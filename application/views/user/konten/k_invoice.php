@@ -22,11 +22,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </section>
     <!-- Main content -->
     <section class="content">
-
+		<!-- Container Fluid -->
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
             <div class="row">
-                <!-- Start Ruas Kiri -->
                 <div class="col-lg-12 col-md-12">
                     <!-- BOX TABEL ATAS -->
                     <div class="card">
@@ -35,8 +33,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <p>Ikuti petunjuk pembayaran di bawah ini agar layanan dapat aktif lebih cepat</p>
                         </div>
                     </div>
+					<!-- END BOX TABEL ATAS -->
                 </div>
-                <!-- END BOX TABEL ATAS -->
+
                 <!-- BOX KIRI -->
                 <div class="col-lg-6 col-md-6">
                     <div class="card card-olive">
@@ -69,38 +68,57 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <!-- END BOX KIRI -->
+
                 <!-- BOX KANAN -->
                 <div class="col-lg-6 col-md-6">
-                    <div class="alert alert-info">
-                        <h3>Jangan Lupa Konfirmasi</h3>
-                        <p>Segera lakukan konfirmasi setelah Anda melakukan pembayaran, Pilih salah satu cara dibawah ini:</p>
-                        <ul>
-                            <li>
-                                <dl>
-                                    <dt>Halaman Konfirmasi</dt>
-                                    <dd>Klik disini untuk melakukan konfirmasi melalui Halaman Konfirmasi</dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt>SMS</dt>
-                                    <dd>Kirimkan SMS ke nomor <?= cetak($telpHosting); ?> dengan format berikut :</dd>
-                                    <dd><?= $formatSMS; ?>
-                                    </dd>
-                                </dl>
-                            </li>
-                        </ul>
-                        <div class="alert alert-danger">
-                            <p>**Lakukan pembayaran sesuai dengan jumlah yang tercantum di Invoice agar dapat terverifikasi dengan cepat</p>
-                        </div>
-                        <a href="<?= base_url('Invoice') ?>" class="btn btn-block btn-warning btn-lg">Halaman Invoice</a>
+                    <div class="alert alert-dark">
+						<div class="row">
+							<div class="col-md-12">
+								<h3>Jangan Lupa Konfirmasi</h3>
+								<p>Segera lakukan konfirmasi setelah Anda melakukan pembayaran, Pilih salah satu cara dibawah ini:</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<ul>
+									<li>
+										<dl>
+											<dt>Halaman Konfirmasi</dt>
+											<dd>Klik <a href="<?= base_url('Invoice/konfirmasi/'.encrypt_url(cetak($idInv))); ?>"><button class="btn btn-sm btn-warning">KONFIRMASI</button></a> untuk melakukan konfirmasi melalui Halaman Konfirmasi</dd>
+										</dl>
+									</li>
+									<li>
+										<dl>
+											<dt>SMS</dt>
+											<dd>Kirimkan SMS ke nomor <?= cetak($telpHosting); ?> dengan format berikut :</dd>
+											<dd><?= $formatSMS; ?>
+											</dd>
+										</dl>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="alert alert-info">
+									<p>**Lakukan pembayaran sesuai dengan jumlah yang tercantum di Invoice agar dapat terverifikasi dengan cepat</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<a href="<?= base_url('Invoice') ?>"><button class="btn btn-warning btn-lg"><i class="fas fa-address-card"></i> Halaman Invoice</button></a>
+							</div>
+						</div>
+
                     </div>
                 </div>
-
                 <!-- END BOX KANAN -->
             </div>
         </div>
+		<!-- /End Container Fluid -->
     </section>
+	<!-- /End Main content -->
 </div>
 
 <!-- /.content-wrapper -->

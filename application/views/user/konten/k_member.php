@@ -21,15 +21,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     <!-- Main content -->
     <section class="content">
-
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
+            <!-- Kotak Kecil -->
             <div class="row">
+				<!-- Service -->
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3><?php echo htmlentities($service, ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <h3><?= cetak($service); ?></h3>
                             <p>SERVICES</p>
                         </div>
                         <div class="icon">
@@ -38,13 +37,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url('service') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+				<!-- /End Service -->
+
+				<!-- Domain -->
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3><?php echo htmlentities($domain, ENT_QUOTES, 'UTF-8'); ?></h3>
-
+                            <h3><?= cetak($domain); ?></h3>
                             <p>DOMAIN</p>
                         </div>
                         <div class="icon">
@@ -53,13 +52,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url('domain') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+				<!-- /End Domain -->
+
+				<!-- Invoice -->
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3><?php echo htmlentities($invoice, ENT_QUOTES, 'UTF-8'); ?></h3>
-
+                            <h3><?= cetak($invoice); ?></h3>
                             <p>INVOICE</p>
                         </div>
                         <div class="icon">
@@ -68,12 +67,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url('invoice') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <!-- ./End Invoice -->
+
+				<!-- Ticket -->
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3><?php echo htmlentities($supportTicket, ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <h3><?= cetak($supportTicket); ?></h3>
                             <p>Ticket Support</p>
                         </div>
                         <div class="icon">
@@ -82,9 +82,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url('ticket') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+				<!-- /End Ticket -->
             </div>
-            <!-- Untuk ROW Dibagian Tiket dan berita -->
+            <!--  /End Kotak Kecil -->
+
+			<!-- TIKET DAN BERITA -->
             <div class="row">
                 <!-- Start Kolom sebelah kiri -->
                 <div class="col-md-6">
@@ -109,7 +111,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </small>
                             <?php endforeach; ?>
                         </div>
-                    </div> <!-- /.card -->
+                    </div>
                 </div>
                 <!-- End Kolom sebelah kiri -->
                 <!-- Start Kolom sebelah kanan -->
@@ -152,14 +154,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
-
                         </div>
                     </div> <!-- /.card -->
                 </div>
                 <!-- End Kolom sebelah kanan -->
             </div>
             <!-- END ROW TIKET DAN BERITA -->
+		</div>
     </section>
-    <!-- /.content -->
+    <!-- /Main content -->
 </div>
 <!-- /.content-wrapper -->
