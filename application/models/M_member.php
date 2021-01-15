@@ -27,6 +27,7 @@ class M_member extends CI_Model
 		$this->tableTld = 'tbtld';
 		$this->tableHosting = 'tbhosting';
 		$this->tableKonfirmasi = 'tbkonfirmasi';
+		$this->tableInbox = 'tbinbox';
 		$this->join1 = 'tbdetailuser.id_user = tbuser.id_user';
     }
 
@@ -185,6 +186,25 @@ class M_member extends CI_Model
 		$this->db->insert($this->tableKonfirmasi, $data);
 	}
 
+	####################################################################################
+	#                               Tabel tbinbox                                     #
+	####################################################################################
+
+	/** Menampilkan data di tabel tbinbox */
+	public function tampil_ticket($idUser)
+	{
+		$this->db->join($this->tableUser, 'tbuser.id_user=tbinbox.id_user');
+		$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
+		return $this->db->get($this->tableInbox);
+	}
+
+	/** Menyimpan Pesan ke dalam tabel tbinbox */
+	public function simpan_inbox($data)
+	{
+		$this->db->insert($this->tableInbox, $data);
+	}
+
+
 
     ##############################################################
     #                                                            #
@@ -218,16 +238,7 @@ class M_member extends CI_Model
         $hasil = $this->db->get('ticket');
         return $hasil->num_rows();
     }
-    public function tampil_ticket($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->where('balasan', 0);
-        $this->db->where('status', 1);
-        $this->db->or_where('status', 2);
-        $this->db->order_by('id_ticket', 'DESC');
-        $hasil = $this->db->get('ticket');
-        return $hasil;
-    }
+
     public function tampil_berita()
     {
         $this->db->order_by('id_berita', 'DESC');
@@ -312,16 +323,7 @@ class M_member extends CI_Model
     #                                                            #
     ##############################################################
 
-    public function tampil_ticketUser($idUser)
-    {
-        $this->db->select('*');
-        $this->db->from('ticket');
-        $this->db->where("id_user", $idUser);
-        $this->db->where("balasan", 0);
-        $this->db->order_by("timeticket", "DESC");
-        $hasil = $this->db->get();
-        return $hasil;
-    }
+
     public function cek_security($idUser)
     {
         $this->db->where("id_user", $idUser);

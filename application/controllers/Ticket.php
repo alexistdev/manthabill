@@ -1,67 +1,134 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 class Ticket extends CI_Controller
 {
-	function __construct()
+	public $load;
+	public $session;
+	public $member;
+	public $idUser;
+	public $tokenSession;
+	public $tokenServer;
+	public $judulHosting;
+	public $namaUser;
+	public $gambarUser;
+	public $form_validation;
+	public $input;
+
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
+		/** Global scope idUser dan token */
+		$this->idUser = $this->session->userdata('id_user');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
+		$this->judulHosting = $this->member->get_setting()->judul_hosting;
+		/** Data User untuk Sidebar */
+		foreach($this->member->get_all_datauser($this->idUser)->result_array() as $rowUser){
+			$this->namaUser = $rowUser['nama_depan'];
+			$this->gambarUser = $rowUser['gambar'];
+		}
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
 	}
 
-	private function _dataMember($idUser)
+	/** Prepare data */
+	private function _dataMember()
 	{
-		$data['idUser'] = $idUser;
 		//nama dan gambar disidebar
-		$data['namaUser'] = $this->member->getProfilUser($idUser)->nama_depan;
-		$data['gambarUser'] = $this->member->getProfilUser($idUser)->gambar;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
 		return $data;
 	}
 
+	/** Template untuk memanggil view */
 	private function _template($data, $view)
 	{
-		$this->load->view('user/' . $view, $data);
+		$this->load->view('user/view/' . $view, $data);
 	}
 
-	function index()
+	/** Method untuk halaman Ticket */
+	public function index()
 	{
-		// $hashSes = $this->session->userdata('token');
-		// $userSes = $this->session->userdata('username');
-		// $userData = $this->m_user->get_userSession($userSes);
-		// $hashKey = $this->m_user->get_token($hashSes);
-		// $idUser = $this->session->userdata('id_user');
-		// $b['user'] = $this->m_user->loginok($idUser);
-		// $b['detailUser'] = $this->m_user->getInfoUser($idUser);
-		// $b['infoTicket'] = $this->m_user->tiketKu($idUser);
-		// if (($hashKey == 0) and ($userData == 0)) {
-		// 	redirect('login');
-		// } else {
-		// 	$this->load->view('user/v_ticket', $b);
-		// }
-		$idUser = $this->session->userdata('id_user');
-		$data = $this->_dataMember($idUser);
-		$view = 'v_ticket';
-		$data['daftarTicket'] = $this->member->tampil_ticketUser($idUser);
-		$this->_template($data, $view);
-	}
 
-	function buat_ticket()
-	{
-		$hashSes = $this->session->userdata('token');
-		$userSes = $this->session->userdata('username');
-		$userData = $this->m_user->get_userSession($userSes);
-		$hashKey = $this->m_user->get_token($hashSes);
-		$idUser = $this->session->userdata('id_user');
-		$b['user'] = $this->m_user->loginok($idUser);
-		$b['idUser'] = $idUser;
-		$b['detailUser'] = $this->m_user->getInfoUser($idUser);
-		if (($hashKey == 0) and ($userData == 0)) {
-			redirect('login');
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
 		} else {
-			$this->load->view('user/v_buatticket', $b);
+			$data = $this->_dataMember();
+			$data['daftarTicket'] = $this->member->tampil_ticket($this->idUser);
+			$data['title'] = "Support Ticket | ". $this->judulHosting;
+			$view = 'v_ticket';
+			$this->_template($data, $view);
+		}
+	}
+
+	/** Method untuk halaman Tambah Ticket */
+	public function buat_ticket()
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
+		} else {
+			$this->form_validation->set_rules(
+				'judulPesan',
+				'Judul Pesan',
+				'trim|min_length[5]|max_length[80]|required',
+				[
+					'max_length' => 'Panjang karakter Judul Pesan maksimal 80 karakter!',
+					'min_length' => 'Panjang karakter Judul Pesan minimal 5 karakter!',
+					'required' => 'Judul pesan harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'isiPesan',
+				'Isi Pesan',
+				'trim|min_length[10]|max_length[400]|required',
+				[
+					'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+					'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+					'required' => 'Isi Pesan harus diisi !'
+				]
+			);
+			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+			if ($this->form_validation->run() === false) {
+				$this->session->set_flashdata('pesan', validation_errors());
+				$data = $this->_dataMember();
+				$data['title'] = "Invoice | ". $this->judulHosting;
+				$view = 'v_buatticket';
+				$this->_template($data, $view);
+			}else{
+				$judulPesan = $this->input->post("judulPesan", TRUE);
+				$isiPesan = $this->input->post("isiPesan", TRUE);
+				$key =  _angkaUnik(20);
+				/* Mempersiapkan data pesan */
+				$dataPesan =[
+					'id_user' => $this->idUser,
+					'is_adm' => 2,
+					'judul' => $judulPesan,
+					'pesan' => $isiPesan,
+					'key_token' => $key,
+					'time' => time(),
+					'status' => 2
+				];
+				$this->member->simpan_inbox($dataPesan);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Tiket berhasil dibuat, silahkan tunggu 1x24 jam untuk dibalas oleh Staff kami!</div>');
+				redirect('Ticket');
+			}
 		}
 	}
 	#################################################################

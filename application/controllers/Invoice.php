@@ -218,7 +218,7 @@ class Invoice extends CI_Controller
 				$this->form_validation->set_rules(
 					'namaPengirim',
 					'Nama Pengirim',
-					'trim|min_length[3]|max_length[100]required',
+					'trim|min_length[3]|max_length[100]|required',
 					[
 						'max_length' => 'Panjang karakter Nama Pengirim maksimal 100 karakter!',
 						'min_length' => 'Panjang karakter Nama Pengirim minimal 3 karakter!',
@@ -228,7 +228,7 @@ class Invoice extends CI_Controller
 				$this->form_validation->set_rules(
 					'namaBank',
 					'Nama Bank',
-					'trim|min_length[3]|max_length[50]required',
+					'trim|min_length[3]|max_length[50]|required',
 					[
 						'max_length' => 'Panjang karakter Nama Bank maksimal 30 karakter!',
 						'min_length' => 'Panjang karakter Nama Bank minimal 3 karakter!',

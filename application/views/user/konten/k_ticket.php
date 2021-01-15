@@ -27,9 +27,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row">
                 <!-- Khusus Personal Hosting -->
                 <div class="col-md-12">
-                    <div class="card card-info">
+                    <div class="card card-dark">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Support Ticket Anda</h3>
+							<a href="<?= base_url('Ticket/buat_ticket'); ?>"><button class="btn btn-success float-right"><i class="fas fa-plus-square mr-1"></i> Buat Ticket</button></a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -58,16 +59,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         } else {
                                             $statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
                                         };
-                                        // $status = htmlentities($row['status_hosting'], ENT_QUOTES, 'UTF-8');
-                                        // if ($status == 1) {
-                                        //     $statusHosting = '<small class=\"badge badge-warning\"> AKTIF </small>';
-                                        // } else if ($status == 2) {
-                                        //     $statusHosting = "<small class='badge badge-warning'> PENDING </small>";
-                                        // } else if ($status == 3) {
-                                        //     $statusHosting = 'SUSPEND';
-                                        // } else {
-                                        //     $statusHosting = 'TERMINATED';
-                                        // }
                                     ?>
                                         <tr>
                                             <td class="text-center"><?= htmlentities($no++, ENT_QUOTES, 'UTF-8') ?></td>
@@ -85,6 +76,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                     </div>
                 </div>
+			</div>
+		</div>
     </section>
     <!-- /.content -->
 </div>
