@@ -26,6 +26,8 @@ class Setting extends CI_Controller
 	public $token;
 	public $tokenSession;
 	public $tokenServer;
+	public $namaUser;
+	public $gambarUser;
 
 	public function __construct()
 	{
@@ -47,124 +49,284 @@ class Setting extends CI_Controller
 	}
 
 	/** Prepare data */
-	private function _dataMember()
+	private function _dataMember($idUser=NULL)
 	{
+		if($idUser != NULL || $idUser !=''){
+			$dataUser = $this->member->get_all_datauser($idUser)->result_array();
+			foreach($dataUser as $rowUser){
+				$data['namaDepanUser'] = $rowUser['nama_depan'];
+				$data['namaBlkUser'] = $rowUser['nama_belakang'];
+				$data['namaUsaha'] = $rowUser['nama_usaha'];
+				$data['emailUser'] = $rowUser['email'];
+				$data['notelp'] = $rowUser['phone'];
+				$data['alamat1'] = $rowUser['alamat'];
+				$data['alamat2'] = $rowUser['alamat2'];
+				$data['kota'] = $rowUser['kota'];
+				$data['provinsi'] = $rowUser['provinsi'];
+				$data['negara'] = $rowUser['negara'];
+				$data['kodepos'] = $rowUser['kodepos'];
+				$data['tglRegistrasi'] = $rowUser['date_create'];
+			}
+		}
 
 		/* Nama dan Gambar di Sidebar */
-		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
-		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
 		$data['title'] = "Product | ". $this->member->get_setting()->judul_hosting;
 		return $data;
 	}
 
-	//khusus membuat captcha dan cek validasi captcha
+	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
-		$config = array(
-			'img_url' => base_url() . 'captcha/',
-			'img_path' => './captcha/',
-			'img_height' =>  50,
-			'word_length' => 5,
-			'img_width' => 150,
-			'font_size' => 10,
-			'expiration' => 300,
-			'pool' => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
-		);
-		$cap = create_captcha($config);
+		$cap = create_captcha(config_captcha());
 		$image = $cap['image'];
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
 	}
 
-	public function check_captcha($string)
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
+	public function _check_captcha($string)
 	{
 		if ($string == $this->session->userdata('captchaword')) {
 			return TRUE;
 		} else {
+			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
 			return FALSE;
 		}
 	}
 
-	function index()
+	/** Method privat untuk memproses simpan data */
+	private function _proses()
 	{
-		$this->form_validation->set_rules('namaDepan', 'Nama Depan', 'trim');
-		$this->form_validation->set_rules('namaBelakang', 'Nama Belakang', 'trim');
-		$this->form_validation->set_rules('namaUsaha', 'Nama Perusahaan', 'trim');
-		$this->form_validation->set_rules('email', 'Email', 'trim');
-		$this->form_validation->set_rules('notelp', 'Nomor Telepon', 'trim');
-		$this->form_validation->set_rules('alamat1', 'Alamat 1', 'trim');
-		$this->form_validation->set_rules('alamat2', 'Alamat 2', 'trim');
-		$this->form_validation->set_rules('kota', 'Kota', 'trim');
-		$this->form_validation->set_rules('provinsi', 'Provinsi', 'trim');
-		$this->form_validation->set_rules('kodepos', 'Kode Pos', 'trim');
-		$this->form_validation->set_rules('negara', 'Negara', 'trim');
-		if ($this->form_validation->run() === false) {
-			$idUser = $this->session->userdata('id_user');
-			$data = $this->_dataMember($idUser);
-			$view = 'v_setting';
-			//$data['daftarTicket'] = $this->member->tampil_ticketUser($idUser);
-			$data['namaDepanUser'] = $this->member->getDetailUser($idUser)->nama_depan;
-			$data['namaBlkUser'] = $this->member->getDetailUser($idUser)->nama_belakang;
-			$data['namaUsaha'] = $this->member->getDetailUser($idUser)->nama_usaha;
-			$data['notelp'] = $this->member->getDetailUser($idUser)->phone;
-			$data['alamat1'] = $this->member->getDetailUser($idUser)->alamat;
-			$data['alamat2'] = $this->member->getDetailUser($idUser)->alamat2;
-			$data['kota'] = $this->member->getDetailUser($idUser)->kota;
-			$data['provinsi'] = $this->member->getDetailUser($idUser)->provinsi;
-			$data['negara'] = $this->member->getDetailUser($idUser)->negara;
-			$data['kodepos'] = $this->member->getDetailUser($idUser)->kodepos;
-			$data['emailUser'] = $this->member->getUser($idUser)->email;
-			$data['CekSecPin'] = $this->member->getUser($idUser)->sec_pin;
-			$cekWaktu = $this->member->getUser($idUser)->timepin;
-			$waktu = strtotime(date("Y-m-d H:i:s"));
-			if ($cekWaktu > $waktu) {
-				$nW = 0;
-			} else {
-				$nW = 1;
-			};
-			$data['nW'] = $nW;
-			$this->_template($data, $view);
-		} else {
-			$idUser = $this->session->userdata('id_user');
-			$waktuSekarang = time();
-			$cekWaktu = $this->member->getProfilUser($idUser)->time_req;
-			if (($cekWaktu == 0) || ($waktuSekarang > $cekWaktu)) {
-				//menambahkan waktu 5 menit ke database
-				$waktuDimasukkan = strtotime('+5 minutes', $waktuSekarang);
-				$namaDepan = $this->input->post('namaDepan', TRUE);
-				$namaBelakang = $this->input->post('namaBelakang', TRUE);
-				$namaUsaha = $this->input->post('namaUsaha', TRUE);
-				$notelp = $this->input->post('notelp', TRUE);
-				$alamat1 = $this->input->post('alamat1', TRUE);
-				$alamat2 = $this->input->post('alamat2', TRUE);
-				$kota = $this->input->post('kota', TRUE);
-				$provinsi = $this->input->post('provinsi', TRUE);
-				$kodepos = $this->input->post('kodepos', TRUE);
-				$negara = $this->input->post('negara', TRUE);
+		$namaDepan = $this->input->post('namaDepan', TRUE);
+		$namaBelakang = $this->input->post('namaBelakang', TRUE);
+		$namaUsaha = $this->input->post('namaUsaha', TRUE);
+		$notelp = $this->input->post('notelp', TRUE);
+		$alamat1 = $this->input->post('alamat1', TRUE);
+		$alamat2 = $this->input->post('alamat2', TRUE);
+		$kota = $this->input->post('kota', TRUE);
+		$provinsi = $this->input->post('provinsi', TRUE);
+		$kodepos = $this->input->post('kodepos', TRUE);
+		$negara = $this->input->post('negara', TRUE);
+		$dataDetailUser =[
+			'nama_depan' => $namaDepan,
+			'nama_belakang' => $namaBelakang,
+			'nama_usaha' => $namaUsaha,
+			'phone' => $notelp,
+			'alamat' => $alamat1,
+			'alamat2' => $alamat2,
+			'kota' => $kota,
+			'provinsi' => $provinsi,
+			'kodepos' => $kodepos,
+			'negara' => $negara,
+		];
+		$this->member->update_data_detail($dataDetailUser, $this->idUser);
+		$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data Informasi Anda telah diperbaharui!</div>');
+		redirect('Setting');
+	}
 
-				//mempersiapkan data detailuser
-				$dataDetail = array(
-					'nama_depan' => $namaDepan,
-					'nama_belakang' => $namaBelakang,
-					'nama_usaha' => $namaUsaha,
-					'alamat' => $alamat1,
-					'alamat2' => $alamat2,
-					'kota' => $kota,
-					'provinsi' => $provinsi,
-					'negara' => $negara,
-					'kodepos' => $kodepos,
-					'phone' => $notelp,
-					'time_req' => $waktuDimasukkan
-				);
-				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data profil berhasil diperbaharui!</div>');
-				$this->member->update_profil($dataDetail, $idUser);
-				redirect('setting');
+	/** Method untuk menampilkan halaman setting */
+	public function index()
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
+		} else {
+			$this->form_validation->set_rules(
+				'namaDepan',
+				'Nama Depan',
+				'trim|min_length[3]|max_length[20]|required',
+				[
+					'max_length' => 'Panjang karakter Nama Depan maksimal 20 karakter!',
+					'min_length' => 'Panjang karakter Nama Depan minimal 3 karakter!',
+					'required' => 'Nama Depan harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'namaBelakang',
+				'Nama Belakang',
+				'trim|min_length[3]|max_length[30]',
+				[
+					'max_length' => 'Panjang karakter Nama Belakang maksimal 30 karakter!',
+					'min_length' => 'Panjang karakter Nama Belakang minimal 3 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'namaUsaha',
+				'Nama Usaha',
+				'trim|min_length[5]|max_length[50]',
+				[
+					'max_length' => 'Panjang karakter Nama Usaha maksimal 30 karakter!',
+					'min_length' => 'Panjang karakter Nama Usaha minimal 5 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'email',
+				'Email',
+				'trim|required',
+				[
+					'required' => 'Email tidak boleh kosong !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'notelp',
+				'Nomor Telepon',
+				'trim|min_length[5]|max_length[30]|numeric',
+				[
+					'max_length' => 'Panjang karakter Nomor telepon maksimal 30 karakter!',
+					'min_length' => 'Format nomor telepon tidak sesuai!',
+					'numeric' => 'Format nomor telepon tidak sesuai !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'alamat1',
+				'Alamat Kolom 1',
+				'trim|min_length[5]|max_length[200]|required',
+				[
+					'max_length' => 'Panjang karakter Alamat kolom 1 maksimal 200 karakter!',
+					'min_length' => 'Panjang karakter Alamat kolom 1 minimal 5 karakter!',
+					'required' => 'Alamat kolom 1 harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'alamat2',
+				'Alamat Kolom 2',
+				'trim|min_length[5]|max_length[200]',
+				[
+					'max_length' => 'Panjang karakter Alamat kolom 2 maksimal 200 karakter!',
+					'min_length' => 'Panjang karakter Alamat kolom 2 minimal 5 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'kota',
+				'Kota',
+				'trim|min_length[3]|max_length[30]|required',
+				[
+					'max_length' => 'Panjang karakter Kota maksimal 30 karakter!',
+					'min_length' => 'Panjang karakter Kota minimal 3 karakter!',
+					'required' => 'Nama Kota harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'provinsi',
+				'Provinsi',
+				'trim|min_length[3]|max_length[50]|required',
+				[
+					'max_length' => 'Panjang karakter Provinsi maksimal 50 karakter!',
+					'min_length' => 'Panjang karakter Provinsi minimal 3 karakter!',
+					'required' => 'Nama Provinsi harus diisi !'
+				]
+			);
+			$this->form_validation->set_rules(
+				'kodepos',
+				'Kodepos',
+				'trim|min_length[3]|max_length[10]',
+				[
+					'max_length' => 'Panjang karakter Kodepos maksimal 10 karakter!',
+					'min_length' => 'Panjang karakter Kodepos minimal 3 karakter!'
+				]
+			);
+			$this->form_validation->set_rules(
+				'negara',
+				'Negara',
+				'trim|min_length[3]|max_length[30]|required',
+				[
+					'max_length' => 'Panjang karakter Negara maksimal 30 karakter!',
+					'min_length' => 'Panjang karakter Negara minimal 3 karakter!',
+					'required' => 'Nama Negara harus diisi !'
+				]
+			);
+			$this->form_validation->set_error_delimiters('<span class="text-sm text-danger">', '</span>');
+			if ($this->form_validation->run() === false) {
+				$data = $this->_dataMember($this->idUser);
+				$view = "v_setting";
+				$this->_template($data, $view);
 			} else {
-				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Anda baru saja merubah profil, silahkan dicoba 5 menit lagi!</div>');
-				redirect('setting');
+				$this->_proses();
 			}
 		}
 	}
+
+//	function index()
+//	{
+//		$this->form_validation->set_rules('namaDepan', 'Nama Depan', 'trim');
+//		$this->form_validation->set_rules('namaBelakang', 'Nama Belakang', 'trim');
+//		$this->form_validation->set_rules('namaUsaha', 'Nama Perusahaan', 'trim');
+//		$this->form_validation->set_rules('email', 'Email', 'trim');
+//		$this->form_validation->set_rules('notelp', 'Nomor Telepon', 'trim');
+//		$this->form_validation->set_rules('alamat1', 'Alamat 1', 'trim');
+//		$this->form_validation->set_rules('alamat2', 'Alamat 2', 'trim');
+//		$this->form_validation->set_rules('kota', 'Kota', 'trim');
+//		$this->form_validation->set_rules('provinsi', 'Provinsi', 'trim');
+//		$this->form_validation->set_rules('kodepos', 'Kode Pos', 'trim');
+//		$this->form_validation->set_rules('negara', 'Negara', 'trim');
+//		if ($this->form_validation->run() === false) {
+//			$idUser = $this->session->userdata('id_user');
+//			$data = $this->_dataMember($idUser);
+//			$view = 'v_setting';
+//			//$data['daftarTicket'] = $this->member->tampil_ticketUser($idUser);
+//			$data['namaDepanUser'] = $this->member->getDetailUser($idUser)->nama_depan;
+//			$data['namaBlkUser'] = $this->member->getDetailUser($idUser)->nama_belakang;
+//			$data['namaUsaha'] = $this->member->getDetailUser($idUser)->nama_usaha;
+//			$data['notelp'] = $this->member->getDetailUser($idUser)->phone;
+//			$data['alamat1'] = $this->member->getDetailUser($idUser)->alamat;
+//			$data['alamat2'] = $this->member->getDetailUser($idUser)->alamat2;
+//			$data['kota'] = $this->member->getDetailUser($idUser)->kota;
+//			$data['provinsi'] = $this->member->getDetailUser($idUser)->provinsi;
+//			$data['negara'] = $this->member->getDetailUser($idUser)->negara;
+//			$data['kodepos'] = $this->member->getDetailUser($idUser)->kodepos;
+//			$data['emailUser'] = $this->member->getUser($idUser)->email;
+//			$data['CekSecPin'] = $this->member->getUser($idUser)->sec_pin;
+//			$cekWaktu = $this->member->getUser($idUser)->timepin;
+//			$waktu = strtotime(date("Y-m-d H:i:s"));
+//			if ($cekWaktu > $waktu) {
+//				$nW = 0;
+//			} else {
+//				$nW = 1;
+//			};
+//			$data['nW'] = $nW;
+//			$this->_template($data, $view);
+//		} else {
+//			$idUser = $this->session->userdata('id_user');
+//			$waktuSekarang = time();
+//			$cekWaktu = $this->member->getProfilUser($idUser)->time_req;
+//			if (($cekWaktu == 0) || ($waktuSekarang > $cekWaktu)) {
+//				//menambahkan waktu 5 menit ke database
+//				$waktuDimasukkan = strtotime('+5 minutes', $waktuSekarang);
+//				$namaDepan = $this->input->post('namaDepan', TRUE);
+//				$namaBelakang = $this->input->post('namaBelakang', TRUE);
+//				$namaUsaha = $this->input->post('namaUsaha', TRUE);
+//				$notelp = $this->input->post('notelp', TRUE);
+//				$alamat1 = $this->input->post('alamat1', TRUE);
+//				$alamat2 = $this->input->post('alamat2', TRUE);
+//				$kota = $this->input->post('kota', TRUE);
+//				$provinsi = $this->input->post('provinsi', TRUE);
+//				$kodepos = $this->input->post('kodepos', TRUE);
+//				$negara = $this->input->post('negara', TRUE);
+//
+//				//mempersiapkan data detailuser
+//				$dataDetail = array(
+//					'nama_depan' => $namaDepan,
+//					'nama_belakang' => $namaBelakang,
+//					'nama_usaha' => $namaUsaha,
+//					'alamat' => $alamat1,
+//					'alamat2' => $alamat2,
+//					'kota' => $kota,
+//					'provinsi' => $provinsi,
+//					'negara' => $negara,
+//					'kodepos' => $kodepos,
+//					'phone' => $notelp,
+//					'time_req' => $waktuDimasukkan
+//				);
+//				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data profil berhasil diperbaharui!</div>');
+//				$this->member->update_profil($dataDetail, $idUser);
+//				redirect('setting');
+//			} else {
+//				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Anda baru saja merubah profil, silahkan dicoba 5 menit lagi!</div>');
+//				redirect('setting');
+//			}
+//		}
+//	}
 	#################################################################
 	#                                                               #
 	#                  Update halaman profil user                   #

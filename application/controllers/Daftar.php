@@ -68,7 +68,7 @@ class Daftar extends CI_Controller
 		$this->form_validation->set_rules(
 			'email',
 			'Email',
-			'required',
+			'trim|required',
 			[
 				'required' => 'Email harus diisi!'
 			]
@@ -76,7 +76,7 @@ class Daftar extends CI_Controller
 		$this->form_validation->set_rules(
 			'password',
 			'Password',
-			'required|min_length[6]',
+			'trim|required|min_length[6]',
 			[
 				'required' => 'Password harus diisi!',
 				'min_length' => 'Password minimal harus terdiri dari 6 karakter'

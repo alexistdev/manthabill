@@ -91,6 +91,12 @@ class M_member extends CI_Model
 		return $this->db->get($this->tableDetailUser);
 
 	}
+	/** Update data detail user */
+	public function update_data_detail($data, $idUser)
+	{
+		$this->db->where('id_user', $idUser);
+		$this->db->update($this->tableDetailUser, $data);
+	}
 	####################################################################################
 	#                                Tabel tbproduct                                   #
 	####################################################################################
@@ -311,16 +317,4 @@ class M_member extends CI_Model
 
 		return $this->db->get()->result_array();
 	}
-
-
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Setting                   #
-    #                                                            #
-    ##############################################################
-    public function update_profil($dataProfil, $idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->update('tbdetailuser', $dataProfil);
-    }
 }
