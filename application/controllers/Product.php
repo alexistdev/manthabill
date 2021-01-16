@@ -24,7 +24,10 @@ class Product extends CI_Controller
 	public $input;
 	public $idUser;
 	public $token;
-	public $cekToken;
+	public $tokenSession;
+	public $tokenServer;
+	public $namaUser;
+	public $gambarUser;
 
 	public function __construct()
 	{
@@ -54,9 +57,8 @@ class Product extends CI_Controller
 		}
 
 		/* Nama dan Gambar di Sidebar */
-		$data['idUser'] = $idUser;
-		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
-		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
 		$data['title'] = "Product | ". $this->member->get_setting()->judul_hosting;
 		return $data;
 	}
@@ -76,7 +78,7 @@ class Product extends CI_Controller
 	}
 
 	/** Method untuk halaman Beli */
-	public function beli($idProduct = NULL)
+	public function beli($idProduct=NULL)
 	{
 		if($this->tokenSession != $this->tokenServer){
 			_unlogin();
@@ -97,7 +99,7 @@ class Product extends CI_Controller
 					$tlD = $this->member->get_data_tld();
 					foreach ($tlD->result_array() as $row) {
 						$options[cetak($row['tld'])] = strtoupper(cetak($row['tld']));
-					};
+					}
 					$attribut = [
 						"class" => "form-control"
 					];
@@ -112,7 +114,9 @@ class Product extends CI_Controller
 		}
 	}
 
-	/** Method untuk memproses pembelian */
+	/** Method untuk memproses pembelian
+	 * @param $id
+	 */
 	private function _proses($id)
 	{
 		$paket = $this->input->post("pilihan", TRUE);
@@ -190,15 +194,19 @@ class Product extends CI_Controller
 		/* mengarahkan ke halaman instruksi pembayaran */
 		$data = $this->_dataMember($this->idUser);
 
-		$data['telpHosting'] = $this->member->getSetting()->telp_hosting;
-		$data['namaHosting'] = $this->member->getSetting()->nama_hosting;
-		$totalBiaya = $this->member->getInvoice($idInvoice)->total_jumlah;
+		$dataSetting = $this->member->get_data_setting();
+		foreach($dataSetting->result_array() as $rowSetting){
+			$data['telpHosting'] = $rowSetting['telp_hosting'];
+			$data['namaHosting'] = $rowSetting['nama_hosting'];
+			$data['namaBank'] = $rowSetting['nama_bank'];
+			$data['nomorRekening'] = $rowSetting['no_rekening'];
+			$data['namaPemilikRekening'] = $rowSetting['nama_pemilik'];
+		}
+
+		$data['idInv'] = $idInvoice;
+		$data['NoInvoice'] = strtoupper($noInvoice);
 		$data['namaProduk'] = $getNamaProduct;
-		$data['NoInvoice'] = $this->member->getInvoice($idInvoice)->no_invoice;
-		$data['namaBank'] = $this->member->getInfoBank()->nama_bank;
-		$data['nomorRekening'] = $this->member->getInfoBank()->no_rekening;
-		$data['namaPemilikRekening'] = $this->member->getInfoBank()->nama_pemilik;
-		$data['totalBiaya'] = $totalBiaya;
+		$data['totalBiaya'] = $hargaSetelahDiskon;
 		$data['formatSMS'] = "<b>BAYAR</b> [spasi] <b>INV</b> [spasi] <b>" .
 					htmlentities(strtoupper($data['NoInvoice']), ENT_QUOTES, 'UTF-8') .
 					"</b> [spasi] <b> " .
@@ -208,8 +216,10 @@ class Product extends CI_Controller
 	}
 
 
-	/** Method untuk menampilkan halaman invoice */
-	public function invoice($idProduct = NULL)
+	/** Method untuk menampilkan halaman invoice
+	 * @param null $idProduct
+	 */
+	public function invoice($idProduct=NULL)
 	{
 		if (($idProduct == "") or ($idProduct == NULL)) {
 			redirect('Product');

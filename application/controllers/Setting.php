@@ -1,15 +1,60 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * ManthaBill V.2.0
+ *
+ * Software Billing ini ditujukan untuk pemula hoster
+ * Low Budget dan ingin memulai usaha selling hosting.
+ *
+ * Dikembangkan oleh: AlexistDev
+ * Kontak: www.alexistdev.com
+ *
+ * Software ini gratis.Namun jika anda ingin support pengembangan software ini
+ * Silahkan donasikan $1 ke paypal:alexistdev@gmail.com
+ *
+ * Terimakasih atas dukungan anda.
+ *
+ */
 class Setting extends CI_Controller
 {
-	function __construct()
+	public $member;
+	public $load;
+	public $session;
+	public $form_validation;
+	public $input;
+	public $idUser;
+	public $token;
+	public $tokenSession;
+	public $tokenServer;
+
+	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
+		/** Global scope idUser dan token */
+		$this->idUser = $this->session->userdata('id_user');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
+	}
+
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('user/view/' . $view, $data);
+	}
+
+	/** Prepare data */
+	private function _dataMember()
+	{
+
+		/* Nama dan Gambar di Sidebar */
+		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
+		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
+		$data['title'] = "Product | ". $this->member->get_setting()->judul_hosting;
+		return $data;
 	}
 
 	//khusus membuat captcha dan cek validasi captcha
@@ -38,20 +83,6 @@ class Setting extends CI_Controller
 		} else {
 			return FALSE;
 		}
-	}
-
-	private function _dataMember($idUser)
-	{
-		$data['idUser'] = $idUser;
-		//nama dan gambar disidebar
-		$data['namaUser'] = $this->member->getProfilUser($idUser)->nama_depan;
-		$data['gambarUser'] = $this->member->getProfilUser($idUser)->gambar;
-		return $data;
-	}
-
-	private function _template($data, $view)
-	{
-		$this->load->view('user/' . $view, $data);
 	}
 
 	function index()
