@@ -36,6 +36,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 });
             }, 2000);
         });
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		});
         $(function() {
             $('#tabelku').DataTable({
                 "paging": true,
@@ -46,6 +49,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 "autoWidth": false,
             });
         });
+		/** Saat tombol modalkunci diklik */
+		$(document).on("click", "#tombolKunci", function () {
+			var token = $(this).data('id');
+			var newUrl = "<?= base_url('Ticket/kunci/'); ?>" + token;
+			$("#urlKunci").attr('href', newUrl);
+		});
     </script>
 </body>
 

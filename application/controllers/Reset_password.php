@@ -181,6 +181,14 @@ class Reset_password extends CI_Controller
 					'matches' => 'Password tidak sama!'
 				]
 			);
+			$this->form_validation->set_rules(
+				'captcha',
+				'Captcha',
+				'trim|callback__check_captcha|required',
+				[
+					'required' => 'Captcha harus diisi!'
+				]
+			);
 			$token = $this->input->post('token', TRUE);
 			if ($this->form_validation->run() === false) {
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');

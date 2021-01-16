@@ -48,10 +48,43 @@ class Ticket extends CI_Controller
 		}
 	}
 
-	/** Prepare data */
-	private function _dataMember()
+	/** Method untuk generate captcha */
+	private function _create_captcha()
 	{
+		$cap = create_captcha(config_captcha());
+		$image = $cap['image'];
+		$this->session->set_userdata('captchaword', $cap['word']);
+		return $image;
+	}
+
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
+	public function _check_captcha($string)
+	{
+		if ($string == $this->session->userdata('captchaword')) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
+			return FALSE;
+		}
+	}
+
+	/** Prepare data */
+	private function _dataMember($key = NULL)
+	{
+		if($key != NULL || $key != ''){
+			$dataTicket = $this->member->get_data_ticket($key,$this->idUser,FALSE)->result_array();
+			foreach($dataTicket as $rowTicket){
+				$data['waktuPembuatan'] = $rowTicket['time'];
+				$data['pengirim'] = ($this->namaUser != '')? $this->namaUser: 'Member';
+				$data['judul'] = $rowTicket['judul'];
+				$data['pesanAwal'] = $rowTicket['pesan'];
+				$data['statusTicket'] = $rowTicket['status_inbox'];
+			}
+			$data['dataBalas'] = $this->member->get_data_balas($key)->result_array();
+			$data['token'] = $key;
+		}
 		//nama dan gambar disidebar
+		$data['image'] = $this->_create_captcha();
 		$data['namaUser'] = $this->namaUser;
 		$data['gambarUser'] = $this->gambarUser;
 		return $data;
@@ -104,6 +137,14 @@ class Ticket extends CI_Controller
 					'required' => 'Isi Pesan harus diisi !'
 				]
 			);
+			$this->form_validation->set_rules(
+				'captcha',
+				'Captcha',
+				'trim|callback__check_captcha|required',
+				[
+					'required' => 'Captcha harus diisi!'
+				]
+			);
 			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
 			if ($this->form_validation->run() === false) {
 				$this->session->set_flashdata('pesan', validation_errors());
@@ -123,7 +164,7 @@ class Ticket extends CI_Controller
 					'pesan' => $isiPesan,
 					'key_token' => $key,
 					'time' => time(),
-					'status' => 2
+					'status_inbox' => 2
 				];
 				$this->member->simpan_inbox($dataPesan);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Tiket berhasil dibuat, silahkan tunggu 1x24 jam untuk dibalas oleh Staff kami!</div>');
@@ -131,140 +172,86 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
-	#################################################################
-	#                                                               #
-	#                  		 Submit Ticket                          #
-	#################################################################
-	function submit_ticket()
+	/** Method untuk halaman Membalas Ticket */
+	public function lihat_ticket($keyx = NULL)
 	{
-		$hashSes = $this->session->userdata('token');
-		$userSes = $this->session->userdata('username');
-		$userData = $this->m_user->get_userSession($userSes);
-		$hashKey = $this->m_user->get_token($hashSes);
-		$idUser = $this->session->userdata('id_user');
-		if (($hashKey == 0) and ($userData == 0)) {
-			redirect('login');
+		$key = $keyx;
+		if($this->tokenSession != $this->tokenServer){
+			_unlogin();
 		} else {
-			$this->form_validation->set_rules('subyek', 'Judul', 'trim|required|min_length[5]');
-			$this->form_validation->set_rules('pesan', 'Pesan', 'trim|required|min_length[10]');
-			$this->form_validation->set_message('min_length', '{field} harus minimal berjumlah {param} karakter.');
-			$this->form_validation->set_message('required', '%s harus diisi');
-			$judul = $this->m_user->saringan($this->input->post("subyek"));
-			$pesan = nl2br($this->m_user->saringan($this->input->post("pesan")));
-			$varId = $this->m_user->saringan($this->input->post("varUserId"));
-			$emailUser = $this->m_user->get_email($idUser)->email;
-			$emailHosting = $this->m_user->get_companyEmail()->email_hosting;
-			if ($this->form_validation->run() == false) {
-				$this->session->set_flashdata('pesanGagal', validation_errors());
-				redirect('ticket/buat_ticket');
+			if (($keyx == "") or ($keyx == NULL)) {
+				redirect('Ticket');
 			} else {
-				if ($varId != $idUser) {
-					$this->session->set_flashdata('pesanGagal', "Ada sedikit kesalahan, silahkan dicoba beberapa saat lagi.");
-					redirect('ticket');
+				$cekToken = $this->member->get_data_ticket($key,$this->idUser,FALSE)->num_rows();
+				if($cekToken != 0){
+					$this->form_validation->set_rules(
+						'isiPesan',
+						'Isi Pesan',
+						'trim|min_length[10]|max_length[400]|required',
+						[
+							'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+							'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+							'required' => 'Isi Pesan harus diisi !'
+						]
+					);
+					$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+					if ($this->form_validation->run() === false) {
+						$this->session->set_flashdata('pesan', validation_errors());
+						$data = $this->_dataMember($key);
+						$data['title'] = "Lihat Ticket | " . $this->judulHosting;
+						$view = 'v_lihatticket';
+						$this->_template($data, $view);
+					} else{
+						$statusTicket = $this->member->get_data_ticket($key,$this->idUser,TRUE)->row()->status_inbox;
+						if($statusTicket != 1){
+							$this->session->set_flashdata('pesan2', '<div class="alert alert-warning" role="alert">Anda hanya bisa membalas pesan yang sudah dibalas oleh Administrator, silahkan tunggu 1x24 jam untuk mendapatkan balasan terlebih dahulu!</div>');
+							redirect('Ticket/lihat_ticket/'.cetak($key));
+						} else {
+							$isiPesan = $this->input->post("isiPesan", TRUE);
+							$dataBalas = [
+								'is_admin' => 2,
+								'key_token' => $key,
+								'pesan' => $isiPesan,
+								'time' => time()
+							];
+							$dataInbox = [
+								'status_inbox' => 2
+							];
+							/* simpan pesan balas */
+							$this->member->simpan_inbox_balas($dataBalas);
+							/* update status pesan */
+							$this->member->update_inbox($dataInbox, $key);
+							$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Anda berhasil membalas pesan ini, silahkan tunggu staff kami untuk membalas pesan anda!</div>');
+							redirect('Ticket/lihat_ticket/'.cetak($key));
+						}
+					}
 				} else {
-					//Membuat Tiket
-					$waktuTiket = strtotime(date("Y-m-d H:i:s"));
-					$ticketNumber = sha1($waktuTiket);
-					$dataTicket = array(
-						'id_user' => $varId,
-						'subyek' => $judul,
-						'pesan' => $pesan,
-						'timeticket' => $waktuTiket,
-						'keyticket' => $ticketNumber,
-						'status' => 1
-					);
-					$this->m_user->simpanTicket($dataTicket);
-					//Mengirimkan email
-					$emailPesan1 = "
-							Yth.Pelanggan , <br><br>
-							
-							Anda telah membuat support ticket<br>
-							Silahkan tunggu 1x24 jam, dan kami akan membalas ticket anda.<br><br>
-
-							<br><br>
-							Regards<br>
-							Admin- www.adrihost.com<br>
-					";
-					$dataEmail1 = array(
-						'email_pengirim' => $emailHosting,
-						'email_tujuan' => $emailUser,
-						'subyek' => "Anda telah membuat Support Ticket",
-						'email_pesan' => $emailPesan1,
-						'status' => 2
-					);
-					//simpan data ke tbemail
-					$this->m_user->simpan_email($dataEmail1);
-					$this->session->set_flashdata('pesanSukses', "Ticket Berhasil Dikirimkan");
-					redirect('ticket');
+					redirect('Ticket');
 				}
 			}
 		}
 	}
-	function view_ticket($keyTicket = NULL)
+
+	/** Method untuk halaman Membalas Ticket */
+	public function kunci($keyx = NULL)
 	{
-		$hashSes = $this->session->userdata('token');
-		$userSes = $this->session->userdata('username');
-		$userData = $this->m_user->get_userSession($userSes);
-		$hashKey = $this->m_user->get_token($hashSes);
-		$idUser = $this->session->userdata('id_user');
-		$b['user'] = $this->m_user->loginok($idUser);
-		$keyT = $keyTicket;
-		if (($hashKey == 0) and ($userData == 0)) {
-			redirect('login');
+		$key = $keyx;
+		if ($this->tokenSession != $this->tokenServer) {
+			_unlogin();
 		} else {
-			if (empty($keyTicket) or $keyTicket = "" or $keyTicket = NULL) {
-				redirect('ticket');
+			if (($keyx == "") or ($keyx == NULL)) {
+				redirect('Ticket');
 			} else {
-				$b['dataTanggal'] = date("m-d-Y", $this->m_user->getTicket($keyT)->timeticket);
-				$b['dataTicket'] = $this->m_user->getDataTicket($keyT);
-				$this->load->view('user/v_lihatticket', $b);
-			}
-		}
-	}
-	#################################################################
-	#                                                               #
-	#                  		 Balas Ticket                           #
-	#################################################################
-	function balas_ticket()
-	{
-		$hashSes = $this->session->userdata('token');
-		$userSes = $this->session->userdata('username');
-		$userData = $this->m_user->get_userSession($userSes);
-		$hashKey = $this->m_user->get_token($hashSes);
-		$idUser = $this->session->userdata('id_user');
-		if (($hashKey == 0) and ($userData == 0)) {
-			redirect('login');
-		} else {
-			$this->form_validation->set_rules('pesan', 'Pesan', 'trim|required|min_length[10]');
-			$this->form_validation->set_message('min_length', '{field} harus minimal berjumlah {param} karakter.');
-			$this->form_validation->set_message('required', '%s harus diisi');
-			$pesan = nl2br($this->m_user->saringan($this->input->post("pesan")));
-			$varId = $this->m_user->saringan($this->input->post("varUserId"));
-			$keyTicket = $this->m_user->saringan($this->input->post("keyTicket"));
-			$judul = "[Klien]Balasan support ticket.";
-			if ($this->form_validation->run() == false) {
-				$this->session->set_flashdata('pesanGagal', validation_errors());
-				redirect('ticket/view_ticket/' . $keyTicket);
-			} else {
-				if ($varId != $idUser) {
-					$this->session->set_flashdata('pesanGagal', "Ada sedikit kesalahan, silahkan dicoba beberapa saat lagi.");
-					redirect('ticket');
-				} else {
-					//Membuat Tiket
-					$waktuTiket = strtotime(date("Y-m-d H:i:s"));
-					$ticketNumber = sha1($waktuTiket);
-					$dataBalasanTicket = array(
-						'id_user' => $varId,
-						'subyek' => $judul,
-						'pesan' => $pesan,
-						'timeticket' => $waktuTiket,
-						'keyticket' => $keyTicket,
-						'balasan' => 1,
-						'status' => 1
-					);
-					$this->m_user->simpanTicket($dataBalasanTicket);
-					$this->session->set_flashdata('pesanSukses', "Berhasil menambahkan balasan ticket");
-					redirect('ticket/view_ticket/' . $keyTicket);
+				$cekToken = $this->member->get_data_ticket($key,$this->idUser,TRUE)->num_rows();
+				if($cekToken != 0){
+					$dataInbox = [
+						'status_inbox' => 3
+					];
+					$this->member->update_inbox($dataInbox, $key);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Support ticket berhasil dikunci!</div>');
+					redirect('Ticket');
+				}else{
+					redirect('Ticket');
 				}
 			}
 		}

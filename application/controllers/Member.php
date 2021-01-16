@@ -21,14 +21,32 @@ class Member extends CI_Controller
 	public $load;
 	public $session;
 	public $member;
+	public $idUser;
+	public $tokenSession;
+	public $tokenServer;
+	public $judulHosting;
+	public $namaUser;
+	public $gambarUser;
+	public $form_validation;
+	public $input;
 
 	/** Constructor dari Class Member */
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_member', 'member');
+		/** Global scope idUser dan token */
+		$this->idUser = $this->session->userdata('id_user');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
+		$this->judulHosting = $this->member->get_setting()->judul_hosting;
+		/** Data User untuk Sidebar */
+		foreach($this->member->get_all_datauser($this->idUser)->result_array() as $rowUser){
+			$this->namaUser = $rowUser['nama_depan'];
+			$this->gambarUser = $rowUser['gambar'];
+		}
 		if ($this->session->userdata('is_login_in') !== TRUE) {
-			redirect('Login');
+			redirect('login');
 		}
 	}
 
@@ -43,35 +61,31 @@ class Member extends CI_Controller
 	{
 		$data['idUser'] = $idUser;
 		/* Bagian Menampilkan Statistik */
-		$data['service'] = $this->member->jumlahService($idUser);
-		$data['domain'] = $this->member->jumlahDomain($idUser);
-		$data['invoice'] = $this->member->jumlahInvoice($idUser);
-		$data['supportTicket'] = $this->member->jumlahTicket($idUser);
+		$data['service'] = '0';
+		$data['domain'] = '0';
+		$data['invoice'] = '0';
+		$data['supportTicket'] = '0';
 
 		/* Bagian Menampilkan Tabel Tiket dan Berita */
-		$data['dataTicket'] = $this->member->tampil_ticket($idUser);
-		$data['news'] = $this->member->tampil_berita();
+		//$data['dataTicket'] = $this->member->tampil_ticket($idUser);
+		$data['news'] = '';
 
 		/* Nama dan Gambar di Sidebar */
-		$data['namaUser'] = $this->member->get_data_detail($idUser)->row()->nama_depan;
-		$data['gambarUser'] = $this->member->get_data_detail($idUser)->row()->gambar;
-		$data['title'] = "Dashboard | ". $this->member->get_setting()->judul_hosting;
+		$data['namaUser'] = $this->namaUser;
+		$data['gambarUser'] = $this->gambarUser;
 		return $data;
 	}
-
 
 	/** Method untuk halaman Member */
 	public function index()
 	{
 		/** Login dengan Desain Pattern Singleton */
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->member->get_data_token($hashSes)->num_rows();
-		if ($hashKey==0){
+		if($this->tokenSession != $this->tokenServer){
 			_unlogin();
-		} else{
-			$idUser = $this->session->userdata('id_user');
-			$data = $this->_dataMember($idUser);
-			$view = "v_member";
+		} else {
+			$data = $this->_dataMember($this->idUser);
+			$data['title'] = "Dashboard | ". $this->judulHosting;
+			$view = 'v_member';
 			$this->_template($data, $view);
 		}
 	}

@@ -58,6 +58,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										?>
 
 									</div>
+									<div class="row form-group">
+										<div class="col-md-6">
+											<div class="row">
+												<div class="col-md-6">
+													<?php echo $image; ?>
+												</div>
+												<div class="col-md-6">
+													<?= form_input(['name' => 'captcha', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'captcha', 'required' => 'required']); ?>
+												</div>
+											</div>
+										</div>
+
+									</div>
 									<div class="form-group">
 										<button type="submit" name="submit" class="btn btn-primary">Tambah</button>
 										<a href="<?= base_url('Ticket'); ?>"><button type="button" class="btn btn-danger">Batal</button></a>

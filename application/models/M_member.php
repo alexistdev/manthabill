@@ -28,6 +28,7 @@ class M_member extends CI_Model
 		$this->tableHosting = 'tbhosting';
 		$this->tableKonfirmasi = 'tbkonfirmasi';
 		$this->tableInbox = 'tbinbox';
+		$this->tableInboxBalas = 'inboxbalas';
 		$this->join1 = 'tbdetailuser.id_user = tbuser.id_user';
     }
 
@@ -195,6 +196,21 @@ class M_member extends CI_Model
 	{
 		$this->db->join($this->tableUser, 'tbuser.id_user=tbinbox.id_user');
 		$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
+		$this->db->where('tbinbox.id_user',$idUser);
+		return $this->db->get($this->tableInbox);
+	}
+
+	/** Menampilkan data di tabel tbinbox */
+	public function get_data_ticket($data, $idUser, $status=TRUE)
+	{
+
+		$this->db->join($this->tableUser, 'tbuser.id_user=tbinbox.id_user');
+		$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
+		$this->db->where('key_token', $data);
+		$this->db->where('tbinbox.id_user', $idUser);
+		if($status){
+			$this->db->where('status_inbox <', 3);
+		}
 		return $this->db->get($this->tableInbox);
 	}
 
@@ -204,49 +220,28 @@ class M_member extends CI_Model
 		$this->db->insert($this->tableInbox, $data);
 	}
 
+	/** Menyimpan update tbinbox */
+	public function update_inbox($data, $key)
+	{
+		$this->db->where('key_token', $key);
+		$this->db->update($this->tableInbox, $data);
+	}
 
+	####################################################################################
+	#                               Tabel inboxbalas                                     #
+	####################################################################################
+	/** Menampilkan data dari tabel tbinboxbalas */
+	public function get_data_balas($token)
+	{
+		$this->db->where('key_token',$token);
+		return $this->db->get($this->tableInboxBalas);
+	}
 
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Member                    #
-    #                                                            #
-    ##############################################################
-
-    public function jumlahService($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $hasil = $this->db->get('tbhosting');
-        return $hasil->num_rows();
-    }
-    public function jumlahDomain($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $hasil = $this->db->get('tbdomain');
-        return $hasil->num_rows();
-    }
-    public function jumlahInvoice($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->where('status_inv', 2);
-        $hasil = $this->db->get('tbinvoice');
-        return $hasil->num_rows();
-    }
-    public function jumlahTicket($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->where('status', 1);
-        $hasil = $this->db->get('ticket');
-        return $hasil->num_rows();
-    }
-
-    public function tampil_berita()
-    {
-        $this->db->order_by('id_berita', 'DESC');
-        $this->db->limit(1);
-        $hasil = $this->db->get('tbberita');
-        return $hasil;
-    }
-
+	/** Menyimpan Pesan ke dalam tabel inboxbalas */
+	public function simpan_inbox_balas($data)
+	{
+		$this->db->insert($this->tableInboxBalas, $data);
+	}
 
     ##############################################################
     #                                                            #
@@ -317,18 +312,7 @@ class M_member extends CI_Model
 		return $this->db->get()->result_array();
 	}
 
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Ticket                    #
-    #                                                            #
-    ##############################################################
 
-
-    public function cek_security($idUser)
-    {
-        $this->db->where("id_user", $idUser);
-        return $this->db->get('tbuser')->row();
-    }
     ##############################################################
     #                                                            #
     #                Menangani halaman Setting                   #
