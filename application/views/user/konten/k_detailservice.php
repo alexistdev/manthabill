@@ -24,130 +24,59 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- Main content -->
 	<section class="content">
 		<div class="container-fluid">
-			<!-- Informasi Detail Paket -->
 			<div class="row">
 				<div class="col-md-12">
-					<div class="card card-dark">
-						<!-- Card Header -->
-						<div class="card-header">
-							<h3>Informasi Service</h3>
-						</div>
-						<!-- /End Card Header -->
-						<!-- Card Body -->
+					<div class="card">
 						<div class="card-body">
-							<div class="row">
-								<div class="col-md-8">
-									<dt>Paket</dt>
-									<dd><?= cetak($namaHosting); ?></dd>
-									<dt>Domain</dt>
-									<dd><?= cetak($namaDomain); ?></dd>
-									<dt>Registration Date</dt>
-									<dd><?= cetak($registrationDate); ?></dd>
-									<dt>End Date</dt>
-									<dd><?= cetak($endDate); ?></dd>
-								</div>
-								<div class="col-md-4">
-									<dt>Recuring Amount</dt>
-									<dd>Rp. <?= cetak(number_format($amount,0,",",".")); ?></dd>
-									<dt>Payment Method</dt>
-									<dd>Transfer Bank</dd>
-									<dt>Status</dt>
-									<dd>
-										<?php
-											switch ($status){
-												case 1:
-													echo "<small class='badge badge-success'>Aktif</small>";
-													break;
-												case 2:
-													echo "<small class='badge badge-warning'>Pending</small>";
-													break;
-												case 3:
-													echo "<small class='badge badge-danger'>Suspend</small>";
-													break;
-												default:
-													echo "<small class='badge badge-dark'>Terminated</small>";
-											}
-										?>
-									</dd>
-								</div>
-							</div>
+							<table class="table table-striped">
+								<tr>
+									<th scope="row">Nama Produk</th>
+									<td width="5%">:</td>
+									<td width="70%"><?= cetak($namaHosting); ?></td>
+								</tr>
+								<tr>
+									<th scope="row">Domain Name</th>
+									<td width="5%">:</td>
+									<td width="70%"><?= cetak($domain); ?></td>
+								</tr>
+								<tr>
+									<th scope="row">Billing</th>
+									<td width="5%">:</td>
+									<td width="70%">Rp.<?= konversiRupiah(cetak($hargaHosting)); ?>,-</td>
+								</tr>
+								<tr>
+									<th scope="row">Start</th>
+									<td width="5%">:</td>
+									<td width="70%"><?= konversiTanggal(cetak($tanggalMulai)); ?></td>
+								</tr>
+								<tr>
+									<th scope="row">Expire:</th>
+									<td width="5%">:</td>
+									<td width="70%"><?= konversiTanggal(cetak($tanggalExpire)); ?></td>
+								</tr>
+								<tr>
+									<th scope="row">Status:</th>
+									<td width="5%">:</td>
+									<td width="70%">
+									<?php if($statusHosting == 1) { ?>
+										<small class="badge badge-success"> AKTIF </small>
+									<?php } else if($statusHosting == 2) { ?>
+										<small class="badge badge-warning"> PENDING </small>
+									<?php } else if($statusHosting == 3) { ?>
+										<small class="badge badge-danger"> SUSPEND </small>
+									<?php } else{ ?>
+										<small class="badge badge-primary"> TERMINATED </small>
+									<?php } ?>
+									</td>
+								</tr>
+							</table>
+							<a href="<?= base_url('Service'); ?>"><button class="btn btn-danger"><i class="fas fa-chevron-circle-left"></i> Kembali</button></a>
+							<?php if($statusHosting == 1) { ?>
+								<a href="http://<?php echo $domain ?>/cpanel" target="_blank"><button class="btn btn-primary"><i class="fas fa-bullseye"></i> CPANEL</button></a>
+							<?php } ?>
 						</div>
-						<!-- /End Card Body -->
 					</div>
 				</div>
-			</div>
-			<!-- Informasi Detail Paket -->
-			<div class="row">
-				<!--	Kolom Kiri	-->
-				<div class="col-md-4">
-					<div class="card card-dark">
-						<!-- Card Header -->
-						<div class="card-header">
-							<h3>Fitur</h3>
-						</div>
-						<!-- /End Card Header -->
-
-						<!-- Card Body -->
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-4">
-									<dt>Disk Available</dt>
-									<dd><?= cetak($diskAvailable); ?></dd>
-									<dt>Bandwith</dt>
-									<dd><?= cetak($bandwith); ?></dd>
-									<dt>Addon Domain</dt>
-									<dd><?= (cetak($addon) != '')? cetak($addon): "."; ?></dd>
-								</div>
-								<div class="col-md-8">
-									<dt>Email Account</dt>
-									<dd><?= (cetak($email) != '')? cetak($email): "."; ?></dd>
-									<dt>FTP Account</dt>
-									<dd><?= (cetak($ftp) != '')? cetak($ftp): "."; ?></dd>
-								</div>
-							</div>
-						</div>
-						<!-- /End Card Body -->
-					</div>
-				</div>
-				<!--	/End Kolom Kiri	-->
-
-				<!--	Kolom Kanan	-->
-				<div class="col-md-8">
-					<div class="card card-dark">
-						<!--	Card Body	-->
-						<div class="card-body">
-							<div class="row">
-								<?php if($status == 1) { ?>
-									<div class="col-md-3">
-										<a href="http://<?= cetak($domain); ?>/cpanel" class="btn btn-app"><i class="fas fa-edit"></i>Cpanel</a>
-									</div>
-									<div class="col-md-3">
-										<a href="" class="btn btn-app"><i class="fas fa-envelope"></i>Kirim Pesan</a>
-									</div>
-									<div class="col-md-3">
-										<a href="" class="btn btn-app"><i class="fas fa-random"></i>Upgrade Paket</a>
-									</div>
-									<div class="col-md-3">
-										<a href="" class="btn btn-app"><i class="fas fa-ban text-danger"></i> <span class="text-danger">Pembatalan</span></a>
-									</div>
-								<?php } elseif($status == 2) { ?>
-									<div class="alert alert-warning">
-										Saat ini layanan anda dalam status <span class="text-danger font-weight-bold">PENDING</span> , silahkan lengkapi pembayaran atau konfirmasi pembayaran anda!
-										<a href="<?= base_url('Invoice'); ?>"><span class="text-dark font-weight-bold">DISINI</span></a>
-									</div>
-								<?php } else { ?>
-									<div class="col-md-12">
-										<div class="alert alert-danger">
-											Saat ini akun anda sudah dinonaktifkan , silahkan hubungi <a href="<?= base_url('Ticket'); ?>"><span class="text-dark font-weight-bold">Administrator</span></a> !
-										</div>
-									</div>
-								<?php } ?>
-							</div>
-						</div>
-						<!--	/End Card Body	-->
-					</div>
-				</div>
-				<!--	/End Kolom Kanan	-->
 			</div>
 		</div>
 	</section>

@@ -83,9 +83,17 @@ class Service extends CI_Controller
 			_unlogin();
 		} else {
 			$id = decrypt_url($idHosting);
-			$cekId = $this->member->get_data_service($id,FALSE)->num_rows();
-			if($cekId != 0){
+			$getData = $this->member->get_data_service($id,FALSE);
+			if($getData->num_rows() != 0){
 				$data = $this->_dataMember();
+				foreach($getData->result_array() as $rowDetail){
+					$data['namaHosting'] = $rowDetail['nama_hosting'];
+					$data['hargaHosting'] = $rowDetail['harga'];
+					$data['tanggalMulai'] = $rowDetail['start_hosting'];
+					$data['tanggalExpire'] = $rowDetail['end_hosting'];
+					$data['domain'] = $rowDetail['domain'];
+					$data['statusHosting'] = $rowDetail['status_hosting'];
+				}
 				$data['title'] = "Detail Hosting | ". $this->member->get_setting()->judul_hosting;
 				$view = "v_detailservice";
 				$this->_template($data, $view);
