@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row">
                 <!-- Col -->
                 <div class="col-md-12">
-                    <div class="card card-info">
+                    <div class="card card-dark">
 						<!-- Card Header -->
                         <div class="card-header">
                             <h3 class="card-title">Daftar Invoice Anda</h3>

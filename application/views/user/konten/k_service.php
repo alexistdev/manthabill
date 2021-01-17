@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row">
                 <!-- Khusus Personal Hosting -->
                 <div class="col-md-12">
-                    <div class="card card-info">
+                    <div class="card card-dark">
 						<!-- Start Card-header -->
                         <div class="card-header">
                             <h3 class="card-title">Layanan Hosting Anda</h3>

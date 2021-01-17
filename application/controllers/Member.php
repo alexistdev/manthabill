@@ -59,11 +59,10 @@ class Member extends CI_Controller
 	/** Prepare data */
 	private function _dataMember($idUser)
 	{
-		$data['idUser'] = $idUser;
 		/* Bagian Menampilkan Statistik */
 		$data['service'] = '0';
 		$data['domain'] = '0';
-		$data['invoice'] = '0';
+		$data['invoice'] = $this->member->get_data_invoice($idUser, $status=TRUE, $type=TRUE)->num_rows();
 		$data['supportTicket'] = '0';
 
 		/* Bagian Menampilkan Tabel Tiket dan Berita */

@@ -143,8 +143,13 @@ class M_member extends CI_Model
 	public function get_data_invoice($data, $status=TRUE, $type=TRUE)
 	{
 		if($status){
+			if($type){
+				$this->db->where('status_inv',2);
+				$this->db->or_where('status_inv',3);
+			}
 			$this->db->where('id_user', $data);
 			$this->db->order_by('id_invoice', 'DESC');
+
 		} else {
 			if($type){
 				$this->db->where('status_inv',2);
@@ -191,6 +196,18 @@ class M_member extends CI_Model
 	####################################################################################
 	#                                Tabel tbhosting                                   #
 	####################################################################################
+
+	/** Mendapatkan data tbhosting	*/
+	public function get_data_service($data, $type=TRUE)
+	{
+		if($type){
+			$this->db->where('id_user', $data);
+			$this->db->order_by('status_hosting', 'ASC');
+		} else {
+			$this->db->where('id_hosting', $data);
+		}
+		return $this->db->get($this->tableHosting);
+	}
 
 	/** Menyimpan ke dalam tabel tbhosting	*/
 	public function simpan_hosting($dataHosting)
@@ -250,7 +267,7 @@ class M_member extends CI_Model
 	}
 
 	####################################################################################
-	#                               Tabel inboxbalas                                     #
+	#                               Tabel inboxbalas                                   #
 	####################################################################################
 	/** Menampilkan data dari tabel tbinboxbalas */
 	public function get_data_balas($token)
@@ -264,6 +281,8 @@ class M_member extends CI_Model
 	{
 		$this->db->insert($this->tableInboxBalas, $data);
 	}
+
+
 
     ##############################################################
     #                                                            #
@@ -310,13 +329,7 @@ class M_member extends CI_Model
     #                                                            #
     ##############################################################
 
-    public function tampilService($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->order_by('status_hosting', 'ASC');
-        $hasil = $this->db->get('tbhosting');
-        return $hasil;
-    }
+
     public function cek_host($idHosting,$idUser)
     {
         $this->db->where('id_hosting', $idHosting);
