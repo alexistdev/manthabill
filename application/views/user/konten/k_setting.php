@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <!-- Khusus sebelah kiri -->
-                <div class="col-md-5">
+                <div class="col-md-3">
                     <!-- Profile Image -->
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
@@ -45,23 +45,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <li class="list-group-item">
                                     <b>Status</b> <a class="float-right">Verified</a>
                                 </li>
-                                <li class="list-group-item">
-                                    <b>Security pin</b> <a href="<?php echo base_url('setting/req_pin'); ?>" class="float-right">
 
-<!--                                        if (!empty($CekSecPin)) {-->
-<!--                                            if ($nW == 1) {-->
-<!--                                                echo "Request New Pin";-->
-<!--                                            } else {-->
-<!--                                                echo "Sudah Dikirimkan";-->
-<!--                                            }-->
-<!--                                        } else {-->
-<!--                                            echo "New Pin";-->
-<!--                                        }; -->
-                                    </a>
-                                </li>
                             </ul>
 
-                            <a href="#" class="btn btn-info btn-block"><b>Ganti Password</b></a>
+                            <a href="<?= base_url('Setting/ubah_password'); ?>" class="btn btn-info btn-block"><b>Ganti Password</b></a>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -69,7 +56,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <!-- End Sebelah kiri -->
                 <!-- Start Menu sebelah kanan -->
-                <div class="col-md-7">
+                <div class="col-md-9">
                     <!-- Profile Image -->
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
@@ -149,6 +136,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 </div>
                 <!-- End Sebelah kiri -->
+			</div>
+		</div>
     </section>
     <!-- /.content -->
 </div>

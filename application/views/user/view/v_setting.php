@@ -31,17 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $(".alert").fadeTo(500, 0).slideUp(500, function() {
                     $(this).remove();
                 });
-            }, 3000);
-        });
-        $(function() {
-            $('#tabelku').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-            });
+            }, 5000);
         });
     </script>
 </body>

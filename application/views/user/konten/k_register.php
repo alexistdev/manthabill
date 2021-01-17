@@ -13,7 +13,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
   <span id="username_result2"></span>
 </div>
 <div class="input-group mb-3">
-  <?= form_input(['name' => 'password', 'type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password', 'value' => set_value('password'), 'required' => 'required']); ?>
+  <?= form_input(['name' => 'password', 'type' => 'password', 'class' => 'form-control', 'placeholder' => 'Password','maxlength' => '50', 'value' => set_value('password'), 'required' => 'required']); ?>
   <div class="input-group-append">
     <div class="input-group-text">
       <span class="fas fa-lock"></span>
@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
   </div>
 </div>
 <div class="input-group mb-3">
-  <?= form_input(['name' => 'password2', 'type' => 'password', 'class' => 'form-control', 'placeholder' => 'Ulangi Password Baru', 'value' => set_value('password2'), 'required' => 'required']); ?>
+  <?= form_input(['name' => 'password2', 'type' => 'password', 'class' => 'form-control', 'placeholder' => 'Ulangi Password Baru','maxlength' => '50', 'value' => set_value('password2'), 'required' => 'required']); ?>
   <div class="input-group-append">
     <div class="input-group-text">
       <span class="fas fa-lock"></span>

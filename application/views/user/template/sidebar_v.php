@@ -45,14 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= base_url('Domain') ?>" class="nav-link">
-                        <i class="nav-icon fas fa-globe"></i>
-                        <p>
-                            Domain
-                        </p>
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="<?= base_url('Service') ?>" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>

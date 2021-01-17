@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * Terimakasih atas dukungan anda.
  *
  */
-class Domain extends CI_Controller
+class DomainOLD extends CI_Controller
 {
 	public $load;
 	public $session;

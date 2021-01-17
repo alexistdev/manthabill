@@ -78,6 +78,22 @@ class M_member extends CI_Model
 		$this->db->join($this->tableDetailUser, $this->join1);
 		return $this->db->get($this->tableUser);
 	}
+
+	/** Mengecek password berdasarkan id */
+	public function cek_password($idUser,$password)
+	{
+		$this->db->where('id_user', $idUser);
+		$this->db->where('password', sha1($password));
+		return $this->db->get($this->tableUser);
+	}
+
+	/** Update data detail user */
+	public function update_data_user($data, $idUser)
+	{
+		$this->db->where('id_user', $idUser);
+		$this->db->update($this->tableUser, $data);
+	}
+
 	####################################################################################
 	#                              Tabel tbdetailuser                                  #
 	####################################################################################

@@ -37,6 +37,11 @@ class Product extends CI_Controller
 		$this->idUser = $this->session->userdata('id_user');
 		$this->tokenSession = $this->session->userdata('token');
 		$this->tokenServer = $this->member->get_token_byId($this->idUser)->row()->token;
+		/** Data User untuk Sidebar */
+		foreach($this->member->get_all_datauser($this->idUser)->result_array() as $rowUser){
+			$this->namaUser = $rowUser['nama_depan'];
+			$this->gambarUser = $rowUser['gambar'];
+		}
 		if ($this->session->userdata('is_login_in') !== TRUE) {
 			redirect('login');
 		}
