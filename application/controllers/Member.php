@@ -67,7 +67,7 @@ class Member extends CI_Controller
 
 		/* Bagian Menampilkan Tabel Tiket dan Berita */
 		//$data['dataTicket'] = $this->member->tampil_ticket($idUser);
-		$data['news'] = '';
+		$data['news'] = $this->member->get_data_berita()->result_array();
 
 		/* Nama dan Gambar di Sidebar */
 		$data['namaUser'] = $this->namaUser;
@@ -84,6 +84,7 @@ class Member extends CI_Controller
 		} else {
 			$data = $this->_dataMember($this->idUser);
 			$data['title'] = "Dashboard | ". $this->judulHosting;
+			$data['dataTicket'] = $this->member->tampil_ticket($this->idUser);
 			$view = 'v_member';
 			$this->_template($data, $view);
 		}

@@ -29,6 +29,7 @@ class M_member extends CI_Model
 		$this->tableKonfirmasi = 'tbkonfirmasi';
 		$this->tableInbox = 'tbinbox';
 		$this->tableInboxBalas = 'inboxbalas';
+		$this->tableBerita = 'tbberita';
 		$this->join1 = 'tbdetailuser.id_user = tbuser.id_user';
     }
 
@@ -282,6 +283,15 @@ class M_member extends CI_Model
 		$this->db->insert($this->tableInboxBalas, $data);
 	}
 
+	####################################################################################
+	#                               Tabel tbberita                                     #
+	####################################################################################
+
+	/** Menampilkan data dari tabel tbberita */
+	public function get_data_berita(){
+		$this->db->limit(1);
+		return $this->db->get($this->tableBerita);
+	}
 
 
     ##############################################################
@@ -289,61 +299,37 @@ class M_member extends CI_Model
     #                Menangani halaman Domain                    #
     #                                                            #
     ##############################################################
-
-    public function simpan_logDom($dataTld)
-    {
-        $this->db->insert('tbdomaintransit', $dataTld);
-        return $this->db->insert_id();
-    }
-    public function cek_idLog($idLog, $idUser)
-    {
-        $this->db->where('id_domtrans', $idLog);
-        $this->db->where('id_user', $idUser);
-        $query = $this->db->get('tbdomaintransit');
-        return $query->num_rows();
-    }
-    public function simpan_domain($dataDomain)
-    {
-        $this->db->insert('tbdomain', $dataDomain);
-        return $this->db->insert_id();
-    }
-    public function simpan_domainWhois($dataWhois)
-    {
-        $this->db->insert('tbdomainwhois', $dataWhois);
-    }
-    public function hapus_domLog($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $this->db->delete('tbdomaintransit');
-    }
-    public function tampilDomain($idUser)
-    {
-        $this->db->where('id_user', $idUser);
-        $hasil = $this->db->get('tbdomain');
-        return $hasil;
-    }
-
-    ##############################################################
-    #                                                            #
-    #                Menangani halaman Service                   #
-    #                                                            #
-    ##############################################################
-
-
-    public function cek_host($idHosting,$idUser)
-    {
-        $this->db->where('id_hosting', $idHosting);
-		$this->db->where('id_user', $idUser);
-        $query =  $this->db->get('tbhosting');
-        return $query->num_rows();
-    }
-
-    public function tampil_detail_service($idHosting)
-	{
-		$this->db->from('tbhosting as b');
-		$this->db->join('tbproduct as a', 'a.id_product = b.id_product');
-		$this->db->where('id_hosting', $idHosting);
-
-		return $this->db->get()->result_array();
-	}
+//
+//    public function simpan_logDom($dataTld)
+//    {
+//        $this->db->insert('tbdomaintransit', $dataTld);
+//        return $this->db->insert_id();
+//    }
+//    public function cek_idLog($idLog, $idUser)
+//    {
+//        $this->db->where('id_domtrans', $idLog);
+//        $this->db->where('id_user', $idUser);
+//        $query = $this->db->get('tbdomaintransit');
+//        return $query->num_rows();
+//    }
+//    public function simpan_domain($dataDomain)
+//    {
+//        $this->db->insert('tbdomain', $dataDomain);
+//        return $this->db->insert_id();
+//    }
+//    public function simpan_domainWhois($dataWhois)
+//    {
+//        $this->db->insert('tbdomainwhois', $dataWhois);
+//    }
+//    public function hapus_domLog($idUser)
+//    {
+//        $this->db->where('id_user', $idUser);
+//        $this->db->delete('tbdomaintransit');
+//    }
+//    public function tampilDomain($idUser)
+//    {
+//        $this->db->where('id_user', $idUser);
+//        $hasil = $this->db->get('tbdomain');
+//        return $hasil;
+//    }
 }

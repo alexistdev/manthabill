@@ -97,10 +97,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <!-- /.card-header -->
                         <div class="card-body">
                             <?php
-                            foreach ($news->result_array() as $row) :
-                                $judul = $row['judul_berita'];
-                                $isiBerita = $row['isi_berita'];
-                                $tgl = $row['tgl_berita'];
+                            foreach ($news as $rowBerita) :
+                                $judul = $rowBerita['judul_berita'];
+                                $isiBerita = $rowBerita['isi_berita'];
+                                $tgl = $rowBerita['tgl_berita'];
                             ?>
                                 <h3><?php echo htmlentities(strtoupper($judul), ENT_QUOTES, 'UTF-8'); ?></h3>
                                 <hr>
@@ -136,13 +136,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <tbody>
                                         <?php
                                         foreach ($dataTicket->result_array() as $row) :
-                                            $nomorTicket = $row['id_ticket'];
-                                            $judul = $row['subyek'];
-                                            $tanggalTicket = date("d-m-Y H:i:s", $row['timeticket']);
-                                            $keyTicket = $row['keyticket'];
+                                            $nomorTicket = $row['id_inbox'];
+                                            $judul = $row['judul'];
+                                            $tanggalTicket = date("d-m-Y H:i:s", $row['time']);
+                                            $keyTicket = $row['key_token'];
                                         ?>
                                             <tr>
-                                                <td><a href="<?php echo base_url('ticket/view_ticket/' . $keyTicket); ?>">#<?php echo htmlentities($nomorTicket, ENT_QUOTES, 'UTF-8'); ?></a></td>
+                                                <td><a href="<?php echo base_url('ticket/lihat_ticket/' . $keyTicket); ?>">#<?php echo htmlentities($nomorTicket, ENT_QUOTES, 'UTF-8'); ?></a></td>
                                                 <td><?php echo htmlentities($judul, ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td><span class="label label-success">Open</span></td>
                                                 <td>

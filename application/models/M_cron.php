@@ -2,33 +2,61 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_cron extends CI_Model{
-	function __construct(){
+
+	/**
+	 * Menggunakan 3 table:
+	 * tbemail
+	 * tbsetting
+	 * tblogmail
+	 */
+
+	public function __construct(){
 		parent::__construct();
+		$this->tableEmail = 'tbemail';
+		$this->tableSetting = 'tbsetting';
+		$this->tableLog = 'tblogmail';
 	}
-	/*Mengirimkan email
-	/
-	/
-	/=====================================*/
-	function ambil_daftar($lim) {
-    $this->db->where('status', 2);
+
+	####################################################################################
+	#                                Tabel tbEmail                                     #
+	####################################################################################
+
+	/** Mengambil daftar email berdasarkan limit di tabel email */
+	public function ambil_daftar($lim) {
+		$this->db->where('status', 2);
 		$this->db->limit($lim);
-    $query = $this->db->get('tbemail')->result_array();
-    return $query;
+		return $this->db->get($this->tableEmail)->result_array();
 	}
-	function get_emailLimit() {
-        $this->db->select('limit_email');
-        $query = $this->db->get('tbsetting')->row();
-        return $query;
-	}
-	function simpan_log($data) {
-        $this->db->insert('tblogmail',$data);
-	}
-	function update_status($stat,$id) {
+
+	/** Mengupdate status email jika sudah dikirimkan */
+	public function update_status($stat,$id) {
 		$this->db->where('id_email',$id);
-        $this->db->update('tbemail',$stat);
+		$this->db->update($this->tableEmail,$stat);
 	}
-	function hapus_terkirim() {
+
+	/** Menghapus email dari tabel email jika sudah dikirimkan atau status =1 */
+	public function hapus_terkirim() {
 		$this->db->where('status',1);
-        $this->db->delete('tbemail');
+		$this->db->delete($this->tableEmail);
 	}
+
+	####################################################################################
+	#                                Tabel tbSetting                                   #
+	####################################################################################
+
+	/** Mendapatkan limit email setiap kali dikirimkan */
+	public function get_emailLimit() {
+        $this->db->select('limit_email');
+        return $this->db->get($this->tableSetting)->row();
+	}
+
+	####################################################################################
+	#                                Tabel tblogmail                                   #
+	####################################################################################
+
+	/** Menyimpan catatan pengiriman ke dalam tabel tblogmail */
+	public function simpan_log($data) {
+        $this->db->insert($this->tableLog,$data);
+	}
+
 }
