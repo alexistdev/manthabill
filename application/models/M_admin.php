@@ -27,6 +27,8 @@ class M_admin extends CI_Model{
 		$this->tableSetting = 'tbsetting';
 		$this->tableProduct = 'tbproduct';
 		$this->tableInbox = 'tbinbox';
+		$this->tableInboxBalas = 'inboxbalas';
+		$this->tableHosting = 'tbhosting';
 	}
 
 
@@ -153,13 +155,64 @@ class M_admin extends CI_Model{
 	public function get_data_inbox($data=null,$type=TRUE){
 		if($data){
 			if($type){
-				$this->db->where('id_inbox',$id);
+				$this->db->where('id_inbox',$data);
 			} else{
-				$this->db->where('key_token',$id);
+				$this->db->where('key_token',$data);
 			}
 		}
 		return $this->db->get($this->tableInbox);
 	}
+
+	/** Menampilkan data di tabel tbinbox */
+	public function get_data_ticket($data, $status=TRUE)
+	{
+
+		$this->db->join($this->tableUser, 'tbuser.id_user=tbinbox.id_user');
+		$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
+		$this->db->where('key_token', $data);
+		if($status){
+			$this->db->where('status_inbox <', 3);
+		}
+		return $this->db->get($this->tableInbox);
+	}
+
+	/** Menyimpan update tbinbox */
+	public function update_inbox($data, $key)
+	{
+		$this->db->where('key_token', $key);
+		$this->db->update($this->tableInbox, $data);
+	}
+
+	####################################################################################
+	#                               Tabel inboxbalas                                   #
+	####################################################################################
+	/** Menampilkan data dari tabel tbinboxbalas */
+	public function get_data_balas($token)
+	{
+		$this->db->where('key_token',$token);
+		return $this->db->get($this->tableInboxBalas);
+	}
+
+	/** Menyimpan Pesan ke dalam tabel inboxbalas */
+	public function simpan_inbox_balas($data)
+	{
+		$this->db->insert($this->tableInboxBalas, $data);
+	}
+
+	####################################################################################
+	#                               Tabel tbhosting                                    #
+	####################################################################################
+
+	public function get_data_hosting($data=NULL){
+		if($data != NULL){
+			$this->db->where('id_user', $data);
+			$this->db->order_by("status_hosting ASC, id_hosting DESC");
+		}
+		return $this->db->get($this->tableHosting);
+	}
+
+
+
 
 	###########################################################################################
 	#                                                                                         #

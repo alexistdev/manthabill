@@ -246,10 +246,11 @@ class Admin extends CI_Controller {
 	}
 
 	/** Method untuk mempersiapkan data */
-	private function prepare_data($id)
+	private function prepare_data_user($id)
 	{
 		$data=[];
 		$detailUser = $this->admin->tampil_detailUser($id);
+		$data['dataService'] = $this->admin->get_data_hosting($id);
 		foreach($detailUser->result_array() as $row){
 			$data['idUser'] = $id;
 			$data['client'] = $row['client'];
@@ -280,7 +281,7 @@ class Admin extends CI_Controller {
 			if (($id==NULL) || ($id=="") ||($cekDetail < 1)){
 				redirect('staff/Admin/user');
 			} else {
-				$data = $this->prepare_data($id);
+				$data = $this->prepare_data_user($id);
 				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
 				$data = array_merge($data,$judul);
 				$view ='v_edituser';
@@ -299,7 +300,7 @@ class Admin extends CI_Controller {
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 				redirect('staff/admin/user');
 			} else {
-				$data = $this->prepare_data($id);
+				$data = $this->prepare_data_user($id);
 				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
 				$data = array_merge($data,$judul);
 				$view ='v_detailuser';
@@ -910,7 +911,100 @@ class Admin extends CI_Controller {
 			if (($keyx == "") or ($keyx == NULL)) {
 				redirect('staff/Admin/inbox');
 			} else {
-				$cekToken = $this->admin->get_data_ticket($key,FALSE)->num_rows();
+				$cekToken = $this->admin->get_data_inbox($key,FALSE)->num_rows();
+				if($cekToken != 0){
+					$this->form_validation->set_rules(
+						'isiPesan',
+						'Isi Pesan',
+						'trim|min_length[10]|max_length[400]|required',
+						[
+							'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+							'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+							'required' => 'Isi Pesan harus diisi !'
+						]
+					);
+					$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+					if ($this->form_validation->run() === false) {
+						$this->session->set_flashdata('pesan', validation_errors());
+						$data = $this->_dataTicket($key);
+						$judul['title'] = "Detail Inbox | Administrator Billing System Manthabill V.2.0";
+						$data = array_merge($data,$judul);
+						$view ='v_lihatticket';
+						$this->_template($data,$view);
+					} else{
+						$isiPesan = $this->input->post("isiPesan", TRUE);
+						$dataBalas = [
+							'is_admin' => 1,
+							'key_token' => $key,
+							'pesan' => $isiPesan,
+							'time' => time()
+						];
+						$dataInbox = [
+							'status_inbox' => 2
+						];
+						/* simpan pesan balas */
+						$this->admin->simpan_inbox_balas($dataBalas);
+						/* update status pesan */
+						$this->admin->update_inbox($dataInbox, $key);
+						$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Balasan ticket berhasil dibuat!</div>');
+						redirect('staff/Admin/lihat_ticket/'.cetak($key));
+					}
+				} else {
+					redirect('staff/Admin/inbox');
+				}
+			}
+		}
+	}
+
+
+	/** Mempersiapkan data ticket */
+	private function _dataTicket($key)
+	{
+		if($key != NULL || $key != ''){
+			$dataTicket = $this->admin->get_data_ticket($key, $status=FALSE)->result_array();
+			foreach($dataTicket as $rowTicket){
+				$data['waktuPembuatan'] = $rowTicket['time'];
+				$namaDepan = $rowTicket['nama_depan'];
+				$namaBelakang = $rowTicket['nama_belakang'];
+				$NoClient = $rowTicket['client'];
+				$idUser = $rowTicket['id_user'];
+				if($namaDepan == '' && $namaBelakang == ''){
+					$data['pengirim'] = 'Client No #'.cetak($idUser);
+				} else {
+					$data['pengirim'] = $namaDepan.' '.$namaBelakang;
+				}
+				$data['judul'] = $rowTicket['judul'];
+				$data['pesanAwal'] = $rowTicket['pesan'];
+				$data['statusTicket'] = $rowTicket['status_inbox'];
+			}
+			$data['dataBalas'] = $this->admin->get_data_balas($key)->result_array();
+			$data['token'] = $key;
+			$data['namaUsaha'] = $this->namaUsaha;
+			return $data;
+		}
+	}
+
+	/** Method untuk halaman Membalas Ticket */
+	public function kunci($keyx = NULL)
+	{
+		$key = $keyx;
+		if ($this->tokenSession != $this->tokenServer) {
+			_unlogin();
+		} else {
+			if (($keyx == "") or ($keyx == NULL)) {
+				redirect('staff/Admin/inbox');
+			} else {
+				$cekToken = $this->admin->get_data_inbox($key,FALSE)->num_rows();
+				if($cekToken != 0){
+					$dataInbox = [
+						'status_inbox' => 3
+					];
+					$this->admin->update_inbox($dataInbox, $key);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Support ticket berhasil dikunci!</div>');
+					redirect('staff/Admin/inbox');
+				}else{
+					redirect('staff/Admin/inbox');
+				}
 			}
 		}
 	}

@@ -42,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">
-							<table id="tabelku" class="table table-bordered table-hover">
+							<table id="tabelInbox" class="table table-bordered table-hover">
 								<thead>
 								<tr>
 									<th class="text-center">No</th>
@@ -75,7 +75,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 												<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Lihat Pesan"><i class="fas fa-eye"></i></button></a>
 											<?php if(($rowTicket['status_inbox']) < 3 ){ ?>
 												<span data-toggle="modal" id="tombolKunci" data-target="#modalKunci" data-id="<?= cetak($rowTicket['key_token']); ?>">
-    												<a href="#" class="btn btn-danger" role="button" data-toggle="tooltip" data-placement="left" title="Kunci Kunci"><i class="fas fa-lock"></i></a>
+    												<a href="#" class="btn btn-danger" role="button" data-toggle="tooltip" data-placement="left" title="Kunci Ticket"><i class="fas fa-lock"></i></a>
   												</span>
 											<?php } ?>
 										</td>
@@ -104,7 +104,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-				<a href="" id="urlKunci"><button type="button" class="btn btn-danger">Kunci</button></a>
+				<a href="" id="urlKunci"><button  type="button" class="btn btn-danger">Kunci</button></a>
 			</div>
 		</div>
 	</div>

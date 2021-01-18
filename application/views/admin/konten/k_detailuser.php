@@ -95,19 +95,64 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 				<!-- Profil kanan -->
 				<div class="col-md-9">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="card card-dark">
-								<div class="card-header">
-									<h3 class="card-title">Service</h3>
-									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
-								</div>
-								<div class="card-body">
-									This is some text within a card body.
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card card-dark">
+									<div class="card-header">
+										<h3 class="card-title">Service</h3>
+										<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
+									</div>
+									<div class="card-body">
+										<table id="tblService" class="table table-responsive table-bordered table-hover">
+											<thead>
+											<tr>
+												<th class="text-center">No</th>
+												<th class="text-center">Product</th>
+												<th class="text-center">Domain</th>
+												<th class="text-center">Pricing</th>
+												<th class="text-center" width="15%">Due</th>
+												<th class="text-center">Status</th>
+												<th class="text-center" width="5%"></th>
+											</tr>
+											</thead>
+											<tbody>
+											<?php
+											$no =1;
+											foreach ($dataService->result_array() as $row) :
+												$idHosting = $row['id_hosting'];
+												$namaService = $row['nama_hosting'];
+												$domain = $row['domain'];
+												$harga = number_format($row['harga'], 0, ",", ".");
+												$dateRegister = konversiTanggal($row['start_hosting']);
+												$status = $row['status_hosting'];
+												if ($status == 1) {
+													$statusHosting = "<small class='badge badge-success'> AKTIF </small>";
+												} else if ($status == 2) {
+													$statusHosting = "<small class='badge badge-warning'> PENDING </small>";
+												} else if ($status == 3) {
+													$statusHosting = "<small class='badge badge-danger'> SUSPEND </small>";
+												} else {
+													$statusHosting = "<small class='badge badge-dark'> TERMINATED </small>";
+												}
+												?>
+												<tr>
+													<td class="text-center"><?= cetak($no++); ?></td>
+													<td class="text-center"><?= cetak($namaService) ?></td>
+													<td class="text-center"><?= cetak($domain) ?></td>
+													<td class="text-center"><?= cetak($harga) ?></td>
+													<td class="text-center"><?= cetak($dateRegister) ?></td>
+													<td class="text-center"><?= $statusHosting ?></td>
+													<td class="text-center"><a class="btn btn-primary btn-xs" href='<?= base_url("service/detailhosting/" . encrypt_url($idHosting)); ?>'><i class="fas fa-eye"></i></a></td>
+												</tr>
+											<?php endforeach; ?>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+
+
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card card-dark">

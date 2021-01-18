@@ -23,8 +23,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <!-- Pace -->
     <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+	<!-- DataTables -->
+	<link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 
 	<!-- JQuery UI	-->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
