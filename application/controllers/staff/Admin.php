@@ -476,6 +476,22 @@ class Admin extends CI_Controller {
 			}
 		}
 	}
+	###########################################################################################
+	#                      Ini adalah menu service shared hosting                             #
+	###########################################################################################
+
+	/** Method untuk menampilkan data halaman service shared_hosting */
+	public function shared_hosting(){
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
+			$data['dataService'] = $this->admin->get_data_hosting();
+			$data['title'] = "Service Shared Hosting | Administrator Billing System Manthabill V.2.0";
+			$view = "v_sharedhosting";
+			$this->_template($data, $view);
+		}
+	}
 
 	###########################################################################################
 	#                        Ini adalah menu paket shared hosting                             #
@@ -1273,27 +1289,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Service Shared                              #
-	#                                                                                         #
-	###########################################################################################
 
-
-	/**
-	 * Method untuk menampilkan halaman service/shared hosting!
-	 */
-	public function shared_hosting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Service Shared Hosting | Administrator Billing System Manthabill V.2.0";
-			$view = "v_sharedhosting";
-			$this->_template($data, $view);
-		}
-	}
 
 	###########################################################################################
 	#                                                                                         #

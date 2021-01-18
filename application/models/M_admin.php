@@ -207,6 +207,9 @@ class M_admin extends CI_Model{
 		if($data != NULL){
 			$this->db->where('id_user', $data);
 			$this->db->order_by("status_hosting ASC, id_hosting DESC");
+		} else{
+			$this->db->join($this->tableUser, "tbuser.id_user = tbhosting.id_user");
+			$this->db->order_by('id_hosting', 'DESC');
 		}
 		return $this->db->get($this->tableHosting);
 	}
