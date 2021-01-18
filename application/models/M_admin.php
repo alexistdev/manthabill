@@ -21,9 +21,12 @@ class M_admin extends CI_Model{
 		parent::__construct();
 		$this->load->database();
 		$this->tableUser = 'tbuser';
+		$this->tableDetailUser = 'tbdetailuser';
 		$this->tableToken = 'tbtoken';
 		$this->tableAdmin = 'tbadmin';
 		$this->tableSetting = 'tbsetting';
+		$this->tableProduct = 'tbproduct';
+		$this->tableInbox = 'tbinbox';
 	}
 
 
@@ -81,6 +84,82 @@ class M_admin extends CI_Model{
 		return $this->db->get($this->tableUser)->row();
 	}
 
+	/** Mendapatkan data dari tbuser */
+	public function get_data_user($id){
+		$this->db->where("id_user",$id);
+		return $this->db->get($this->tableUser);
+	}
+
+	/** Mendapatkan data dari tbuser */
+	public function hapus_user($id)
+	{
+		$this->db->where('id_user', $id);
+		$this->db->delete($this->tableUser);
+	}
+
+	/** Mengupdate data dari tbuser */
+	public function user_update($data,$idUser){
+		$this->db->where('id_user',$idUser);
+		$this->db->update($this->tableUser,$data);
+	}
+
+	####################################################################################
+	#                                Tabel tbdetailuser                                #
+	####################################################################################
+
+	/** Mengupdate data dari tbdetailuser */
+	public function detail_user_update($data2,$idUser){
+		$this->db->where('id_user',$idUser);
+		$this->db->update($this->tableDetailUser,$data2);
+	}
+
+	####################################################################################
+	#                                Tabel tbproduct                                   #
+	####################################################################################
+	/** Menampilkan data dari tabel tbproduct */
+	public function get_data_product($id=null)
+	{
+		if($id!=null || $id!=""){
+			$this->db->where('id_product',$id);
+		} else {
+			$this->db->order_by('type_product', 'ASC');
+		}
+		return $this->db->get($this->tableProduct);
+	}
+
+
+	/** Mengupdate data paket */
+	public function update_data_paket($dataProduk, $id){
+		$this->db->where('id_product ',$id);
+		$this->db->update($this->tableProduct,$dataProduk);
+	}
+
+	/** Menyimpan data paket */
+	public function simpan_data_paket($data){
+		$this->db->insert($this->tableProduct,$data);
+	}
+
+	/** Menghapus data paket */
+	public function hapus_paket($id)
+	{
+		$this->db->where('id_product', $id);
+		$this->db->delete($this->tableProduct);
+	}
+
+	####################################################################################
+	#                                Tabel tbinbox                                     #
+	####################################################################################
+	/** Menampilkan data ticket*/
+	public function get_data_inbox($data=null,$type=TRUE){
+		if($data){
+			if($type){
+				$this->db->where('id_inbox',$id);
+			} else{
+				$this->db->where('key_token',$id);
+			}
+		}
+		return $this->db->get($this->tableInbox);
+	}
 
 	###########################################################################################
 	#                                                                                         #
@@ -88,18 +167,6 @@ class M_admin extends CI_Model{
 	#                                                                                         #
 	###########################################################################################
 
-	/** Mendapatkan data dari tbuser */
-	public function get_data_user($id){
-		$this->db->where("id_user",$id);
-		return $this->db->get('tbuser')->row();
-	}
-
-	/** mengecek id_user di tbuser */
-	public function cekDetailUser($idUser) {
-		$this->db->where('id_user', $idUser);
-		$query = $this->db->get('tbuser');
-		return $query->num_rows();
-	}
 
 	//Menampilkan data hosting di menu user
 	public function tampil_user(){
@@ -119,14 +186,6 @@ class M_admin extends CI_Model{
 		return $detail;
 	}
 
-	public function user_update($data,$idUser){
-		$this->db->where('id_user',$idUser);
-		$this->db->update('tbuser',$data);
-	}
-	public function user_update2($data2,$idUser){
-		$this->db->where('id_user',$idUser);
-		$this->db->update('tbdetailuser',$data2);
-	}
 
 	public function Cek_Email($email) {
 		$this->db->where('email',$email);
@@ -141,56 +200,19 @@ class M_admin extends CI_Model{
 		return $this->db->insert_id();
 	}
 
-	public function hapus_user($id)
-	{
-		$this->db->where('id_user', $id);
-		$this->db->delete('tbuser');
-	}
-
 	###########################################################################################
 	#                                                                                         #
 	#                             Ini adalah menu Paket Hosting                               #
 	#                                                                                         #
 	###########################################################################################
-	/** Mendapatkan data dari tbproduct */
-	public function get_data_paket($id){
-		$this->db->where("id_product",$id);
-		return $this->db->get('tbproduct')->row();
-	}
 
-	/** Menampilkan data dari tabel tbproduct */
-	public function tampil_paket($id=null)
-	{
-		if($id!=null || $id!=""){
-			$this->db->where('id_product',$id);
-		}
-		$this->db->order_by('type_product', 'ASC');
-		return $this->db->get('tbproduct');
-	}
 
-	/** Mengecek apakah ada id paket yang dimaksud */
-	public function cekDetailPaket($idProduk) {
-		$this->db->where('id_product', $idProduk);
-		$query = $this->db->get('tbproduct');
-		return $query->num_rows();
-	}
-	/** Mengupdate data paket */
-	public function update_data_paket($dataProduk, $id){
-		$this->db->where('id_product ',$id);
-		$this->db->update('tbproduct',$dataProduk);
-	}
 
-	/** Menyimpan data paket */
-	public function simpan_data_paket($data){
-		$this->db->insert('tbproduct',$data);
-	}
 
-	/** Menghapus data paket */
-	public function hapus_paket($id)
-	{
-		$this->db->where('id_product', $id);
-		$this->db->delete('tbproduct');
-	}
+
+
+
+
 
 	###########################################################################################
 	#                                                                                         #

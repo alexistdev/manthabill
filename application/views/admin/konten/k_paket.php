@@ -55,7 +55,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<tbody>
 								<?php
 								$no =1;
-								foreach ($dataPaket->result_array() as $row) :?>
+								foreach ($dataPaket as $row) :?>
 									<tr>
 										<td class="text-center"><?= cetak($no++); ?></td>
 										<td class="text-center"><?= cetak($row['nama_product']) ?></td>

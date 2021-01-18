@@ -68,8 +68,10 @@ class Daftar extends CI_Controller
 		$this->form_validation->set_rules(
 			'email',
 			'Email',
-			'trim|required',
+			'trim|max_length[50]|valid_email|required',
 			[
+				'max_length' => 'Panjang karakter Password maksimal 50 karakter!',
+				'valid_email' => 'Email yang anda masukkan tidak valid',
 				'required' => 'Email harus diisi!'
 			]
 		);

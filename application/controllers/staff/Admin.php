@@ -51,27 +51,39 @@ class Admin extends CI_Controller {
 		$this->load->view('admin/view/' . $view, $data);
 	}
 
-	/** Mengecek format email */
-	private function _validasiEmail($email)
+	/** Method untuk generate captcha */
+	private function _create_captcha()
 	{
-		$apiKey = $this->ApiKey;
-		$urlAPI = 'https://emailverification.whoisxmlapi.com/api/v1?'
-			.					"apiKey={$apiKey}&emailAddress={$email}";
-		$contents = file_get_contents($urlAPI);
-		$res = json_decode($contents);
-		$dnsEmail = $res->dnsCheck;
-		$smtpEmail = $res->smtpCheck;
-		if($dnsEmail == TRUE  && $smtpEmail== TRUE){
+		$cap = create_captcha(config_captcha());
+		$image = $cap['image'];
+		$this->session->set_userdata('captchaword', $cap['word']);
+		return $image;
+	}
+
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
+	public function _check_captcha($string)
+	{
+		if ($string == $this->session->userdata('captchaword')) {
 			return TRUE;
 		} else {
+			$this->form_validation->set_message('_check_captcha', 'Captcha yang anda masukkan salah!');
 			return FALSE;
 		}
 	}
 
-	/**
-	 * Mengecek Email user apakah sudah terdaftar sebelumnya !
-	 */
+	/** Pemanggilan di fungsi ajax untuk mengirimkan token CSRF ! */
+	public function get_csrf()
+	{
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+			$csrf['csrf_name'] = $this->security->get_csrf_token_name();
+			$csrf['csrf_token'] = $this->security->get_csrf_hash();
+			echo json_encode($csrf);
+		} else {
+			redirect('Login');
+		}
+	}
 
+	/** Mengecek Email user apakah sudah terdaftar sebelumnya ! */
 	public function checkEmail(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);
@@ -82,20 +94,13 @@ class Admin extends CI_Controller {
 				$email = $this->input->post("email");
 				$cekEmail = $this->admin->Cek_Email($email);
 				if ($cekEmail > 0){
-					$cekValid = $this->_validasiEmail($email);
-					if($cekValid){
-						echo "ok";
-					}
+					echo "ok";
 				}
 			} else {
 				redirect('staff/admin/user');
 			}
 		}
 	}
-//	public function emailku(){
-//		$hasil = $this->_check_email('alexistdev@gmail.com');
-//		var_dump($hasil['smtpCheck']);
-//	}
 
 	/** Prepare data */
 	private function _dataMember()
@@ -152,9 +157,10 @@ class Admin extends CI_Controller {
 			$this->form_validation->set_rules(
 				'email',
 				'Email',
-				'trim|max_length[50]|required',
+				'trim|max_length[50]|valid_email|required',
 				[
 					'max_length' => 'Panjang karakter Password maksimal 50 karakter!',
+					'valid_email' => 'Email yang anda masukkan tidak valid',
 					'required' => 'Email harus diisi!'
 				]
 			);
@@ -263,20 +269,14 @@ class Admin extends CI_Controller {
 		return $data;
 	}
 
-	/**
-	 * Method untuk mengedit user !
-	 */
-
-
+	/** Method untuk halaman edit user ! */
 	public function edit_user($idx=null)
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
 			$id = decrypt_url($idx);
-			$cekDetail = $this->admin->cekDetailUser($id);
+			$cekDetail = $this->admin->get_data_user($id)->num_rows();
 			if (($id==NULL) || ($id=="") ||($cekDetail < 1)){
 				redirect('staff/Admin/user');
 			} else {
@@ -289,20 +289,13 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 *
-	 * Menampilkan halaman detail user !
-	 *
-	 */
-
+	/** Method untuk halaman detail user ! */
 	public function detail_user($idx=null){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
 			$id = decrypt_url($idx);
-			$cekDetail = $this->admin->cekDetailUser($id);
+			$cekDetail = $this->admin->get_data_user($id)->num_rows();
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 				redirect('staff/admin/user');
 			} else {
@@ -315,36 +308,13 @@ class Admin extends CI_Controller {
 		}
 	}
 
-
-
-	/**
-	 * Pemanggilan di fungsi ajax untuk mengirimkan token CSRF !
-	 */
-
-	public function get_csrf()
-	{
-		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-			$csrf['csrf_name'] = $this->security->get_csrf_token_name();
-			$csrf['csrf_token'] = $this->security->get_csrf_hash();
-			echo json_encode($csrf);
-		} else {
-			redirect('Login');
-		}
-	}
-
-	/**
-	 * Method untuk mengupdate data user yang dikirimkan melalui Form Update User !
-	 *
-	 */
-
+	/** Method untuk mengupdate data user yang dikirimkan melalui Form Update UserPemanggilan di fungsi ajax untuk mengirimkan token CSRF ! */
 	public function update_user($idx=null){
-		$id = decrypt_url($idx);
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$cekDetail = $this->admin->cekDetailUser($id);
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_user($id)->num_rows();
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 				redirect('staff/admin/user');
 			} else {
@@ -460,7 +430,7 @@ class Admin extends CI_Controller {
 					$negara = $this->input->post("negara", TRUE);
 
 					if($password != ""){
-						//Mengupdate tabel tbuser
+						/* Mengupdate tabel tbuser */
 						$dataUser = [
 							'password' => sha1($password)
 						];
@@ -478,8 +448,8 @@ class Admin extends CI_Controller {
 						'kodepos' => $kodepos,
 						'phone' => $telepon
 					];
-					// mengupdate tabel tbdetailuser
-					$this->admin->user_update2($dataDetail,$id);
+					/* mengupdate tabel tbdetailuser */
+					$this->admin->detail_user_update($dataDetail,$id);
 					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data user telah diperbaharui!</div>');
 					redirect('staff/Admin/edit_user/'.encrypt_url($id));
 				}
@@ -487,15 +457,14 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	/** Method untuk menghapus data user */
 	public function hapus_user($idx=NULL)
 	{
 		$id = decrypt_url($idx);
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
 		} else {
-			$cekDetail = $this->admin->cekDetailUser($id);
+			$cekDetail = $this->admin->get_data_user($id)->num_rows();
 			if (($id == NULL) or ($id == "") or ($cekDetail < 1)) {
 				redirect('staff/admin/user');
 			} else {
@@ -508,64 +477,51 @@ class Admin extends CI_Controller {
 	}
 
 	###########################################################################################
-	#                                                                                         #
-	#                      Ini adalah menu Paket Shared Hosting                               #
-	#                                                                                         #
+	#                        Ini adalah menu paket shared hosting                             #
 	###########################################################################################
 
-	/**
-	 * Method untuk menampilkan daftar paket shared hosting !
-	 */
-
+	/** Method untuk shared hosting */
 	public function paket()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Dashboard | Manthabill";
-			$data['dataPaket'] = $this->admin->tampil_paket();
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
+			$data['title'] = "Paket Shared Hosting | Administrator Billing System Manthabill V.2.0";
+			$data['dataPaket'] = $this->admin->get_data_product()->result_array();
 			$view = "v_paket";
 			$this->_template($data, $view);
 		}
 	}
 
-	/**
-	 * Method untuk menampilkan edit paket shared hosting !
-	 */
-
+	/** Method untuk menampilkan edit paket shared hosting */
 	public function edit_paket($idx=null)
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
 			$id = decrypt_url($idx);
-			$cekDetail = $this->admin->cekDetailPaket($id);
+			$cekDetail = $this->admin->get_data_product($id)->num_rows();
 			if (($id==NULL) || ($id=="") ||($cekDetail < 1)){
 				redirect('staff/Admin/paket');
 			} else {
 				$data = $this->prepare_data_paket($id);
+				$sidebar = $this->_dataMember();
 				$judul['title'] = "Edit Paket | Administrator Billing System Manthabill V.2.0";
 				$data = array_merge($data,$judul);
+				$data = array_merge($data,$sidebar);
 				$view ='v_editpaket';
 				$this->_template($data,$view);
 			}
 		}
 	}
 
-	/**
-	 * Method untuk menampilkan tambah paket shared hosting !
-	 */
+	/** Method untuk menampilkan tambah paket shared hosting */
 	public function tambah_shared()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
 			$this->form_validation->set_rules(
 				'namaPaket',
 				'Nama Paket',
@@ -678,7 +634,9 @@ class Admin extends CI_Controller {
 			);
 			$this->form_validation->set_error_delimiters('<span class="text-danger text-sm">', '</span>');
 			if ($this->form_validation->run() === false) {
-				$data['title'] = "Tambah Paket | Administrator Billing System Manthabill V.2.0";
+				$data = $this->_dataMember();
+				$judul['title'] = "Tambah Paket | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
 				$view ='v_tambahpaket';
 				$this->_template($data,$view);
 			} else {
@@ -718,14 +676,11 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Private Method untuk mendapatkan data detail paket shared hosting !
-	 */
-
+	/** Private Method untuk mendapatkan data detail paket shared hosting */
 	private function prepare_data_paket($id)
 	{
 		$data=[];
-		$detailPaket = $this->admin->tampil_paket($id);
+		$detailPaket = $this->admin->get_data_product($id);
 		foreach($detailPaket->result_array() as $row){
 			$data['idProduct'] = $id;
 			$data['namaProduct'] = $row['nama_product'];
@@ -745,21 +700,16 @@ class Admin extends CI_Controller {
 		return $data;
 	}
 
-	/**
-	 * Method untuk mengupdate paket shared hosting !
-	 */
-
+	/** Method untuk mengupdate paket shared hosting ! */
 	public function update_paket($idx=null)
 	{
-		$id = decrypt_url($idx);
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
 		} else {
-			$cekDetail = $this->admin->cekDetailPaket($id);
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_product($id)->num_rows();
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
-				redirect('staff/admin/paket');
+				redirect('staff/Admin/paket');
 			} else {
 				$this->form_validation->set_rules(
 					'namaPaket',
@@ -913,26 +863,54 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Method untuk menghapus paket shared hosting!
-	 */
-
+	/** Method untuk menghapus paket shared hosting! */
 	public function hapus_paket($idx=NULL)
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
 		} else {
 			$id = decrypt_url($idx);
-			$cekDetail = $this->admin->cekDetailPaket($id);
+			$cekDetail = $this->admin->get_data_product($id)->num_rows();
 			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
 				redirect('staff/admin/paket');
 			} else {
-				$getName = $this->admin->get_data_paket($id)->nama_product;
+				$getName = $this->admin->get_data_product($id)->nama_product;
 				$this->admin->hapus_paket($id);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data paket ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
 				redirect('staff/Admin/paket');
+			}
+		}
+	}
+
+	###########################################################################################
+	#                              Ini adalah menu inbox                                      #
+	###########################################################################################
+	/** Method untuk halaman inbox! */
+	public function inbox()
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
+			$judul['title'] = "Inbox | Administrator Billing System Manthabill V.2.0";
+			$data['dataTicket'] = $this->admin->get_data_inbox(NULL,TRUE)->result_array();
+			$data = array_merge($data,$judul);
+			$view ='v_inbox';
+			$this->_template($data,$view);
+		}
+	}
+
+	/** Method untuk melihat detail ticket */
+	public function lihat_ticket($keyx = NULL)
+	{
+		$key = $keyx;
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			if (($keyx == "") or ($keyx == NULL)) {
+				redirect('staff/Admin/inbox');
+			} else {
+				$cekToken = $this->admin->get_data_ticket($key,FALSE)->num_rows();
 			}
 		}
 	}
