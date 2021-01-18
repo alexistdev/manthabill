@@ -24,6 +24,13 @@ function _unlogin(){
 	redirect('Login');
 }
 
+/** Membatalkan session login */
+function _adminlogout(){
+	$ci = get_instance();
+	$ci->session->set_userdata('is_login_admin', FALSE);
+	redirect('staff/Login');
+}
+
 /** Mendapatkan angka diskon unik */
 function diskonUnik()
 {

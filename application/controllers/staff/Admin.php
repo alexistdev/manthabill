@@ -24,11 +24,25 @@ class Admin extends CI_Controller {
 	public $form_validation;
 	public $email;
 	public $security;
+	public $tokenSession;
+	public $tokenServer;
+	public $namaUsaha;
+	public $ApiKey;
 
 	/** Method Construct untuk menginisiasi class Admin */
 	public function __construct(){
 		parent:: __construct();
 		$this->load->model('m_admin', 'admin');
+		$this->tokenSession = $this->session->userdata('token');
+		$this->tokenServer = $this->admin->get_token_byId(0)->row()->token;
+		$dataSetting = $this->admin->get_data_setting()->result_array();
+		foreach($dataSetting as $rowSetting){
+			$this->namaUsaha = $rowSetting['nama_hosting'];
+			$this->ApiKey = $rowSetting['api_key'];
+		}
+		if ($this->session->userdata('is_login_admin') !== TRUE) {
+			redirect('staff/Login');
+		}
 	}
 
 	/** Template untuk memanggil view */
@@ -37,14 +51,67 @@ class Admin extends CI_Controller {
 		$this->load->view('admin/view/' . $view, $data);
 	}
 
-	/** Method untuk halaman Admin */
-	public function index()
+	/** Mengecek format email */
+	private function _validasiEmail($email)
 	{
+		$apiKey = $this->ApiKey;
+		$urlAPI = 'https://emailverification.whoisxmlapi.com/api/v1?'
+			.					"apiKey={$apiKey}&emailAddress={$email}";
+		$contents = file_get_contents($urlAPI);
+		$res = json_decode($contents);
+		$dnsEmail = $res->dnsCheck;
+		$smtpEmail = $res->smtpCheck;
+		if($dnsEmail == TRUE  && $smtpEmail== TRUE){
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Mengecek Email user apakah sudah terdaftar sebelumnya !
+	 */
+
+	public function checkEmail(){
 		$hashSes = $this->session->userdata('token');
 		$hashKey = $this->admin->get_token($hashSes);
 		if ($hashKey==0){
 			redirect('staff/login');
 		} else{
+			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+				$email = $this->input->post("email");
+				$cekEmail = $this->admin->Cek_Email($email);
+				if ($cekEmail > 0){
+					$cekValid = $this->_validasiEmail($email);
+					if($cekValid){
+						echo "ok";
+					}
+				}
+			} else {
+				redirect('staff/admin/user');
+			}
+		}
+	}
+//	public function emailku(){
+//		$hasil = $this->_check_email('alexistdev@gmail.com');
+//		var_dump($hasil['smtpCheck']);
+//	}
+
+	/** Prepare data */
+	private function _dataMember()
+	{
+		/* Nama dan Gambar di Sidebar */
+		$data['namaUsaha'] = $this->namaUsaha;
+		return $data;
+	}
+
+	/** Method untuk halaman Admin */
+	public function index()
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
 			$data['title'] = "Dashboard | Manthabill";
 			$view = "v_admin";
 			$this->_template($data, $view);
@@ -53,28 +120,23 @@ class Admin extends CI_Controller {
 
 	/** Method untuk logout */
 	public function logout(){
-		$hashSes = $this->session->userdata('token');
 		//hapus token sebelum logout
-		$this->admin->hapus_token($hashSes);
+		$this->admin->hapus_token();
 		$this->session->sess_destroy();
 		redirect(base_url('staff/login'));
 	}
 
 	###########################################################################################
-	#                                                                                         #
 	#                               Ini adalah menu User                                      #
-	#                                                                                         #
 	###########################################################################################
-	/**
-	 * Method yang mengatur halaman user !
-	 */
+
+	/** Method yang mengatur halaman user ! */
 	public function user()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
 			$data['dataUser'] = $this->admin->tampil_user();
 			$data['title'] = "Dashboard | Manthabill";
 			$view ='v_user';
@@ -82,32 +144,28 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Method untuk menambahkan user !
-	 */
-
+	/** Method untuk halaman tambah data user ! */
 	public function tambah_user(){
-		$this->load->helper('url');
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
 			$this->form_validation->set_rules(
 				'email',
 				'Email',
-				'required',
+				'trim|max_length[50]|required',
 				[
+					'max_length' => 'Panjang karakter Password maksimal 50 karakter!',
 					'required' => 'Email harus diisi!'
 				]
 			);
 			$this->form_validation->set_rules(
 				'password',
 				'Password',
-				'trim|min_length[6]|max_length[50]',
+				'trim|min_length[6]|max_length[50]|required',
 				[
 					'max_length' => 'Panjang karakter Password maksimal 50 karakter!',
-					'min_length' => 'Panjang karakter Password minimal 6 karakter!'
+					'min_length' => 'Panjang karakter Password minimal 6 karakter!',
+					'required' => 'Email harus diisi!'
 				]
 			);
 			$this->form_validation->set_rules(
@@ -122,6 +180,7 @@ class Admin extends CI_Controller {
 			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
 			if ($this->form_validation->run() === false) {
 				$this->session->set_flashdata('pesan', validation_errors());
+				$data = $this->_dataMember();
 				$data['title'] = "Dashboard | Manthabill";
 				$view ='v_tambahuser';
 				$this->_template($data,$view);
@@ -132,7 +191,7 @@ class Admin extends CI_Controller {
 
 				############### Menambahkan data client id untuk perhitungan #############
 				/*Mendapatkan data prefix dari halaman setting*/
-				$prefix = $this->admin->get_setting()->prefix;
+				$prefix = $this->admin->get_data_setting()->row()->prefix;
 				if($prefix == 0){
 					$prefix += 1;
 				}
@@ -146,7 +205,7 @@ class Admin extends CI_Controller {
 				###############                    end                        #############
 				$tanggalDibuat = date("Y-m-d");
 				//simpan kirim email
-				$namaHosting = $this->admin->get_setting()->nama_hosting;
+				$namaHosting = $this->admin->get_data_setting()->row()->nama_hosting;
 				if($kirimEmail == 1){
 					$judul = "Anda berhasil mendaftar akun di ". $namaHosting;
 					$message = "
@@ -170,7 +229,8 @@ class Admin extends CI_Controller {
 				$idpengguna = $this->admin->simpan($dataUser);
 				//memasukkan data ke tbdetailuser
 				$dataDetail = [
-					'id_user' => $idpengguna
+					'id_user' => $idpengguna,
+					'gambar' => 'default.jpg'
 				];
 				$this->admin->simpan2($dataDetail);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data user berhasil ditambahkan!</div>');
@@ -179,10 +239,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Private Method untuk mendapatkan data detail user !
-	 */
-
+	/** Method untuk mempersiapkan data */
 	private function prepare_data($id)
 	{
 		$data=[];
@@ -258,27 +315,7 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Mengecek Email user apakah sudah terdaftar sebelumnya !
-	 */
 
-	public function checkEmail(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-				$email = $this->input->post("email");
-				$cekEmail = $this->admin->Cek_Email($email);
-				if ($cekEmail > 0){
-					echo "ok";
-				} 
-			} else {
-				redirect('staff/admin/user');
-			}
-		}
-	}
 
 	/**
 	 * Pemanggilan di fungsi ajax untuk mengirimkan token CSRF !

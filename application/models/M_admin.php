@@ -19,41 +19,66 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class M_admin extends CI_Model{	
 	public function __construct(){
 		parent::__construct();
-	}
-	public function cek_loginadmin($username,$password) {
-        $this->db->where('username', $username);
-        $this->db->where('password', $password);
-        $query = $this->db->get('tbadmin');
-        return $query->num_rows();
-    }
-	public function data_loginadmin($username,$password) {
-		$this->db->where('username', $username);
-        $this->db->where('password', $password);
-        return $this->db->get('tbadmin')->row();
-	}
-	public function get_token($key){
-		$this->db->where('token', $key);
-        $query = $this->db->get('tbtoken');
-        return $query->num_rows();
-	}
-	public function hapus_token($key){
-		$this->db->where('token', $key);
-		$this->db->delete('tbtoken');
-	}
-	public function simpan_token($token){
-		$this->db->insert('tbtoken',$token);
+		$this->load->database();
+		$this->tableUser = 'tbuser';
+		$this->tableToken = 'tbtoken';
+		$this->tableAdmin = 'tbadmin';
+		$this->tableSetting = 'tbsetting';
 	}
 
-	/** Mendapatkan prefix dari setting */
-	public function get_setting()
+
+	####################################################################################
+	#                                Tabel tbtoken                                     #
+	####################################################################################
+
+	/** Untuk mendapatkan data token */
+	public function get_token_byId($id){
+		$this->db->where('id_user', $id);
+		return $this->db->get($this->tableToken);
+	}
+
+	/** Hapus Token saat login */
+	public function hapus_token()
 	{
-		return $this->db->get('tbsetting')->row();
+		$this->db->where('id_user', 0);
+		$this->db->delete($this->tableToken);
 	}
 
+	/** Menyimpan token ke dalam tbtoken */
+	public function simpan_token($token){
+		$this->db->insert($this->tableToken,$token);
+	}
+
+	####################################################################################
+	#                                Tabel tbadmin                                     #
+	####################################################################################
+
+	/** Mengecek admin login */
+	public function cek_login_admin($username,$password) {
+		$this->db->where('username', $username);
+		$this->db->where('password', $password);
+		return $this->db->get($this->tableAdmin)->num_rows();
+	}
+
+	####################################################################################
+	#                                Tabel tbSetting                                   #
+	####################################################################################
+
+	/** Untuk mendapatkan data dari Setting */
+	public function get_data_setting()
+	{
+		return $this->db->get($this->tableSetting);
+	}
+
+	####################################################################################
+	#                                Tabel tbuser                                      #
+	####################################################################################
+
+	/** Mendapatkan data client terbaru */
 	public function get_max_client()
 	{
 		$this->db->select_max('client');
-		return $this->db->get('tbuser')->row();
+		return $this->db->get($this->tableUser)->row();
 	}
 
 

@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 	<!-- Brand Logo -->
 	<a href="<?= base_url('member') ?>" class="brand-link">
 		<img src="<?= base_url('assets/AdminLTE3') ?>/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-		<span class="brand-text font-weight-light">AdriHost</span>
+		<span class="brand-text font-weight-light"><?= cetak($namaUsaha); ?></span>
 	</a>
 
 	<!-- Sidebar -->
@@ -13,10 +13,10 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 		<!-- Sidebar user (optional) -->
 		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 			<div class="image">
-				<img src="" class="img-circle elevation-2" alt="User Image">
+				<img src="<?= base_url('gambar/default.jpg') ?>" class="img-circle elevation-2" alt="User Image">
 			</div>
 			<div class="info ml-3">
-				<a href="<?= base_url('member') ?>" class="d-block"></a>
+				<a href="<?= base_url('staff/Admin') ?>" class="d-block">Administrator</a>
 			</div>
 		</div>
 

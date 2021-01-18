@@ -25,40 +25,30 @@ class Login extends CI_Controller{
 	public $load;
 	public $input;
 
-
-
 	public function __construct(){
 		parent:: __construct();
 		$this->load->model('m_admin', 'admin');
+		if ($this->session->userdata('is_login_admin') == TRUE) {
+			redirect('staff/Admin');
+		}
 	}
 
+	/** Template untuk memanggil view */
+	private function _template($data, $view)
+	{
+		$this->load->view('admin/login/' . $view, $data);
+	}
 
-	/**
-	 * Method untuk generate captcha
-	 */
-
+	/** Method untuk generate captcha */
 	private function _create_captcha()
 	{
-		$config = [
-			'img_url' => base_url() . 'captcha/',
-			'img_path' => './captcha/',
-			'img_height' =>  50,
-			'word_length' => 5,
-			'img_width' => 150,
-			'font_size' => 10,
-			'expiration' => 300,
-			'pool' => '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ'
-		];
-		$cap = create_captcha($config);
+		$cap = create_captcha(config_captcha());
 		$image = $cap['image'];
 		$this->session->set_userdata('captchaword', $cap['word']);
 		return $image;
 	}
 
-	/**
-	 * Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar
-	 */
-
+	/** Method untuk memvalidasi apakah captcha yang dimasukkan sudah benar */
 	public function _check_captcha($string)
 	{
 		if ($string == $this->session->userdata('captchaword')) {
@@ -69,10 +59,7 @@ class Login extends CI_Controller{
 		}
 	}
 
-	/**
-	 * Method index di Controller Staff/Login
-	 */
-
+	/** Method index dari halaman login */
 	public function index(){
 		$this->form_validation->set_rules(
 			'username',
@@ -110,17 +97,21 @@ class Login extends CI_Controller{
 		} else {
 			$username = $this->input->post('username', TRUE);
 			$password = sha1($this->input->post('password', TRUE));
-			$cek = $this->admin->cek_loginadmin($username,$password);
+			$cek = $this->admin->cek_login_admin($username,$password);
 			$waktu = date('Y-m-d H:i:s');
 			$key = sha1($waktu);
 			$logTime = strtotime($waktu);
+			/* Mengecek apakah password dan username sudah benar */
 			if($cek ==1){
-				$row = $this->admin->data_loginadmin($username,$password);
+				/* Cek apa token sudah ada apa belum, jika ada dihapus */
+				$cekToken = $this->admin->get_token_byId(0)->num_rows();
+				if($cekToken > 0){
+					//jalankan hapus token
+					$this->admin->hapus_token();
+				}
 				$data_session = [
-					'username' => $row->username,
-					'id_admin' => $row->id_admin,
 					'token' => $key,
-					'loginadmin' => "admin"
+					'is_login_admin' => TRUE
 				];
 				$hashkey = [
 					'id_user' => 0,
@@ -129,46 +120,13 @@ class Login extends CI_Controller{
 				];
 				$this->admin->simpan_token($hashkey);
 				$this->session->set_userdata($data_session);
-				redirect("staff/admin");
+				redirect("staff/Admin");
 			}else{
 				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Username atau password anda salah!</div>');
-				redirect("staff/login");
+				redirect("staff/Login");
 			}
 		}
 	}
 
-	private function _template($data, $view)
-	{
-		$this->load->view('admin/login/' . $view, $data);
-	}
 
-//	function aksi_login(){
-//		$username = $this->input->post('username');
-//		$password = sha1($this->input->post('password'));
-//		$cek = $this->m_admin->cek_loginadmin($username,$password);
-//		$waktu = date('Y-m-d H:i:s');
-//		$key = sha1($waktu);
-//		$logTime = strtotime($waktu);
-//		if($cek ==1){
-//			$row = $this->m_admin->data_loginadmin($username,$password);
-//			$data_session = array(
-//				'username' => $row->username,
-//				'id_admin' => $row->id_admin,
-//				'token' => $key,
-//				'loginadmin' => "admin"
-//			);
-//			$hashkey = array(
-//				'id_user' => 0,
-//				'token' => $key,
-//				'time' => $logTime
-//			);
-//			$this->m_admin->simpan_token($hashkey);
-//			$this->session->set_userdata($data_session);
-//			redirect("staff/admin");
-//		}else{
-//			$this->session->set_flashdata('item', array('pesan' => 'username atau password salah'));
-//			redirect("staff/login");
-//		}
-//	}
-	
 }
