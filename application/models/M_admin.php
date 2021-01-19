@@ -203,6 +203,7 @@ class M_admin extends CI_Model{
 	#                               Tabel tbhosting                                    #
 	####################################################################################
 
+	/** Mendapatkan data hosting berdasarkan idUser */
 	public function get_data_hosting($data=NULL){
 		if($data != NULL){
 			$this->db->where('id_user', $data);
@@ -214,6 +215,20 @@ class M_admin extends CI_Model{
 		return $this->db->get($this->tableHosting);
 	}
 
+	/** Mendapatkan data hosting berdasarkan id_hosting */
+	public function get_data_hostingbyid($data){
+		$this->db->join($this->tableUser, "tbuser.id_user = tbhosting.id_user");
+		$this->db->join($this->tableDetailUser, "tbdetailuser.id_user = tbuser.id_user");
+		$this->db->where('id_hosting', $data);
+		return $this->db->get($this->tableHosting);
+	}
+
+	/** Mengupdate data tbhosting */
+	public function update_data_hosting($dataHosting,$id)
+	{
+		$this->db->where('id_hosting ',$id);
+		$this->db->update($this->tableHosting,$dataHosting);
+	}
 
 
 

@@ -42,10 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<!-- /.card-header -->
 						<div class="card-body">
 							<!-- Table	-->
-							<div class="container">
-								<div class="row">
-									<div class="col-12">
-										<table id="tblService" class="table table-responsive table-bordered table-hover">
+										<table id="tblService" class="table table-bordered table-hover" style="width:100%">
 
 											<thead>
 												<tr>
@@ -88,16 +85,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 													<td class="text-center">Rp. <?= cetak($harga) ?></td>
 													<td class="text-center"><?= cetak($dateRegister) ?></td>
 													<td class="text-center"><?= $statusHosting ?></td>
-													<td class="text-center"><a class="btn btn-primary btn-sm" href='<?= base_url("service/detailhosting/" . encrypt_url($idHosting)); ?>'>Detail</a></td>
+													<td class="text-center"><a class="btn btn-primary btn-sm" href='<?= base_url("staff/Admin/detail_shared/" . encrypt_url($idHosting)); ?>'>Detail</a></td>
 												</tr>
 											<?php endforeach; ?>
 											</tbody>
 										</table>
-									</div>
-								</div>
-							</div>
 							<!-- /Table	-->
-
 						</div>
 					</div>
 				</div>

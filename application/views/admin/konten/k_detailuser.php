@@ -103,16 +103,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 									</div>
 									<div class="card-body">
-										<table id="tblService" class="table table-responsive table-bordered table-hover">
+										<table id="tblService" class="table table-bordered table-hover" style="width:100%">
 											<thead>
 											<tr>
 												<th class="text-center">No</th>
 												<th class="text-center">Product</th>
 												<th class="text-center">Domain</th>
 												<th class="text-center">Pricing</th>
-												<th class="text-center" width="15%">Due</th>
+												<th class="text-center">Due</th>
 												<th class="text-center">Status</th>
-												<th class="text-center" width="5%"></th>
+												<th class="text-center"></th>
 											</tr>
 											</thead>
 											<tbody>

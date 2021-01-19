@@ -493,6 +493,146 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	/** Method untuk menampilkan halaman detail service shared hosting */
+	public function detail_shared($idx=null)
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_hostingbyid($id)->num_rows();
+			if (($idx==NULL) || ($idx=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/shared_hosting');
+			} else {
+				$data = $this->_dataMember();
+				$info = $this->_dataService($id);
+				$data = array_merge($data,$info);
+				$view = "v_detailshared";
+				$this->_template($data, $view);
+			}
+		}
+	}
+
+	/** Private method untuk mempersiapkan data service yang akan disajikan */
+	private function _dataService($id)
+	{
+		$dataService = $this->admin->get_data_hostingbyid($id)->result_array();
+		foreach($dataService as $rowService){
+			$data['client'] = $rowService['client'];
+			$data['idUser'] = $rowService['id_user'];
+			$namaDepan= $rowService['nama_depan'];
+			$namaBelakang= $rowService['nama_belakang'];
+			if($namaDepan == '' && $namaBelakang ==''){
+				$data['namaClient'] = 'NN';
+			} else if($namaDepan == ''){
+				$data['namaClient'] = $namaBelakang;
+			} else {
+				$data['namaClient'] = $namaDepan;
+			}
+			$data['idHosting'] =$id;
+			$data['notelp'] = $rowService['phone'];
+			$data['emailClient'] = $rowService['email'];
+			$data['namaProduk'] =$rowService['nama_hosting'];
+			$data['namaDomain'] =$rowService['domain'];
+			$data['hargaHosting'] =$rowService['harga'];
+			$data['mulaiHosting'] =$rowService['start_hosting'];
+			$data['expiredHosting'] =$rowService['end_hosting'];
+			$data['statusHosting'] =$rowService['status_hosting'];
+		}
+		$data['title'] = "Detail Service Shared Hosting | Administrator Billing System Manthabill V.2.0";
+		return $data;
+	}
+
+	/** Method untuk mengaktifkan service shared hosting */
+	public function aktif_shared($idx=null)
+	{
+		if ($this->tokenSession != $this->tokenServer) {
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_hostingbyid($id)->num_rows();
+			if (($idx==NULL) || ($idx=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/shared_hosting');
+			} else {
+				$dataService = $this->admin->get_data_hostingbyid($id)->result_array();
+				foreach($dataService as $rowService){
+					$namaProduct = $rowService['nama_hosting'];
+					$namaDomain = $rowService['domain'];
+					$emailUser = $rowService['email'];
+					$statusHosting = $rowService['status_hosting'];
+				}
+				/* Status Hosting Harus tidak boleh aktif*/
+				if($statusHosting != 1){
+					$this->form_validation->set_rules(
+						'usernameCpanel',
+						'Username Cpanel',
+						'trim|min_length[6]|max_length[30]|required',
+						[
+							'max_length' => 'Panjang karakter Username Cpanel maksimal 30 karakter!',
+							'min_length' => 'Panjang karakter Username Cpanel minimal 6 karakter!',
+							'required' => 'Username Cpanel harus diisi!'
+						]
+					);
+					$this->form_validation->set_rules(
+						'passwordCpanel',
+						'Password Cpanel',
+						'trim|min_length[6]|max_length[80]|required',
+						[
+							'max_length' => 'Panjang karakter Password Cpanel maksimal 80 karakter!',
+							'min_length' => 'Panjang karakter Password Cpanel minimal 6 karakter!',
+							'required' => 'Password Cpanel harus diisi!'
+						]
+					);
+					$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+					if ($this->form_validation->run() === false) {
+						$this->session->set_flashdata('pesan', validation_errors());
+						$data = $this->_dataMember();
+						$data['title'] = "Aktivasi " .$namaProduct."| Administrator Billing System Manthabill V.2.0";
+						$data['idHosting'] = $id;
+						$data['namaHosting'] = $namaProduct;
+						$view = "v_aktifshared";
+						$this->_template($data, $view);
+					} else {
+						$usernameCpanel = $this->input->post("usernameCpanel", TRUE);
+						$passwordCpanel = $this->input->post("passwordCpanel", TRUE);
+
+						/* Mengaktifkan layanan shared hosting */
+						$dataHosting = [
+							'status_hosting' => 1
+						];
+						$this->admin->update_data_hosting($dataHosting,$id);
+						/* Mengirimkan email perihal layanan yang diaktifkan */
+
+						$judulEmail = "Layanan Hosting ". $namaProduct." telah diaktifkan!";
+
+						$pesanEmail = "
+							Selamat layanan anda ".$namaProduct." telah berhasil diaktifkan</br>
+							Dan berikut detail informasi cpanel nya:</br></br>
+							Username: " . $usernameCpanel . " </br>
+							Password: " . $passwordCpanel . " </br></br>
+							Anda bisa login di http://.".$namaDomain."/cpanel<br><br>
+
+							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!
+							Team kami akan membalas 1x24 jam Support tiket anda.
+
+							Regards<br>
+							Admin
+						";
+						kirim_email($emailUser, $pesanEmail, $judulEmail);
+						$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Layanan ini telah diaktifkan diaktifkan</div>');
+						redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+					}
+
+				} else {
+					$this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Layanan ini sudah aktif sebelumnya!</div>');
+					redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+				}
+			}
+		}
+	}
+
+
+
 	###########################################################################################
 	#                        Ini adalah menu paket shared hosting                             #
 	###########################################################################################
