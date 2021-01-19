@@ -90,7 +90,8 @@ class M_admin extends CI_Model{
 
 	/** Mendapatkan data dari tbuser */
 	public function get_data_user($id){
-		$this->db->where("id_user",$id);
+		$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
+		$this->db->where("tbuser.id_user",$id);
 		return $this->db->get($this->tableUser);
 	}
 
@@ -189,6 +190,12 @@ class M_admin extends CI_Model{
 	{
 		$this->db->where('key_token', $key);
 		$this->db->update($this->tableInbox, $data);
+	}
+
+	/** Menyimpan Pesan ke dalam tabel inbox */
+	public function simpan_inbox($data)
+	{
+		$this->db->insert($this->tableInbox, $data);
 	}
 
 	####################################################################################

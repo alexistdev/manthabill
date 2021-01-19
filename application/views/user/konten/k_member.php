@@ -143,7 +143,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         ?>
                                             <tr>
                                                 <td><a href="<?php echo base_url('ticket/lihat_ticket/' . $keyTicket); ?>">#<?php echo htmlentities($nomorTicket, ENT_QUOTES, 'UTF-8'); ?></a></td>
-                                                <td><?php echo htmlentities($judul, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?= $cetak($judul); ?></td>
                                                 <td><span class="label label-success">Open</span></td>
                                                 <td>
                                                     <div class="sparkbar" data-color="#00a65a" data-height="20"><?php echo htmlentities($tanggalTicket, ENT_QUOTES, 'UTF-8'); ?></div>

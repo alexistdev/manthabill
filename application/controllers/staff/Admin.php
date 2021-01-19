@@ -171,6 +171,88 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	/** Kirim pesan ke member */
+	public function kirim_pesan($idx=null){
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_user($id)->num_rows();
+			if (($id == NULL) || ($id == "") || ($cekDetail < 1)) {
+				redirect('staff/Admin/user');
+			} else {
+				$this->form_validation->set_rules(
+					'judulPesan',
+					'Judul Pesan',
+					'trim|min_length[5]|max_length[80]|required',
+					[
+						'max_length' => 'Panjang karakter Judul Pesan maksimal 80 karakter!',
+						'min_length' => 'Panjang karakter Judul Pesan minimal 5 karakter!',
+						'required' => 'Judul pesan harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'isiPesan',
+					'Isi Pesan',
+					'trim|min_length[10]|max_length[400]|required',
+					[
+						'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+						'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+						'required' => 'Isi Pesan harus diisi !'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					$data = $this->_dataMember();
+					$dataPesan = $this->_dataPesan($id);
+					$judul['title'] = "Kirim Pesan | Administrator Billing System Manthabill V.2.0";
+					$data = array_merge($data,$judul);
+					$data = array_merge($data,$dataPesan);
+					$view ='v_kirimpesan';
+					$this->_template($data,$view);
+				}else{
+					$judulPesan = $this->input->post("judulPesan", TRUE);
+					$isiPesan = $this->input->post("isiPesan", TRUE);
+					$key = _angkaUnik(20);
+					/* Mempersiapkan data pesan */
+					$dataPesan = [
+						'id_user' => $id,
+						'is_adm' => 1,
+						'judul' => $judulPesan,
+						'pesan' => $isiPesan,
+						'key_token' => $key,
+						'time' => time(),
+						'status_inbox' => 1
+					];
+					$this->admin->simpan_inbox($dataPesan);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Pesan telah dikirimkan ke user!</div>');
+					redirect('staff/Admin/detail_user/'.encrypt_url(cetak($id)));
+				}
+			}
+		}
+	}
+
+	/** Private Method untuk data pesan */
+	private function _dataPesan($id)
+	{
+		$dataUser =  $this->admin->get_data_user($id)->result_array();
+		foreach($dataUser as $rowUser){
+			$namaDepan = $rowUser['nama_depan'];
+			$namaBelakang = $rowUser['nama_belakang'];
+			$client = $rowUser['client'];
+			if($namaDepan =='' && $namaBelakang ==''){
+				$data['namaUser'] = "Client #".$client;
+			}else if($namaDepan == ''){
+				$data['namaUser'] = $namaBelakang;
+			}else{
+				$data['namaUser'] = $namaDepan.' '.$namaBelakang;
+			}
+		}
+		$data['idUser'] = $id;
+		return $data;
+	}
+
 	/** Method untuk halaman tambah data user ! */
 	public function tambah_user(){
 		if($this->tokenSession != $this->tokenServer){
@@ -1276,6 +1358,7 @@ class Admin extends CI_Controller {
 				} else {
 					$data['pengirim'] = $namaDepan.' '.$namaBelakang;
 				}
+				$data['isAdmin'] = $rowTicket['is_adm'];
 				$data['judul'] = $rowTicket['judul'];
 				$data['pesanAwal'] = $rowTicket['pesan'];
 				$data['statusTicket'] = $rowTicket['status_inbox'];

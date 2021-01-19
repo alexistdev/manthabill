@@ -39,11 +39,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 						<!-- timeline item pesan pertama -->
 						<div>
-							<i class="fas fa-envelope bg-blue"></i>
+							<i class="fas <?= ($isAdmin !=1)? 'fa-envelope bg-blue': 'fa-bullhorn bg-danger'; ?>"></i>
 							<div class="timeline-item">
 								<span class="time"><i class="fas fa-clock"></i> <?= date("H:s",cetak($waktuPembuatan)); ?></span>
-								<h3 class="timeline-header"><span class="text-primary font-weight-bold"><?= cetak($pengirim); ?></span> - <span class="font-weight-bold"><?= ucwords(cetak($judul)); ?></span></h3>
-
+								<?php if($isAdmin != 1) {?>
+									<h3 class="timeline-header"><span class="text-primary font-weight-bold"><?= cetak($pengirim); ?></span> - <span class="font-weight-bold"><?= ucwords(cetak($judul)); ?></span></h3>
+								<?php } else { ?>
+									<h3 class="timeline-header"><span class="text-danger font-weight-bold">Administrator</span> - <span class="font-weight-bold"><?= ucwords(cetak($judul)); ?></span></h3>
+								<?php } ?>
 								<div class="timeline-body">
 									<?= cetak($pesanAwal); ?>
 								</div>

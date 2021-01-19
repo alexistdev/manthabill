@@ -117,21 +117,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<table class="table no-margin">
 									<thead>
 									<tr>
-										<th>No Ticket</th>
-										<th>Judul</th>
-										<th>Status</th>
-										<th>Tanggal</th>
+										<th class="text-center">No Ticket</th>
+										<th class="text-center">Judul</th>
+										<th class="text-center">Status</th>
+										<th class="text-center">Tanggal</th>
 									</tr>
 									</thead>
 									<tbody>
 										<?php
 											$no = 1;
 											foreach($dataTicket->result_array() as $rowTicket):
+												$status = cetak($rowTicket['status_inbox']);
+												if($status == 1){
+													$statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
+												}else if($status == 2){
+													$statusPrint = "<small class=\"badge badge-warning\"> DIBALAS </small>";
+												} else {
+													$statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
+												}
 										?>
 										<tr>
-											<td class="text-center"><?= cetak($no++); ?></td>
-											<td class="text-center"><?= cetak($rowTicket['judul']); ?></td>
-											<td class="text-center"><?= cetak($rowTicket['pesan']); ?></td>
+											<td class="text-center"><a href="<?= base_url('staff/Admin/lihat_ticket/'.cetak($rowTicket['key_token'])); ?>">#<?= cetak($no++); ?></a></td>
+											<td><?= cetak($rowTicket['judul']); ?></td>
+											<td class="text-center"><?= $statusPrint ?></td>
 											<td class="text-center"><?= konversiUnixTanggal(cetak($rowTicket['time'])); ?></td>
 										</tr>
 										<?php endforeach;?>

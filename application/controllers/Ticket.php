@@ -127,48 +127,49 @@ class Ticket extends CI_Controller
 					'required' => 'Judul pesan harus diisi !'
 				]
 			);
-			$this->form_validation->set_rules(
-				'isiPesan',
-				'Isi Pesan',
-				'trim|min_length[10]|max_length[400]|required',
-				[
-					'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
-					'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
-					'required' => 'Isi Pesan harus diisi !'
-				]
-			);
-			$this->form_validation->set_rules(
-				'captcha',
-				'Captcha',
-				'trim|callback__check_captcha|required',
-				[
-					'required' => 'Captcha harus diisi!'
-				]
-			);
-			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-			if ($this->form_validation->run() === false) {
-				$this->session->set_flashdata('pesan', validation_errors());
-				$data = $this->_dataMember();
-				$data['title'] = "Invoice | ". $this->judulHosting;
-				$view = 'v_buatticket';
-				$this->_template($data, $view);
-			}else{
-				$judulPesan = $this->input->post("judulPesan", TRUE);
-				$isiPesan = $this->input->post("isiPesan", TRUE);
-				$key =  _angkaUnik(20);
-				/* Mempersiapkan data pesan */
-				$dataPesan =[
-					'id_user' => $this->idUser,
-					'is_adm' => 2,
-					'judul' => $judulPesan,
-					'pesan' => $isiPesan,
-					'key_token' => $key,
-					'time' => time(),
-					'status_inbox' => 2
-				];
-				$this->member->simpan_inbox($dataPesan);
-				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Tiket berhasil dibuat, silahkan tunggu 1x24 jam untuk dibalas oleh Staff kami!</div>');
-				redirect('Ticket');
+				$this->form_validation->set_rules(
+					'isiPesan',
+					'Isi Pesan',
+					'trim|min_length[10]|max_length[400]|required',
+					[
+						'max_length' => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+						'min_length' => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+						'required' => 'Isi Pesan harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'captcha',
+					'Captcha',
+					'trim|callback__check_captcha|required',
+					[
+						'required' => 'Captcha harus diisi!'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					$data = $this->_dataMember();
+					$data['title'] = "Invoice | ". $this->judulHosting;
+					$view = 'v_buatticket';
+					$this->_template($data, $view);
+				}else {
+					$judulPesan = $this->input->post("judulPesan", TRUE);
+					$isiPesan = $this->input->post("isiPesan", TRUE);
+					$key = _angkaUnik(20);
+					/* Mempersiapkan data pesan */
+					$dataPesan = [
+						'id_user' => $this->idUser,
+						'is_adm' => 2,
+						'judul' => $judulPesan,
+						'pesan' => $isiPesan,
+						'key_token' => $key,
+						'time' => time(),
+						'status_inbox' => 2
+					];
+					$this->member->simpan_inbox($dataPesan);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Tiket berhasil dibuat, silahkan tunggu 1x24 jam untuk dibalas oleh Staff kami!</div>');
+					redirect('Ticket');
+				}
 			}
 		}
 	}
