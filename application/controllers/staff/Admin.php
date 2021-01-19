@@ -110,6 +110,10 @@ class Admin extends CI_Controller {
 		return $data;
 	}
 
+    ###########################################################################################
+	#                           Ini adalah menu dashboard member                              #
+	###########################################################################################
+
 	/** Method untuk halaman Admin */
 	public function index()
 	{
@@ -117,10 +121,28 @@ class Admin extends CI_Controller {
 			_adminlogout();
 		} else {
 			$data = $this->_dataMember();
-			$data['title'] = "Dashboard | Manthabill";
+			$judul['title'] = "Dashboard | Manthabill";
+			$dataDashboard = $this->_dataDashboard();
+			$data = array_merge($data,$judul);
+			$data = array_merge($data,$dataDashboard);
 			$view = "v_admin";
 			$this->_template($data, $view);
 		}
+	}
+	/** Private method mempersiapkan data member */
+	private function _dataDashboard(){
+		$data['jmlService'] = $this->admin->get_total_service();
+		$data['jmlInvoice'] = $this->admin->get_total_invoice();
+		$data['jmlInbox'] = $this->admin->get_total_inbox();
+		$dataBerita = $this->admin->get_data_berita();
+		foreach ($dataBerita->result_array() as $rowBerita){
+			$data['judulBerita']= $rowBerita['judul_berita'];
+			$data['isiBerita'] = $rowBerita['isi_berita'];
+			$data['tanggalPosting'] = $rowBerita['tgl_berita'];
+		}
+		$data['dataTicket'] = $this->admin->get_ticket_baru();
+
+		return $data;
 	}
 
 	/** Method untuk logout */
@@ -1265,12 +1287,12 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	/** Method untuk halaman Membalas Ticket */
+	/** Method untuk halaman Mengunci Ticket */
 	public function kunci($keyx = NULL)
 	{
 		$key = $keyx;
-		if ($this->tokenSession != $this->tokenServer) {
-			_unlogin();
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
 		} else {
 			if (($keyx == "") or ($keyx == NULL)) {
 				redirect('staff/Admin/inbox');
@@ -1291,571 +1313,269 @@ class Admin extends CI_Controller {
 	}
 
 	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Domain                                      #
-	#                                                                                         #
-	###########################################################################################
-	/**
-	 * Method yang menampilkan halaman domain !
-	 */
-	public function domain()
-	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Dashboard | Manthabill";
-			$data['dataDomain'] = $this->admin->tampil_domain();
-			$view = "v_domain";
-			$this->_template($data, $view);
-		}
-	}
-
-	/**
-	 * Method untuk menampilkan edit domain !
-	 */
-
-	public function edit_domain($idx=null)
-	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$id = decrypt_url($idx);
-			$cekDomain = $this->admin->cekDomain($id);
-			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
-				redirect('staff/Admin/domain');
-			} else {
-				$data = $this->prepare_data_domain($id);
-				$judul['title'] = "Edit Domain | Administrator Billing System Manthabill V.2.0";
-				$data = array_merge($data,$judul);
-				$view ='v_editdomain';
-				$this->_template($data,$view);
-			}
-		}
-	}
-
-	/**
-	 * Private Method untuk mendapatkan data detail paket shared hosting !
-	 */
-
-	private function prepare_data_domain($id)
-	{
-		$data=[];
-		$detailDomain = $this->admin->tampil_domain($id);
-		foreach($detailDomain->result_array() as $row){
-			$data['idTld'] = $id;
-			$data['tld'] = $row['tld'];
-			$data['hargaTld'] = $row['harga_tld'];
-			$data['status'] = $row['status_tld'];
-			$data['default'] = $row['default'];
-		};
-		return $data;
-	}
-
-	/**
-	 * Method untuk mengupdate paket domain !
-	 */
-
-	public function update_domain($idx=null)
-	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
-		} else {
-			$id = decrypt_url($idx);
-			$cekDomain = $this->admin->cekDomain($id);
-			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
-				redirect('staff/Admin/domain');
-			} else {
-				$this->form_validation->set_rules(
-					'namaDomain',
-					'Nama Domain',
-					'trim|min_length[2]|max_length[6]|required',
-					[
-						'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
-						'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
-						'required' => 'Nama Domain harus diisi !'
-					]
-				);
-				$this->form_validation->set_rules(
-					'hargaDomain',
-					'Harga Domain',
-					'trim|numeric|required',
-					[
-						'numeric' => 'Format harus berupa angka!',
-						'required' => 'Harga Domain harus diisi !'
-					]
-				);
-				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-				if ($this->form_validation->run() === false) {
-					$this->session->set_flashdata('pesan', validation_errors());
-					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
-				} else {
-					$tld = $this->input->post("namaDomain", TRUE);
-					$hargaDomain = $this->input->post("hargaDomain", TRUE);
-					$default = $this->input->post("default", TRUE);
-					$status = $this->input->post("status", TRUE);
-					//jika diset default , maka akan menghapus semua status default di tabel tbtld
-					if($default == 1){
-						$dataDefault =[
-							'default' => 2
-						];
-						$this->admin->hapus_default($dataDefault);
-						$status = 1;
-					} else {
-						$default = 2;
-					}
-					if($status == ''){
-						$status = 2;
-					}
-					$dataDomain =[
-						'tld' => strtolower($tld),
-						'harga_tld' => $hargaDomain,
-						'status_tld' => $status,
-						'default' => $default,
-					];
-					$this->admin->update_data_domain($dataDomain,$id);
-					$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain telah diperbaharui!</div>');
-					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
-				}
-			}
-		}
-	}
-
-	/**
-	 * Method untuk menampilkan tambah domain !
-	 */
-	public function tambah_domain()
-	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
-		} else {
-			$this->form_validation->set_rules(
-				'namaDomain',
-				'Nama Domain',
-				'trim|min_length[2]|max_length[6]|required',
-				[
-					'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
-					'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
-					'required' => 'Nama Domain harus diisi !'
-				]
-			);
-			$this->form_validation->set_rules(
-				'hargaDomain',
-				'Harga Domain',
-				'trim|numeric|required',
-				[
-					'numeric' => 'Format harus berupa angka!',
-					'required' => 'Harga Domain harus diisi !'
-				]
-			);
-			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
-			if ($this->form_validation->run() === false) {
-				$this->session->set_flashdata('pesan', validation_errors());
-				$data['title'] = "Tambah Domain | Administrator Billing System Manthabill V.2.0";
-				$view ='v_tambahdomain';
-				$this->_template($data,$view);
-			} else {
-				$tld = $this->input->post("namaDomain", TRUE);
-				$hargaDomain = $this->input->post("hargaDomain", TRUE);
-				$default = $this->input->post("default", TRUE);
-				$status = $this->input->post("status", TRUE);
-				//jika diset default , maka akan menghapus semua status default di tabel tbtld
-				if($default == 1){
-					$dataDefault =[
-						'default' => 2
-					];
-					$this->admin->hapus_default($dataDefault);
-					$status = 1;
-				} else {
-					$default = 2;
-				}
-				if($status == ''){
-					$status = 2;
-				}
-				$dataDomain =[
-					'tld' => strtolower($tld),
-					'harga_tld' => $hargaDomain,
-					'status_tld' => $status,
-					'default' => $default,
-				];
-				$this->admin->simpan_data_domain($dataDomain);
-				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain baru telah ditambahkan!</div>');
-				redirect('staff/Admin/domain');
-			}
-		}
-	}
-
-	/**
-	 * Method untuk menghapus paket domain!
-	 */
-
-	public function hapus_domain($idx=NULL)
-	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey == 0) {
-			redirect('staff/login');
-		} else {
-			$id = decrypt_url($idx);
-			$cekDomain = $this->admin->cekDomain($id);
-			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
-				redirect('staff/Admin/domain');
-			} else {
-				$getName = $this->admin->get_data_domain($id)->tld;
-				$this->admin->hapus_domain($id);
-				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Data domain ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
-				redirect('staff/Admin/domain');
-			}
-		}
-	}
-	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Service Domain                              #
-	#                                                                                         #
+	#                              Ini adalah menu setting                                    #
 	###########################################################################################
 
-	/**
-	 * Method untuk menampilkan halaman service/domain!
-	 */
-	public function service_domain()
+	/** Method untuk menampilkan halaman Setting */
+	public function setting()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Service Domain | Administrator Billing System Manthabill V.2.0";
-			$data['dataDomain'] = $this->admin->tampil_domain_service();
-			$view = "v_servicedomain";
-			$this->_template($data, $view);
-		}
+		$data = $this->_dataMember();
+		$judul['title'] = "Setting | Administrator Billing System Manthabill V.2.0";
+		$data['dataTicket'] = $this->admin->get_data_inbox(NULL,TRUE)->result_array();
+		$data = array_merge($data,$judul);
+		$view ='v_setting';
+		$this->_template($data,$view);
 	}
 
-	/**
-	 * Method untuk menambahkan service/domain!
-	 */
-	public function tambah_service_domain()
+	###########################################################################################
+	#                              Ini adalah menu checkpoint                                 #
+	###########################################################################################
+
+	/** Method untuk menampilkan halaman Setting */
+	public function checkpoint()
 	{
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Tambah Service Domain | Administrator Billing System Manthabill V.2.0";
-			$view = "v_tambahservicedomain";
-			$this->_template($data, $view);
-		}
+		//$this->load->view('admin/v_admin');
 	}
 
+//	###########################################################################################
+//	#                                                                                         #
+//	#                             Ini adalah menu Domain                                      #
+//	#                                                                                         #
+//	###########################################################################################
+//	/**
+//	 * Method yang menampilkan halaman domain !
+//	 */
+//	public function domain()
+//	{
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		if ($hashKey==0){
+//			redirect('staff/login');
+//		} else{
+//			$data['title'] = "Dashboard | Manthabill";
+//			$data['dataDomain'] = $this->admin->tampil_domain();
+//			$view = "v_domain";
+//			$this->_template($data, $view);
+//		}
+//	}
+//
+//	/**
+//	 * Method untuk menampilkan edit domain !
+//	 */
+//
+//	public function edit_domain($idx=null)
+//	{
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		if ($hashKey==0){
+//			redirect('staff/login');
+//		} else{
+//			$id = decrypt_url($idx);
+//			$cekDomain = $this->admin->cekDomain($id);
+//			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+//				redirect('staff/Admin/domain');
+//			} else {
+//				$data = $this->prepare_data_domain($id);
+//				$judul['title'] = "Edit Domain | Administrator Billing System Manthabill V.2.0";
+//				$data = array_merge($data,$judul);
+//				$view ='v_editdomain';
+//				$this->_template($data,$view);
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * Private Method untuk mendapatkan data detail paket shared hosting !
+//	 */
+//
+//	private function prepare_data_domain($id)
+//	{
+//		$data=[];
+//		$detailDomain = $this->admin->tampil_domain($id);
+//		foreach($detailDomain->result_array() as $row){
+//			$data['idTld'] = $id;
+//			$data['tld'] = $row['tld'];
+//			$data['hargaTld'] = $row['harga_tld'];
+//			$data['status'] = $row['status_tld'];
+//			$data['default'] = $row['default'];
+//		};
+//		return $data;
+//	}
+//
+//	/**
+//	 * Method untuk mengupdate paket domain !
+//	 */
+//
+//	public function update_domain($idx=null)
+//	{
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		if ($hashKey == 0) {
+//			redirect('staff/login');
+//		} else {
+//			$id = decrypt_url($idx);
+//			$cekDomain = $this->admin->cekDomain($id);
+//			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+//				redirect('staff/Admin/domain');
+//			} else {
+//				$this->form_validation->set_rules(
+//					'namaDomain',
+//					'Nama Domain',
+//					'trim|min_length[2]|max_length[6]|required',
+//					[
+//						'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
+//						'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
+//						'required' => 'Nama Domain harus diisi !'
+//					]
+//				);
+//				$this->form_validation->set_rules(
+//					'hargaDomain',
+//					'Harga Domain',
+//					'trim|numeric|required',
+//					[
+//						'numeric' => 'Format harus berupa angka!',
+//						'required' => 'Harga Domain harus diisi !'
+//					]
+//				);
+//				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+//				if ($this->form_validation->run() === false) {
+//					$this->session->set_flashdata('pesan', validation_errors());
+//					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
+//				} else {
+//					$tld = $this->input->post("namaDomain", TRUE);
+//					$hargaDomain = $this->input->post("hargaDomain", TRUE);
+//					$default = $this->input->post("default", TRUE);
+//					$status = $this->input->post("status", TRUE);
+//					//jika diset default , maka akan menghapus semua status default di tabel tbtld
+//					if($default == 1){
+//						$dataDefault =[
+//							'default' => 2
+//						];
+//						$this->admin->hapus_default($dataDefault);
+//						$status = 1;
+//					} else {
+//						$default = 2;
+//					}
+//					if($status == ''){
+//						$status = 2;
+//					}
+//					$dataDomain =[
+//						'tld' => strtolower($tld),
+//						'harga_tld' => $hargaDomain,
+//						'status_tld' => $status,
+//						'default' => $default,
+//					];
+//					$this->admin->update_data_domain($dataDomain,$id);
+//					$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain telah diperbaharui!</div>');
+//					redirect('staff/Admin/edit_domain/'.encrypt_url($id));
+//				}
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * Method untuk menampilkan tambah domain !
+//	 */
+//	public function tambah_domain()
+//	{
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		if ($hashKey == 0) {
+//			redirect('staff/login');
+//		} else {
+//			$this->form_validation->set_rules(
+//				'namaDomain',
+//				'Nama Domain',
+//				'trim|min_length[2]|max_length[6]|required',
+//				[
+//					'max_length' => 'Panjang karakter Nama Domain maksimal 6 karakter!',
+//					'min_length' => 'Panjang karakter Nama Domain minimal 1 karakter!',
+//					'required' => 'Nama Domain harus diisi !'
+//				]
+//			);
+//			$this->form_validation->set_rules(
+//				'hargaDomain',
+//				'Harga Domain',
+//				'trim|numeric|required',
+//				[
+//					'numeric' => 'Format harus berupa angka!',
+//					'required' => 'Harga Domain harus diisi !'
+//				]
+//			);
+//			$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+//			if ($this->form_validation->run() === false) {
+//				$this->session->set_flashdata('pesan', validation_errors());
+//				$data['title'] = "Tambah Domain | Administrator Billing System Manthabill V.2.0";
+//				$view ='v_tambahdomain';
+//				$this->_template($data,$view);
+//			} else {
+//				$tld = $this->input->post("namaDomain", TRUE);
+//				$hargaDomain = $this->input->post("hargaDomain", TRUE);
+//				$default = $this->input->post("default", TRUE);
+//				$status = $this->input->post("status", TRUE);
+//				//jika diset default , maka akan menghapus semua status default di tabel tbtld
+//				if($default == 1){
+//					$dataDefault =[
+//						'default' => 2
+//					];
+//					$this->admin->hapus_default($dataDefault);
+//					$status = 1;
+//				} else {
+//					$default = 2;
+//				}
+//				if($status == ''){
+//					$status = 2;
+//				}
+//				$dataDomain =[
+//					'tld' => strtolower($tld),
+//					'harga_tld' => $hargaDomain,
+//					'status_tld' => $status,
+//					'default' => $default,
+//				];
+//				$this->admin->simpan_data_domain($dataDomain);
+//				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Data domain baru telah ditambahkan!</div>');
+//				redirect('staff/Admin/domain');
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * Method untuk menghapus paket domain!
+//	 */
+//
+//	public function hapus_domain($idx=NULL)
+//	{
+//		$hashSes = $this->session->userdata('token');
+//		$hashKey = $this->admin->get_token($hashSes);
+//		if ($hashKey == 0) {
+//			redirect('staff/login');
+//		} else {
+//			$id = decrypt_url($idx);
+//			$cekDomain = $this->admin->cekDomain($id);
+//			if (($id==NULL) || ($id=="") ||($cekDomain < 1)){
+//				redirect('staff/Admin/domain');
+//			} else {
+//				$getName = $this->admin->get_data_domain($id)->tld;
+//				$this->admin->hapus_domain($id);
+//				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Data domain ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
+//				redirect('staff/Admin/domain');
+//			}
+//		}
+//	}
+//
 
 
-	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Service VPS                                 #
-	#                                                                                         #
-	###########################################################################################
-
-
-	/**
-	 * Method untuk menampilkan halaman service/vps hosting!
-	 */
-	public function vps_hosting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Service VPS Hosting | Administrator Billing System Manthabill V.2.0";
-			$view = "v_vpshosting";
-			$this->_template($data, $view);
-		}
-	}
-
-
-
-
-	
-	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Hosting                                     #
-	#                                                                                         #
-	###########################################################################################
-	function hosting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$x['data'] = $this->admin->tampil_hosting();
-			$this->load->view('admin/v_hosting',$x);
-		}
-	}
-
-	//untuk mengaktifkan hosting
-	function aktif_hosting($idHosting=NULL){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		$user = $this->session->userdata('username');
-		$statusLogin = $this->session->userdata('loginadmin');
-		if (($hashKey>0) && ($user === $statusLogin) && ($user==="admin") ){
-			$cekIdHosting = $this->admin->cek_idHosting($idHosting);
-			if(($idHosting=="") OR ($idHosting==NULL) OR ($cekIdHosting==0)){
-				redirect('staff/admin/hosting');
-			} else {
-				$idUser = $this->admin->get_idByHosting($idHosting)->id_user;
-				$emailPengirim = $this->admin->get_companyEmail()->email_hosting;
-				$emailTujuan = $this->admin->get_emailUser($idUser)->email;
-				$userCpanel = $this->input->post("userCpanel");
-				$passCpanel = $this->input->post("passCpanel");
-				$subyek = "Layanan Hosting Anda telah diaktifkan";
-				$pesan = "Hosting Anda telah diaktifkan , berikut detail Informasi Akun Hosting Anda:<br><br>
-                    Username:  ".$userCpanel."<br>
-                    Password: ".$passCpanel." <br><br>
-					Anda bisa login di www.adrihost.com<br><br>
-                    Regards<br>
-                    Admin- www.adrihost.com
-                ";
-				//mengirimkan email
-				// =======================
-				$this->load->library('email');
-				$this->email->from($emailPengirim, 'AdriHost');
-				$this->email->to($emailTujuan,'Yth.Member');
-				$this->email->subject($subyek);
-				$this->email->message($pesan); 
-				//$this->email->send();
-				//ubah status menjadi aktif
-				$dataUpdate = array(
-					'status_hosting' => 1
-				);
-				$this->admin->aktifkan_hosting($idHosting, $dataUpdate);
-				$this->session->set_flashdata('pesanSukses', 'Hosting telah diaktifkan!');
-				redirect('staff/admin/hosting');
-			}
-		} else{
-			redirect('staff/login');
-		}	
-	}
-	//detail informasi hosting
-	function detail_hosting($idHosting=NULL){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		$user = $this->session->userdata('username');
-		$statusLogin = $this->session->userdata('loginadmin');
-		if (($hashKey>0) && ($user === $statusLogin) && ($user==="admin") ){
-			$cekIdHosting = $this->admin->cek_idHosting($idHosting);
-			if(($idHosting=="") OR ($idHosting==NULL) OR ($cekIdHosting==0)){
-				redirect('staff/admin/hosting');
-			} else {
-				$idUser = $this->admin->getIdUserHosting($idHosting)->id_user;
-				$b['terDaftar'] = date("d-M-Y",strtotime($this->m_admin->getDetailUser($idUser)->date_create));
-				$b['idUser'] = $idUser;
-				$b['idHosting'] = $idHosting;
-				$b['namaDepan'] = $this->admin->getDetailUser($idUser)->nama_depan;
-				$b['namaBelakang'] = $this->m_admin->getDetailUser($idUser)->nama_belakang;
-				$b['emailUser'] = $this->m_admin->getDetailUser($idUser)->email;
-				$b['detailHosting'] = $this->m_admin->getDetailHosting($idHosting);
-				$this->load->view('admin/v_detailhosting',$b);
-			}	
-		} else{
-			redirect('staff/login');
-		}						
-	}
-
-	function detail_simpan($idHosting=NULL){
-		$statusKirimEmail = 0;
-		$layanan = 0;
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		$user = $this->session->userdata('username');
-		$statusLogin = $this->session->userdata('loginadmin');
-		if (($hashKey>0) && ($user === $statusLogin) && ($user==="admin") ){
-			$cekIdHosting = $this->m_admin->cek_idHosting($idHosting);
-			if(($idHosting=="") OR ($idHosting==NULL) OR ($cekIdHosting==0)){
-				redirect('staff/admin/hosting');
-			} else {
-				$layanan = $this->input->post("layanan");
-				$statusKirimEmail = $this->input->post("kirimEmail");
-				if($layanan == 1){
-					if($statusKirimEmail==1){
-						//kirim email
-						$idUser = $this->m_admin->get_idByHosting($idHosting)->id_user;
-						$emailPengirim = $this->m_admin->get_companyEmail()->email_hosting;
-						$emailTujuan = $this->m_admin->get_emailUser($idUser)->email;
-						$subyek = "Layanan Hosting Anda telah dinonaktifkan";
-						$pesan = "Hosting Anda telah dinonaktifkan , silahkan hubungi kami jika ada kekeliruan,<br>
-							atau ingin mengaktifkan kembali hosting anda.<br><br>
-							Anda bisa login di www.adrihost.com<br><br>
-							Regards<br>
-							Admin- www.adrihost.com
-						";
-						$dataEmail = array(
-							'email_pengirim' => $emailPengirim,
-							'email_tujuan' => $emailTujuan,
-							'subyek' => $subyek,
-							'email_pesan' => $pesan,
-							'status' => 2	
-						);
-						$this->m_admin->simpan_email($dataEmail);
-						//update data hosting
-						$dataUpdate = array(
-							'status_hosting' => 3
-						);
-						$this->m_admin->nonaktifkan_hosting($idHosting, $dataUpdate);
-						$this->session->set_flashdata('pesanSukses', 'Hosting telah dinonaktifkan serta dikirimkan email!');
-						redirect('staff/admin/hosting');
-					} else {
-						//update data hosting tanpa pengiriman email
-						$dataUpdate = array(
-							'status_hosting' => 3
-						);
-						$this->m_admin->nonaktifkan_hosting($idHosting, $dataUpdate);
-						$this->session->set_flashdata('pesanSukses', 'Hosting telah dinonaktifkan!');
-						redirect('staff/admin/hosting');
-					}
-				} else if ($layanan == 2){
-					echo "2"."<br>";
-					echo $idHosting;
-				} else {
-					echo "3";
-				}
-			}	
-		} else{
-			redirect('staff/login');
-		}	
-	}
-
-
-
-	/*
-	function tambah_hosting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$x['pilihanProduct'] = $this->m_admin->pilihan_product();
-			$this->load->view('admin/v_tambahHost',$x);
-		}
-	}
-	function simpan_hosting(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->m_admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			//validasi form sebelum form dikirimkan
-			$this->form_validation->set_rules('username','Username','required|min_length[4]');
-			$this->form_validation->set_rules('pilihan','Pilihan','required');
-			$this->form_validation->set_rules('domain','Domain','required');
-			$this->form_validation->set_rules('cpanel','Cpanel','required');
-			$this->form_validation->set_rules('password','Password','required');
-			$this->form_validation->set_rules('startDate','Start Date','required');
-			//$this->form_validation->set_rules('endDate','End Date','required');
-			if($this->form_validation->run() != false){
-				$username = $this->input->post("username");
-				$paket = $this->input->post("pilihan");
-				$domain = $this->input->post("domain");
-				$cpanel = $this->input->post("cpanel");
-				$password = $this->input->post("password");
-				$bulan = $this->input->post("bulan");
-				$emailRadio = $this->input->post("KirimEmail");
-				$startDate = date("Y-m-d", strtotime($this->input->post("startDate")));
-				//$endDate = date("Y-m-d", strtotime($this->input->post("endDate")));
-				$cekUser = $this->m_admin->cek_user($username);
-				$getNamaProduct = $this->m_admin->get_product($paket)->nama_product;
-				$getHargaProduct = $this->m_admin->get_product($paket)->harga;
-				$getStatusProduct = $this->m_admin->get_product($paket)->type_product;
-				$getEmail = $this->m_admin->get_email($username)->email;
-				//validasi jika jenis hosting tipe personal atau pro 
-				if($getStatusProduct == 1){
-					$hargaProduct =  $getHargaProduct * $bulan;
-				} else {
-					$hargaProduct = $getHargaProduct;
-				}
-				$NamaPaket = $getNamaProduct." ".$domain;
-				//perhitungan duedate(enddate)
-				$nextendDate = date("Y-m-d", strtotime($startDate.' + '.$bulan.' Months'));
-				//cek jangan sampai username kosong
-				if($cekUser ==1){
-					$userId=$this->m_admin->get_idUser($username);
-					$data = array(
-						'id_product' => $paket,
-						'id_user' => $userId,
-						'nama_hosting' => $NamaPaket,
-						'user_cpanel' => $cpanel,
-						'harga' => $hargaProduct,
-						'start_hosting' => $startDate,
-						'end_hosting' => $nextendDate,
-						'domain' => $domain,
-						'status' => 2
-					);
-					$idHosting = $this->m_admin->simpan_hosting($data);
-					$noInvoice=$this->m_admin->angkaUnik();
-					$data2 = array(
-						'id_user' => $userId,
-						'id_hosting' => $idHosting,
-						'no_invoice' => $noInvoice,
-						'total_jumlah' => $hargaProduct
-					);
-					$this->m_admin->simpan_invoice($data2);
-					
-					//mengirimkan email notifikasi jika radio button diklik
-					if ($emailRadio==1)
-					{
-						$message="
-							Yth.Pelanggan , kami telah menambahkan satu layanan ke dalam akun anda, berikut informasi detailnya:<br><br>
-							Nama Produk:".$getNamaProduct." <br>
-							Harga: ".$hargaProduct." <br>
-							Durasi: ".$bulan." Bulan<br>
-							Register: ".date("d-m-Y", strtotime($startDate))."<br>
-							Expired:  ".date("d-m-Y", strtotime($nextendDate))."<br><br>
-							Langkah selanjutnya adalah selesaikan pembayarannya sesuai dengan harga yang tercantum ke rekening kami.<br><br>
-							Regards<br>
-							Admin- www.adrihost.com
-						";
-						$this->load->library('email'); 
-						$this->email->from('support@adrihost.com', 'AdriHost');
-						$this->email->to($getEmail,$username);
-						$this->email->subject('Layanan Baru telah Ditambahkan');
-						$this->email->message($message); 			
-						$this->email->send();
-					}
-					//proses penambahan hosting selesai maka akan ditampilkan pesan dan halaman diredirect ke halaman hosting
-					$this->session->set_flashdata('item', array('pesan' => 'Data berhasil ditambahkan!'));
-					redirect('staff/admin/hosting');
-					
-				} else{
-					$this->session->set_flashdata('item2', array('pesan2' => 'user tidak ditemukan!'));
-					redirect('staff/admin/hosting');
-				}
-			}else{
-				$this->session->set_flashdata('item2', array('pesan2' => validation_errors()));
-				redirect('staff/admin/hosting',$data);
-			}
-			
-		}
-	}*/
-	
-
-
-	//ini adalah fungsi untuk memanggil autocomplete username yang ada di tambah hosting
-	function autocomplete(){
-		if (isset($_GET['term'])) {
-            $result = $this->m_admin->search_username($_GET['term']);
-            if (count($result) > 0) {
-            foreach ($result as $row)
-                $arr_result[] = $row->username;
-                echo json_encode($arr_result);
-            }
-        }
-	}
+//	//ini adalah fungsi untuk memanggil autocomplete username yang ada di tambah hosting
+//	function autocomplete(){
+//		if (isset($_GET['term'])) {
+//            $result = $this->m_admin->search_username($_GET['term']);
+//            if (count($result) > 0) {
+//            foreach ($result as $row)
+//                $arr_result[] = $row->username;
+//                echo json_encode($arr_result);
+//            }
+//        }
+//	}
 	
 
 	###########################################################################################
@@ -1864,8 +1584,5 @@ class Admin extends CI_Controller {
 	#                                                                                         #
 	###########################################################################################
 
-	public function lisense()
-	{
-		$this->load->view('admin/v_admin');
-	}
+
 }

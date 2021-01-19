@@ -30,6 +30,7 @@ class M_admin extends CI_Model{
 		$this->tableInboxBalas = 'inboxbalas';
 		$this->tableHosting = 'tbhosting';
 		$this->tableInvoice = 'tbinvoice';
+		$this->tableBerita = 'tbberita';
 	}
 
 
@@ -266,6 +267,45 @@ class M_admin extends CI_Model{
 	{
 		$this->db->where('id_invoice ',$id);
 		$this->db->update($this->tableInvoice,$data);
+	}
+
+	####################################################################################
+	#                               Halaman Dashboard                                  #
+	####################################################################################
+	/** Statistik Service dari tbhosting */
+	public function get_total_service()
+	{
+		$this->db->where('status_hosting', 1);
+		return $this->db->get($this->tableHosting)->num_rows();
+	}
+
+	/** Statistik Service dari tbinvoice */
+	public function get_total_invoice()
+	{
+		$this->db->where('status_inv', 2);
+		$this->db->or_where('status_inv', 3);
+		return $this->db->get($this->tableInvoice)->num_rows();
+	}
+
+	/** Statistik Service dari tbinbox */
+	public function get_total_inbox()
+	{
+		$this->db->where('status_inbox', 1);
+		return $this->db->get($this->tableInbox)->num_rows();
+	}
+
+	/** Menampilkan berita */
+	public function get_data_berita()
+	{
+		$this->db->limit(1);
+		return $this->db->get($this->tableBerita);
+	}
+
+	/** Menampilkan ticket */
+	public function get_ticket_baru()
+	{
+		$this->db->where('status_inbox', 1);
+		return $this->db->get($this->tableInbox);
 	}
 
 

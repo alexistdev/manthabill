@@ -49,14 +49,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							<i class="fas fa-angle-left right"></i>
 						</p>
 					</a>
-					<ul class="nav nav-treeview ">
-						<li class="nav-item">
-							<a href="<?= base_url('staff/Admin/service_domain') ?>" class="nav-link <?= ($this->uri->segment(3) == 'service_domain') ?'active':''; ?>">
-								<i class="nav-icon far fa-circle"></i>
-								<p>Domain</p>
-							</a>
-						</li>
-					</ul>
+
 					<ul class="nav nav-treeview ">
 						<li class="nav-item">
 							<a href="<?= base_url('staff/Admin/shared_hosting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'shared_hosting') ?'active':''; ?>">
@@ -65,14 +58,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							</a>
 						</li>
 					</ul>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="<?= base_url('staff/Admin/vps_hosting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'vps_hosting') ?'active':''; ?>">
-								<i class="nav-icon far fa-circle"></i>
-								<p>VPS</p>
-							</a>
-						</li>
-					</ul>
+
 				</li>
 				<!-- Sidebar Invoice	-->
 				<li class="nav-item">
@@ -109,21 +95,14 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							</a>
 						</li>
 					</ul>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="<?= base_url('staff/Admin/paket') ?>" class="nav-link">
-								<i class="nav-icon far fa-circle"></i>
-								<p>VPS</p>
-							</a>
-						</li>
-					</ul>
+
 				</li>
 				<!-- Sidebar Domain	-->
 				<li class="nav-item">
-					<a href="<?= base_url('staff/Admin/domain') ?>" class="nav-link <?= ($this->uri->segment(3) == 'domain') ?'active':''; ?>">
-						<i class="nav-icon fas fa-globe"></i>
+					<a href="<?= base_url('staff/Admin/setting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'setting') ?'active':''; ?>">
+						<i class="nav-icon fas fa-cogs"></i>
 						<p>
-							Domain
+							Setting
 						</p>
 					</a>
 				</li>

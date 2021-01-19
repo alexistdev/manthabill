@@ -32,13 +32,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<!-- small box -->
 					<div class="small-box bg-info">
 						<div class="inner">
-							<h3></h3>
-							<p>SERVICES</p>
+							<h3><?= cetak($jmlService); ?></h3>
+							<p>SERVICES AKTIF</p>
 						</div>
 						<div class="icon">
 							<i class="ion ion-social-buffer"></i>
 						</div>
-						<a href="<?= base_url('service') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+						<a href="<?= base_url('staff/Admin/shared_hosting') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -46,14 +46,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<!-- small box -->
 					<div class="small-box bg-success">
 						<div class="inner">
-							<h3></h3>
+							<h3>0</h3>
 
 							<p>DOMAIN</p>
 						</div>
 						<div class="icon">
 							<i class="ion ion-earth"></i>
 						</div>
-						<a href="<?= base_url('domain') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+						<a href="<?= base_url('staff/Admin') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -61,14 +61,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<!-- small box -->
 					<div class="small-box bg-warning">
 						<div class="inner">
-							<h3></h3>
+							<h3><?= cetak($jmlInvoice); ?></h3>
 
 							<p>INVOICE</p>
 						</div>
 						<div class="icon">
 							<i class="ion ion-card"></i>
 						</div>
-						<a href="<?= base_url('invoice') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+						<a href="<?= base_url('staff/Admin/invoice') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -76,13 +76,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<!-- small box -->
 					<div class="small-box bg-danger">
 						<div class="inner">
-							<h3></h3>
+							<h3><?= cetak($jmlInbox); ?></h3>
 							<p>Ticket Support</p>
 						</div>
 						<div class="icon">
 							<i class="ion ion-chatbubbles"></i>
 						</div>
-						<a href="<?= base_url('ticket') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+						<a href="<?= base_url('staff/Admin/inbox') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
 				<!-- ./col -->
@@ -97,7 +97,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">
-
+							<h4><?= cetak($judulBerita); ?></h4>
+							<p><?= nl2br(cetak($isiBerita)); ?></p>
+							<p class="text-sm float-right">Diposting: <span class="text-primary font-weight-bold"><?= konversiTanggal(cetak($tanggalPosting)); ?></span></p>
 						</div>
 					</div> <!-- /.card -->
 				</div>
@@ -122,7 +124,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									</tr>
 									</thead>
 									<tbody>
-
+										<?php
+											$no = 1;
+											foreach($dataTicket->result_array() as $rowTicket):
+										?>
+										<tr>
+											<td class="text-center"><?= cetak($no++); ?></td>
+											<td class="text-center"><?= cetak($rowTicket['judul']); ?></td>
+											<td class="text-center"><?= cetak($rowTicket['pesan']); ?></td>
+											<td class="text-center"><?= konversiUnixTanggal(cetak($rowTicket['time'])); ?></td>
+										</tr>
+										<?php endforeach;?>
 									</tbody>
 								</table>
 							</div>
