@@ -1,10 +1,10 @@
-Installasi:<br>
-1. git clone https://github.com/alexistdev/manthabill.git<br>
-2. Buat database dan upload database di folder dengan nama file: manthabill.sql<br>
-3. Buka file config/database dan lakukan pengaturan username, database, dan passwordnya.<br>
-4. Buka file config/email lakukan pengaturan smtp untuk mengirimkan email.
+Installasi:</br>
+1. git clone https://github.com/alexistdev/manthabill.git</br>
+2. Buat database dan upload database di folder dengan nama file: manthabill.sql</br>
+3. Buka file config/database dan lakukan pengaturan username, database, dan passwordnya.</br>
+4. Buka file config/email lakukan pengaturan smtp untuk mengirimkan email.</br>
 5. pasang cronjob di cpanel anda dengan contoh penulisan spt ini wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
-<br><br>
+</br></br>
 
-Silahkan digunakan, jika ada yang butuh bantuan bisa kontak saya di email: alexistdev@gmail.com<br>
+Silahkan digunakan, jika ada yang butuh bantuan bisa kontak saya di email: alexistdev@gmail.com</br>
 atau buka saja issue di github
