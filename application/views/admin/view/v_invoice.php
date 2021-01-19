@@ -24,12 +24,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<!-- pace-progress -->
 	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/pace-progress/pace.min.js"></script>
 	<!-- DataTables -->
-	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.js"></script>
-	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="<?= base_url('assets/AdminLTE3') ?>/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 	<script>
 		$(document).ready( function () {
-			$('#tabelUser').DataTable();
-		} );
+			$('#tabelInvoice').DataTable();
+		});
 		$(window).bind("load", function() {
 			window.setTimeout(function() {
 				$(".alert").fadeTo(500, 0).slideUp(500, function() {
@@ -37,10 +39,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				});
 			}, 2000);
 		});
-		$(document).on("click", "#tombolHapus", function () {
+		$(document).on("click", "#tombolLunas", function () {
 			var userId = $(this).data('id');
-			var newUrl = "<?= base_url('/staff/Admin/hapus_user/'); ?>" + userId;
-			$("#urlHapus").attr('href', newUrl);
+			var newUrl = "<?= base_url('/staff/Admin/bayar_invoice/'); ?>" + userId;
+			$("#urlBayar").attr('href', newUrl);
 		});
 	</script>
 </div>

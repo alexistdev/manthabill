@@ -89,7 +89,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="col-md-12">
 									<div class="form-group">
 										<label for="namaUsaha">Nama Usaha</label>
-										<?= form_input(['name' => 'namaUsaha', 'id'=>'namaUsaha','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Usaha','maxlength' => 50, 'value' => cetak($namaUsaha)]); ?>
+										<?= form_input(['name' => 'namaUsaha', 'id'=>'namaUsaha','type' => 'text', 'class' => 'form-control','placeholder'=>'Nama Usaha','maxlength' => 50, 'value' => cetak($namaUsahaUser)]); ?>
 									</div>
 								</div>
 							</div>

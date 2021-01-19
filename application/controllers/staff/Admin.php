@@ -251,6 +251,8 @@ class Admin extends CI_Controller {
 		$data=[];
 		$detailUser = $this->admin->tampil_detailUser($id);
 		$data['dataService'] = $this->admin->get_data_hosting($id);
+		$data['daftarInvoice']= $this->admin->get_data_invoice($id);
+		$data['daftarTicket']= $this->admin->get_data_inboxbyid($id);
 		foreach($detailUser->result_array() as $row){
 			$data['idUser'] = $id;
 			$data['client'] = $row['client'];
@@ -258,7 +260,7 @@ class Admin extends CI_Controller {
 			$data['namaDepan'] = $row['nama_depan'];
 			$data['namaBelakang'] = $row['nama_belakang'];
 			$data['namaBelakang'] = $row['nama_belakang'];
-			$data['namaUsaha'] = $row['nama_usaha'];
+			$data['namaUsahaUser'] = $row['nama_usaha'];
 			$data['telepon'] = $row['phone'];
 			$data['alamat'] = $row['alamat'];
 			$data['alamat2'] = $row['alamat2'];
@@ -267,6 +269,7 @@ class Admin extends CI_Controller {
 			$data['provinsi'] = $row['provinsi'];
 			$data['negara'] = $row['negara'];
 		};
+		$data['namaUsaha'] = $this->namaUsaha;
 		return $data;
 	}
 
@@ -301,6 +304,7 @@ class Admin extends CI_Controller {
 				redirect('staff/admin/user');
 			} else {
 				$data = $this->prepare_data_user($id);
+
 				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
 				$data = array_merge($data,$judul);
 				$view ='v_detailuser';
@@ -606,10 +610,10 @@ class Admin extends CI_Controller {
 						$judulEmail = "Layanan Hosting ". $namaProduct." telah diaktifkan!";
 
 						$pesanEmail = "
-							Selamat layanan anda ".$namaProduct." telah berhasil diaktifkan</br>
-							Dan berikut detail informasi cpanel nya:</br></br>
-							Username: " . $usernameCpanel . " </br>
-							Password: " . $passwordCpanel . " </br></br>
+							Selamat layanan anda ".$namaProduct." telah berhasil diaktifkan<br>
+							Dan berikut detail informasi cpanel nya:<br><br>
+							Username: " . $usernameCpanel . " <br>
+							Password: " . $passwordCpanel . " <br><br>
 							Anda bisa login di http://.".$namaDomain."/cpanel<br><br>
 
 							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!
@@ -1040,6 +1044,127 @@ class Admin extends CI_Controller {
 	}
 
 	###########################################################################################
+	#                              Ini adalah menu Invoice                                    #
+	###########################################################################################
+	/** Method untuk menampilkan halaman Invoice */
+	public function invoice(){
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$data = $this->_dataMember();
+			$data['title'] = "Invoice | Administrator Billing System Manthabill V.2.0";
+			$data['daftarInvoice'] = $this->admin->get_data_invoice();
+			$view = "v_invoice";
+			$this->_template($data, $view);
+		}
+	}
+
+	/** Method untuk mengunci invoice */
+	public function bayar_invoice($idx = NULL)
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_invoicebyid($id)->num_rows();
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/Admin/invoice');
+			} else {
+				$dataInvoice = [
+					'status_inv' => 1
+				];
+				$this->admin->update_data_invoice($dataInvoice,$id);
+				/* Kirim email */
+				$getDataInvoice = $this->admin->get_data_invoicebyid($id)->result_array();
+				foreach($getDataInvoice as $rowInvoice){
+					$namaProduk = cetak($rowInvoice['detail_produk']);
+					$nomorInvoice = strtoupper(cetak($rowInvoice['no_invoice']));
+					$hargaTotal = konversiRupiah(cetak($rowInvoice['total_jumlah']));
+					$startDate = konversiTanggal(cetak($rowInvoice['start_hosting']));
+					$nextendDate = konversiTanggal(cetak($rowInvoice['end_hosting']));
+					$emailTujuan = cetak($rowInvoice['email']);
+				}
+				$judul = "Konfirmasi Pembayaran";
+				$message = "
+					Yth.Pelanggan , kami telah menerima konfirmasi pembayaran anda:<br><br>
+					".$namaProduk."<br>
+					=====================================================================<br>
+					Nomor Invoice:" . $nomorInvoice . " <br>
+					Harga: Rp." . $hargaTotal . " <br>
+					Register: " . $startDate  . "<br>
+					Expired:  " . $nextendDate . "<br>
+					Jika anda membutuhkan bantuan lebih lanjut, silahkan membuka support tiket melalui halaman dashboard akun anda.
+					<br><br>
+					Regards<br>
+					Admin<br>
+				";
+				kirim_email($emailTujuan, $message, $judul);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Status Invoice telah berhasil dirubah!</div>');
+				redirect('staff/Admin/invoice');
+			}
+		}
+	}
+
+	/** Method untuk menampilkan detail invoice */
+	public function detail_invoice($idx = NULL)
+	{
+		if($this->tokenSession != $this->tokenServer){
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_invoicebyid($id)->num_rows();
+			if (($id==NULL) OR ($id=="") OR($cekDetail < 1)){
+				redirect('staff/Admin/invoice');
+			} else {
+				$data = $this->_dataInvoice($id);
+				$judul['title'] = "Lihat Invoice | Administrator Billing System Manthabill V.2.0";
+				$data = array_merge($data,$judul);
+				$data = array_merge($data,$this->_dataMember());
+				$view ='v_detailinvoice';
+				$this->_template($data,$view);
+			}
+
+		}
+	}
+
+	/** Private method  */
+	private function _dataInvoice($id)
+	{
+		$dataInvoice = $this->admin->get_data_invoicebyid($id);
+		foreach($dataInvoice->result_array() as $rowInvoice)
+		{
+			$data['tanggalInvoice'] = cetak($rowInvoice['inv_date']);
+			$data['NoInvoice'] = cetak($rowInvoice['no_invoice']);
+			$data['due'] = cetak($rowInvoice['due']);
+			$data['namaProduk'] = cetak($rowInvoice['detail_produk']);
+			$data['subtotal'] = cetak($rowInvoice['sub_total']);
+			$data['diskon'] = cetak($rowInvoice['diskon_inv']);
+			$data['totalBiaya'] = cetak($rowInvoice['total_jumlah']);
+			$data['statusInv'] = cetak($rowInvoice['status_inv']);
+			$data['namaDepan'] = cetak($rowInvoice['nama_depan']);
+			$data['namaBelakang'] = cetak($rowInvoice['nama_belakang']);
+			$data['alamat1'] = cetak($rowInvoice['alamat']);
+			$data['alamat2'] = cetak($rowInvoice['alamat2']);
+			$data['kota'] = cetak($rowInvoice['kota']);
+			$data['provinsi'] = cetak($rowInvoice['provinsi']);
+			$data['negara'] = cetak($rowInvoice['negara']);
+			$data['phone'] = cetak($rowInvoice['phone']);
+			$data['email'] = cetak($rowInvoice['email']);
+		}
+
+		$dataSetting = $this->admin->get_data_setting();
+		foreach($dataSetting->result_array() as $rowSetting){
+			$data['namaUsaha'] = $rowSetting['judul_hosting'];
+			$data['namaBank'] = $rowSetting['nama_bank'];
+			$data['nomorRekening'] = $rowSetting['no_rekening'];
+			$data['namaPemilikRekening'] = $rowSetting['nama_pemilik'];
+			$data['namaHosting'] = $rowSetting['nama_hosting'];
+			$data['telpHosting'] = $rowSetting['telp_hosting'];
+		}
+		return $data;
+	}
+
+	###########################################################################################
 	#                              Ini adalah menu inbox                                      #
 	###########################################################################################
 	/** Method untuk halaman inbox! */
@@ -1453,27 +1578,9 @@ class Admin extends CI_Controller {
 		}
 	}
 
-	###########################################################################################
-	#                                                                                         #
-	#                             Ini adalah menu Invoice                                     #
-	#                                                                                         #
-	###########################################################################################
 
 
-	/**
-	 * Method untuk menampilkan halaman service/vps hosting!
-	 */
-	public function invoice(){
-		$hashSes = $this->session->userdata('token');
-		$hashKey = $this->admin->get_token($hashSes);
-		if ($hashKey==0){
-			redirect('staff/login');
-		} else{
-			$data['title'] = "Invoice | Administrator Billing System Manthabill V.2.0";
-			$view = "v_invoice";
-			$this->_template($data, $view);
-		}
-	}
+
 	
 	###########################################################################################
 	#                                                                                         #

@@ -112,7 +112,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 												<th class="text-center">Pricing</th>
 												<th class="text-center">Due</th>
 												<th class="text-center">Status</th>
-												<th class="text-center"></th>
+												<th class="text-center" width="5%"></th>
 											</tr>
 											</thead>
 											<tbody>
@@ -142,7 +142,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 													<td class="text-center"><?= cetak($harga) ?></td>
 													<td class="text-center"><?= cetak($dateRegister) ?></td>
 													<td class="text-center"><?= $statusHosting ?></td>
-													<td class="text-center"><a class="btn btn-primary btn-xs" href='<?= base_url("service/detailhosting/" . encrypt_url($idHosting)); ?>'><i class="fas fa-eye"></i></a></td>
+													<td class="text-center" ><a class="btn btn-primary btn-xs" href='<?= base_url("staff/Admin/detail_shared/" . encrypt_url($idHosting)); ?>'><i class="fas fa-eye"></i></a></td>
 												</tr>
 											<?php endforeach; ?>
 											</tbody>
@@ -161,7 +161,55 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 								</div>
 								<div class="card-body">
-									This is some text within a card body.
+									<table id="tabelInvoice" class="table table-bordered table-hover" style="width:100%">
+										<thead>
+										<tr>
+											<th class="text-center">No</th>
+											<th class="text-center">Nomor Invoice</th>
+											<th class="text-center">Tanggal Dibuat</th>
+											<th class="text-center">Expire</th>
+											<th class="text-center">Jumlah</th>
+											<th class="text-center">Status</th>
+											<th class="text-center" width="5%"></th>
+										</tr>
+										</thead>
+										<tbody>
+										<?php
+										$no = 1;
+
+										foreach ($daftarInvoice->result_array() as $row) :
+											$status = cetak($row['status_inv']);
+											if ($status== 1) {
+												$statusInvoice = "<small class=\"badge badge-primary\"> LUNAS </small>";
+											} else if ($status == 2) {
+												$statusInvoice = "<small class=\"badge badge-warning\"> PENDING </small>";
+											} else if ($status == 3){
+												$statusInvoice = "<small class=\"badge badge-info\"> SEDANG DIREVIEW </small>";
+											} else {
+												$statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
+											};
+											?>
+											<tr>
+												<td class="text-center"><?= cetak($no++); ?></td>
+												<td class="text-center"><?= cetak(strtoupper($row['no_invoice'])); ?></td>
+												<td class="text-center"><?= konversiTanggal(cetak($row['inv_date'])); ?></td>
+												<td class="text-center"><?= konversiTanggal(cetak($row['due'])); ?></td>
+												<td class="text-center">Rp. <?= number_format(cetak($row['total_jumlah']), 0, ",", "."); ?>, -</td>
+												<td class="text-center"><?= $statusInvoice ?></td>
+												<td class="text-center">
+													<?php if ($status != 2){;?>
+														<a href="<?php echo base_url('staff/Admin/detail_invoice/'.encrypt_url(cetak($row['id_invoice'])));?>">
+															<button class="btn btn-primary btn-xs margin"><i class="fas fa-eye"></i></button></a>
+													<?php } else{;?>
+														<a href="<?php echo base_url('staff/Admin/detail_invoice/'.encrypt_url(cetak($row['id_invoice'])));?>">
+															<button class="btn btn-primary btn-xs margin"><i class="fas fa-eye"></i></button></a>
+													<?php };?>
+
+												</td>
+											</tr>
+										<?php endforeach; ?>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -174,7 +222,42 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 								</div>
 								<div class="card-body">
-									This is some text within a card body.
+									<table id="tabelInbox" class="table table-bordered table-hover">
+										<thead>
+										<tr>
+											<th class="text-center">No</th>
+											<th class="text-center">Tanggal</th>
+											<th class="text-center">Subyek</th>
+											<th class="text-center">Status</th>
+											<th class="text-center" width="5%">Action</th>
+										</tr>
+										</thead>
+										<tbody>
+										<?php
+										$no = 1;
+										foreach ($daftarTicket->result_array() as $rowTicket) :
+											$status = htmlentities($rowTicket['status_inbox'], ENT_QUOTES, 'UTF-8');
+											if ($status == 1) {
+												$statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
+											} else if ($status == 2) {
+												$statusPrint = "<small class=\"badge badge-warning\"> DIBALAS </small>";
+											} else {
+												$statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
+											};
+											?>
+											<tr>
+												<td class="text-center"><?= cetak($no++); ?></td>
+												<td class="text-center"><?= cetak(konversiUnixTanggal($rowTicket['time'])); ?></td>
+												<td class="text-left"><?= cetak($rowTicket['judul']); ?></td>
+												<td class="text-center"><?= $statusPrint ?></td>
+												<td class="text-center">
+													<a href="<?= base_url('staff/Admin/lihat_ticket/'.$rowTicket['key_token']); ?>">
+														<button class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Lihat Pesan"><i class="fas fa-eye"></i></button></a>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>

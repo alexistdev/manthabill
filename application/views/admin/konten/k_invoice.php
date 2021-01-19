@@ -41,19 +41,54 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">
-							<table id="tabelUser" class="table table-bordered table-hover">
+							<table id="tabelInvoice" class="table table-bordered table-hover">
 								<thead>
 								<tr>
 									<th class="text-center">No</th>
-									<th class="text-center">Domain</th>
-									<th class="text-center">Client</th>
-									<th class="text-center">Tanggal Daftar</th>
-									<th class="text-center">Tanggal Expire</th>
+									<th class="text-center">Nomor Invoice</th>
+									<th class="text-center">Tanggal Dibuat</th>
+									<th class="text-center">Expire</th>
+									<th class="text-center">Jumlah</th>
+									<th class="text-center">Status</th>
 									<th class="text-center">Aksi</th>
 								</tr>
 								</thead>
 								<tbody>
+								<?php
+								$no = 1;
 
+								foreach ($daftarInvoice->result_array() as $row) :
+									$status = cetak($row['status_inv']);
+									if ($status== 1) {
+										$statusInvoice = "<small class=\"badge badge-primary\"> LUNAS </small>";
+									} else if ($status == 2) {
+										$statusInvoice = "<small class=\"badge badge-warning\"> PENDING </small>";
+									} else if ($status == 3){
+										$statusInvoice = "<small class=\"badge badge-info\"> SEDANG DIREVIEW </small>";
+									} else {
+										$statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
+									};
+									?>
+									<tr>
+										<td class="text-center"><?= cetak($no++); ?></td>
+										<td class="text-center"><?= cetak(strtoupper($row['no_invoice'])); ?></td>
+										<td class="text-center"><?= konversiTanggal(cetak($row['inv_date'])); ?></td>
+										<td class="text-center"><?= konversiTanggal(cetak($row['due'])); ?></td>
+										<td class="text-center">Rp. <?= number_format(cetak($row['total_jumlah']), 0, ",", "."); ?>, -</td>
+										<td class="text-center"><?= $statusInvoice ?></td>
+										<td class="text-center">
+											<?php if ($status != 2){;?>
+												<a href="<?php echo base_url('staff/Admin/detail_invoice/'.encrypt_url(cetak($row['id_invoice'])));?>">
+													<button class="btn btn-primary btn-sm margin">VIEW</button></a>
+											<?php } else{;?>
+												<a href="<?php echo base_url('staff/Admin/detail_invoice/'.encrypt_url(cetak($row['id_invoice'])));?>">
+													<button class="btn btn-primary btn-sm margin">VIEW</button></a>
+												<a href="#">
+													<button class="btn btn-danger btn-primary btn-sm" id="tombolLunas" data-toggle="modal" data-target="#modalHapus" data-id="<?= cetak(encrypt_url($row['id_invoice'])); ?>">Lunas</button></a>
+											<?php };?>
+										</td>
+									</tr>
+								<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
@@ -75,7 +110,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<a href="" id="urlHapus"><button type="button" class="btn btn-danger">Hapus</button></a>
+				<a href="" id="urlBayar"><button type="button" class="btn btn-danger">Lunas</button></a>
 			</div>
 		</div>
 	</div>

@@ -29,6 +29,7 @@ class M_admin extends CI_Model{
 		$this->tableInbox = 'tbinbox';
 		$this->tableInboxBalas = 'inboxbalas';
 		$this->tableHosting = 'tbhosting';
+		$this->tableInvoice = 'tbinvoice';
 	}
 
 
@@ -163,6 +164,12 @@ class M_admin extends CI_Model{
 		return $this->db->get($this->tableInbox);
 	}
 
+	/** Menampilkan data ticket id_user*/
+	public function get_data_inboxbyid($id){
+		$this->db->where('id_user',$id);
+		return $this->db->get($this->tableInbox);
+	}
+
 	/** Menampilkan data di tabel tbinbox */
 	public function get_data_ticket($data, $status=TRUE)
 	{
@@ -229,6 +236,75 @@ class M_admin extends CI_Model{
 		$this->db->where('id_hosting ',$id);
 		$this->db->update($this->tableHosting,$dataHosting);
 	}
+
+	####################################################################################
+	#                               Tabel tbinvoice                                    #
+	####################################################################################
+	/** Mendapatkan data invoice berdasarkan idUser dan tampilkan tanpa idUser */
+	public function get_data_invoice($data=NULL){
+		if($data != NULL){
+			$this->db->where('id_user', $data);
+			$this->db->order_by("status_inv ASC, id_invoice DESC");
+		} else{
+			$this->db->join($this->tableUser, "tbuser.id_user = tbinvoice.id_user");
+			$this->db->order_by('id_invoice', 'DESC');
+		}
+		return $this->db->get($this->tableInvoice);
+	}
+
+	/** Mendapatkan data invoice berdasarkan id_invoice */
+	public function get_data_invoicebyid($data){
+		$this->db->join($this->tableDetailUser, "tbdetailuser.id_user = tbinvoice.id_user");
+		$this->db->join($this->tableUser, "tbuser.id_user = tbdetailuser.id_user");
+		$this->db->join($this->tableHosting, "tbhosting.id_hosting = tbinvoice.id_hosting");
+		$this->db->where('id_invoice', $data);
+		return $this->db->get($this->tableInvoice);
+	}
+
+	/** Mengupdate data tbhosting */
+	public function update_data_invoice($data,$id)
+	{
+		$this->db->where('id_invoice ',$id);
+		$this->db->update($this->tableInvoice,$data);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

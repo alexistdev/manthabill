@@ -35,6 +35,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				"lengthChange": false,
 				"searching":false,
 			});
+			$('#tabelInvoice').DataTable({
+				"pageLength": 5,
+				"responsive": true,
+				"lengthChange": false,
+				"searching":false,
+			});
+			$('#tabelInbox').DataTable({
+				"pageLength": 5,
+				"responsive": true,
+				"lengthChange": false,
+				"searching":false,
+			});
 		} );
 	</script>
 </body>
