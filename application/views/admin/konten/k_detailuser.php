@@ -26,17 +26,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 			<div class="row">
+				<div class="col-md-12">
+					<?= $this->session->flashdata('pesan'); ?>
+				</div>
 				<!--	Kolom Ruas Kiri		-->
 				<div class="col-md-3">
 					<!-- Detail Profil	-->
 					<div class="row">
 						<div class="col-md-12">
+
 							<div class="card card-primary card-outline">
 								<div class="card-body box-profile">
 									<div class="row">
-										<div class="col-md-12">
-											<?= $this->session->flashdata('pesan'); ?>
-										</div>
+
 									</div>
 									<h3 class="profile-username text-center">
 										<?php if(cetak($namaDepan) == "" && cetak($namaBelakang) == ""){
@@ -82,7 +84,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 											<a href="<?= base_url('staff/Admin/kirim_pesan/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-envelope"></i> Kirim Pesan</a>
 										</li>
 										<li class="list-group-item border-0">
-											<i class="fas fa-lock"></i> Suspend Akun
+											<a href="<?= base_url('staff/Admin/suspend_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-lock"></i> Suspend Akun</a>
 										</li>
 										<li class="list-group-item border-0">
 											<i class="fas fa-trash"></i> Delete Akun

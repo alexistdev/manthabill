@@ -117,16 +117,16 @@ class Ticket extends CI_Controller
 		if($this->tokenSession != $this->tokenServer){
 			_unlogin();
 		} else {
-			$this->form_validation->set_rules(
-				'judulPesan',
-				'Judul Pesan',
-				'trim|min_length[5]|max_length[80]|required',
-				[
-					'max_length' => 'Panjang karakter Judul Pesan maksimal 80 karakter!',
-					'min_length' => 'Panjang karakter Judul Pesan minimal 5 karakter!',
-					'required' => 'Judul pesan harus diisi !'
-				]
-			);
+				$this->form_validation->set_rules(
+					'judulPesan',
+					'Judul Pesan',
+					'trim|min_length[5]|max_length[80]|required',
+					[
+						'max_length' => 'Panjang karakter Judul Pesan maksimal 80 karakter!',
+						'min_length' => 'Panjang karakter Judul Pesan minimal 5 karakter!',
+						'required' => 'Judul pesan harus diisi !'
+					]
+				);
 				$this->form_validation->set_rules(
 					'isiPesan',
 					'Isi Pesan',
@@ -170,8 +170,8 @@ class Ticket extends CI_Controller
 					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Tiket berhasil dibuat, silahkan tunggu 1x24 jam untuk dibalas oleh Staff kami!</div>');
 					redirect('Ticket');
 				}
-			}
 		}
+
 	}
 	/** Method untuk halaman Membalas Ticket */
 	public function lihat_ticket($keyx = NULL)

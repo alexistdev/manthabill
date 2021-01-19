@@ -372,6 +372,7 @@ class Admin extends CI_Controller {
 			$data['kota'] = $row['kota'];
 			$data['provinsi'] = $row['provinsi'];
 			$data['negara'] = $row['negara'];
+			$data['statusUser'] = $row['status'];
 		};
 		$data['namaUsaha'] = $this->namaUsaha;
 		return $data;
@@ -581,6 +582,28 @@ class Admin extends CI_Controller {
 				$this->admin->hapus_user($id);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data ' .'<span class="font-weight-bold">'. strtoupper($getName) .'</span>'. ' telah dihapus!</div>');
 				redirect('staff/Admin/user');
+			}
+		}
+	}
+
+	/** Method untuk mensuspend user */
+	public function suspend_user($idx=NULL)
+	{
+		$id = decrypt_url($idx);
+		if ($this->tokenSession != $this->tokenServer) {
+			_adminlogout();
+		} else {
+			$getData = $this->admin->get_data_user($id);
+			if (($id == NULL) or ($id == "") or ($getData->num_rows() < 1)) {
+				redirect('staff/admin/user');
+			} else {
+				$getName = $getData->row()->client;
+				$dataSuspend = [
+					'status' => 3
+				];
+				$this->admin->user_update($dataSuspend,$id);
+				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' telah disuspend!</div>');
+				redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
 			}
 		}
 	}
