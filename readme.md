@@ -1,3 +1,5 @@
+Manthabill adalah software manajemen billing /invoice untuk pemilik Hosting atau yang sedang menjalankan bisnis Hosting. Software ini gratis, tapi mohon untuk tidak menghilangkan link copyrightnya.
+
 Installasi:</br>
 1. git clone https://github.com/alexistdev/manthabill.git</br>
 2. Buat database dan upload database di folder dengan nama file: manthabill.sql</br>
