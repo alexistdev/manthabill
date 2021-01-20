@@ -159,7 +159,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									</div>
 								</div>
 							</div>
-							<!-- Negara-->
+							<!-- Submit-->
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">

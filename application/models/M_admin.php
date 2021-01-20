@@ -77,6 +77,12 @@ class M_admin extends CI_Model{
 		return $this->db->get($this->tableSetting);
 	}
 
+	/** Mengupdate data dari tbsetting */
+	public function setting_update($data){
+		$this->db->where('id_setting',1);
+		$this->db->update($this->tableSetting,$data);
+	}
+
 	####################################################################################
 	#                                Tabel tbuser                                      #
 	####################################################################################

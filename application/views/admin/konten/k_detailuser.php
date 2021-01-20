@@ -55,6 +55,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 											<b>Email</b> <a class="float-right"><?= cetak($email); ?></a>
 										</li>
 										<li class="list-group-item">
+											<b>Status</b> <a class="float-right">
+												<?php if($statusUser == 1) {?>
+													<small class="badge badge-success"> AKTIF </small>
+												<?php } else if($statusUser == 2) {?>
+													<small class="badge badge-warning"> BELUM VERIFIKASI </small>
+												<?php } else {?>
+													<small class="badge badge-danger"> SUSPEND </small>
+												<?php } ?>
+											</a>
+										</li>
+										<li class="list-group-item">
 											<b>Alamat</b> <a class="float-right">
 												<?php if(cetak($alamat) == "" && cetak($alamat2) == ""){
 													echo "NN";
@@ -77,6 +88,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="card-body">
 									<h4>Aksi</h4>
 									<ul class="list-group">
+										<?php if($statusUser != 3) {?>
 										<li class="list-group-item border-0">
 											<a href="<?= base_url('staff/Admin/edit_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-user-edit"></i> Edit Akun</a>
 										</li>
@@ -89,6 +101,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<li class="list-group-item border-0">
 											<i class="fas fa-trash"></i> Delete Akun
 										</li>
+										<?php } else { ?>
+											<li class="list-group-item border-0">
+												<a href="<?= base_url('staff/Admin/edit_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-user-edit"></i> Edit Akun</a>
+											</li>
+											<li class="list-group-item border-0">
+												<a href="<?= base_url('staff/Admin/kirim_pesan/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-envelope"></i> Kirim Pesan</a>
+											</li>
+											<li class="list-group-item border-0">
+												<a href="<?= base_url('staff/Admin/aktifkan_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-unlock"></i> Aktifkan</a>
+											</li>
+										<?php } ?>
 									</ul>
 
 								</div>

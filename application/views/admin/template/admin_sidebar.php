@@ -49,7 +49,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							<i class="fas fa-angle-left right"></i>
 						</p>
 					</a>
-
+					<!-- Service Shared Hosting	-->
 					<ul class="nav nav-treeview ">
 						<li class="nav-item">
 							<a href="<?= base_url('staff/Admin/shared_hosting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'shared_hosting') ?'active':''; ?>">
@@ -97,14 +97,24 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 					</ul>
 
 				</li>
-				<!-- Sidebar Domain	-->
-				<li class="nav-item">
-					<a href="<?= base_url('staff/Admin/setting') ?>" class="nav-link <?= ($this->uri->segment(3) == 'setting') ?'active':''; ?>">
-						<i class="nav-icon fas fa-cogs"></i>
+				<!-- Setting	-->
+				<li class="nav-item has-treeview <?= (($this->uri->segment(3) == 'setting_umum') ) ?'menu-open':''; ?>">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-cog"></i>
 						<p>
 							Setting
+							<i class="fas fa-angle-left right"></i>
 						</p>
 					</a>
+					<!-- Service Shared Hosting	-->
+					<ul class="nav nav-treeview ">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/setting_umum') ?>" class="nav-link <?= ($this->uri->segment(3) == 'setting_umum') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
+								<p>General</p>
+							</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</nav>

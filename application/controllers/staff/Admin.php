@@ -576,7 +576,7 @@ class Admin extends CI_Controller {
 		} else {
 			$cekDetail = $this->admin->get_data_user($id)->num_rows();
 			if (($id == NULL) or ($id == "") or ($cekDetail < 1)) {
-				redirect('staff/admin/user');
+				redirect('staff/Admin/user');
 			} else {
 				$getName = $this->admin->get_data_user($id)->email;
 				$this->admin->hapus_user($id);
@@ -595,18 +595,55 @@ class Admin extends CI_Controller {
 		} else {
 			$getData = $this->admin->get_data_user($id);
 			if (($id == NULL) or ($id == "") or ($getData->num_rows() < 1)) {
-				redirect('staff/admin/user');
+				redirect('staff/Admin/user');
 			} else {
+				/* cek apakah sudah diaktifkan apa belum */
+				$cekAktif = $getData->row()->status;
 				$getName = $getData->row()->client;
-				$dataSuspend = [
-					'status' => 3
-				];
-				$this->admin->user_update($dataSuspend,$id);
-				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' telah disuspend!</div>');
-				redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
+				if($cekAktif == 3){
+					$this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' sudah pernah disuspend!</div>');
+					redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
+				} else {
+					$dataSuspend = [
+						'status' => 3
+					];
+					$this->admin->user_update($dataSuspend,$id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' telah disuspend!</div>');
+					redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
+				}
 			}
 		}
 	}
+
+	/** Method untuk mengaktifkan kembali user */
+	public function aktifkan_user($idx=NULL)
+	{
+		$id = decrypt_url($idx);
+		if ($this->tokenSession != $this->tokenServer) {
+			_adminlogout();
+		} else {
+			$getData = $this->admin->get_data_user($id);
+			if (($id == NULL) or ($id == "") or ($getData->num_rows() < 1)) {
+				redirect('staff/Admin/user');
+			} else {
+				/* cek apakah sudah diaktifkan apa belum */
+				$cekAktif = $getData->row()->status;
+				$getName = $getData->row()->client;
+				if($cekAktif == 3 || $cekAktif == 2){
+					$dataSuspend = [
+						'status' => 1
+					];
+					$this->admin->user_update($dataSuspend,$id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' kembali diaktifkan!</div>');
+					redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
+				} else {
+					$this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' sudah aktif sebelumnya!</div>');
+					redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
+				}
+			}
+		}
+	}
+
 	###########################################################################################
 	#                      Ini adalah menu service shared hosting                             #
 	###########################################################################################
@@ -1423,14 +1460,157 @@ class Admin extends CI_Controller {
 	###########################################################################################
 
 	/** Method untuk menampilkan halaman Setting */
-	public function setting()
+	public function setting_umum()
 	{
-		$data = $this->_dataMember();
-		$judul['title'] = "Setting | Administrator Billing System Manthabill V.2.0";
-		$data['dataTicket'] = $this->admin->get_data_inbox(NULL,TRUE)->result_array();
-		$data = array_merge($data,$judul);
-		$view ='v_setting';
-		$this->_template($data,$view);
+		$this->form_validation->set_rules(
+			'namaHosting',
+			'Nama Hosting',
+			'trim|min_length[3]|max_length[20]|required',
+			[
+				'max_length' => 'Panjang karakter Nama Hosting maksimal 20 karakter!',
+				'min_length' => 'Panjang karakter Nama Hosting minimal 3 karakter!',
+				'required' => 'Nama Hosting harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'judulHosting',
+			'Judul Hosting',
+			'trim|min_length[5]|max_length[100]|required',
+			[
+				'max_length' => 'Panjang karakter Judul Hosting maksimal 100 karakter!',
+				'min_length' => 'Panjang karakter Judul Hosting minimal 5 karakter!',
+				'required' => 'Judul Hosting harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'emailHosting',
+			'Email Hosting',
+			'trim|valid_email|max_length[50]|required',
+			[
+				'max_length' => 'Panjang karakter Email maksimal 50 karakter!',
+				'valid_email' => 'Silahkan masukkan email yang valid!',
+				'required' => 'Email Hosting harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'telponHosting',
+			'Telepon Hosting',
+			'trim|min_length[5]|max_length[30]|required',
+			[
+				'max_length' => 'Panjang karakter Nomor Telepon maksimal 30 karakter!',
+				'min_length' => 'Masukkan nomor telepon yang valid!',
+				'required' => 'Nomor telepon Hosting harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'alamatHosting',
+			'Alamat Hosting',
+			'trim|min_length[5]|max_length[200]|required',
+			[
+				'max_length' => 'Panjang karakter Alamat Hosting maksimal 200 karakter!',
+				'min_length' => 'Panjang karakter Alamat Hosting minimal 5 karakter!',
+				'required' => 'Alamat Hosting harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'urlTos',
+			'URL TOS',
+			'trim|min_length[3]|max_length[100]|required',
+			[
+				'max_length' => 'Panjang karakter URL TOS maksimal 100 karakter!',
+				'min_length' => 'Panjang karakter URL TOS  minimal 3 karakter!',
+				'required' => 'URL TOS harus diisi !'
+			]
+		);
+		$this->form_validation->set_rules(
+			'limitEmail',
+			'Limit Email',
+			'trim|numeric',
+			[
+				'numeric' => 'Format tidak sesuai!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'pajak',
+			'Pajak',
+			'trim|numeric',
+			[
+				'numeric' => 'Format tidak sesuai!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'pajak',
+			'Pajak',
+			'trim|numeric',
+			[
+				'numeric' => 'Format tidak sesuai!'
+			]
+		);
+		$this->form_validation->set_rules(
+			'prefix',
+			'Prefix',
+			'trim|numeric',
+			[
+				'numeric' => 'Format tidak sesuai!'
+			]
+		);
+		$this->form_validation->set_error_delimiters('<span class="text-danger text-sm">', '</span>');
+		if ($this->form_validation->run() === false) {
+			$data = $this->_dataMember();
+			$judul['title'] = "Setting | Administrator Billing System Manthabill V.2.0";
+			$dataSetting = $this->_dataSetting();
+			$data = array_merge($data, $judul);
+			$data = array_merge($data, $dataSetting);
+			$view = 'v_settingumum';
+			$this->_template($data, $view);
+		} else {
+			$namaHosting = $this->input->post("namaHosting", TRUE);
+			$judulHosting = $this->input->post("judulHosting", TRUE);
+			$emailHosting = $this->input->post("emailHosting", TRUE);
+			$telponHosting = $this->input->post("telponHosting", TRUE);
+			$alamatHosting = $this->input->post("alamatHosting", TRUE);
+			$urlTos = $this->input->post("urlTos", TRUE);
+			$limitEmail = $this->input->post("limitEmail", TRUE);
+			$pajak = $this->input->post("pajak", TRUE);
+			$prefix = $this->input->post("prefix", TRUE);
+
+			if($limitEmail == 0 || $limitEmail == ''){
+				$limitEmail = 1;
+			}
+			$dataSettingUmum = [
+				'nama_hosting' => $namaHosting,
+ 			   	'judul_hosting' => $judulHosting,
+				'alamat_hosting' => $alamatHosting,
+				'email_hosting' => $emailHosting,
+				'telp_hosting' => $telponHosting,
+				'tos' => $urlTos,
+				'tax' => $pajak,
+				'limit_email' => $limitEmail,
+				'prefix' => $prefix
+			];
+			$this->admin->setting_update($dataSettingUmum);
+			$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data berhasil diperbaharui!</div>');
+			redirect('staff/Admin/setting_umum');
+		}
+	}
+
+
+	/** Method untuk mempersiapkan data setting */
+	private function _dataSetting()
+	{
+		$dataSetting = $this->admin->get_data_setting()->result_array();
+		foreach($dataSetting as $rowSetting){
+			$data['namaHosting'] = $rowSetting['nama_hosting'];
+			$data['judulHosting'] = $rowSetting['judul_hosting'];
+			$data['emailHosting'] = $rowSetting['email_hosting'];
+			$data['telponHosting'] = $rowSetting['telp_hosting'];
+			$data['alamatHosting'] = $rowSetting['alamat_hosting'];
+			$data['urlTos'] = $rowSetting['tos'];
+			$data['limitEmail'] = $rowSetting['limit_email'];
+			$data['pajak'] = $rowSetting['tax'];
+			$data['prefix'] = $rowSetting['prefix'];
+		}
+		return $data;
 	}
 
 	###########################################################################################
