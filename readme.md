@@ -6,5 +6,8 @@ Installasi:</br>
 5. pasang cronjob di cpanel anda dengan contoh penulisan spt ini wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
 </br></br>
 
+Upgrade:</br>
+1. Lakukan git fetch dan git pull di dalam folder manthabill anda.<br><br>
+
 Silahkan digunakan, jika ada yang butuh bantuan bisa kontak saya di email: alexistdev@gmail.com</br>
 atau buka saja issue di github
