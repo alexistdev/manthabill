@@ -98,7 +98,7 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 				</li>
 				<!-- Setting	-->
-				<li class="nav-item has-treeview <?= (($this->uri->segment(3) == 'setting_umum') ) ?'menu-open':''; ?>">
+				<li class="nav-item has-treeview <?= (($this->uri->segment(3) == 'setting_umum') || ($this->uri->segment(3) == 'setting_api')) ?'menu-open':''; ?>">
 					<a href="#" class="nav-link">
 						<i class="nav-icon fas fa-cog"></i>
 						<p>
@@ -112,6 +112,15 @@ defined('BASEPATH') or exit('No direct script access allowed'); ?>
 							<a href="<?= base_url('staff/Admin/setting_umum') ?>" class="nav-link <?= ($this->uri->segment(3) == 'setting_umum') ?'active':''; ?>">
 								<i class="nav-icon far fa-circle"></i>
 								<p>General</p>
+							</a>
+						</li>
+					</ul>
+					<!-- Service Shared Hosting	-->
+					<ul class="nav nav-treeview ">
+						<li class="nav-item">
+							<a href="<?= base_url('staff/Admin/setting_api') ?>" class="nav-link <?= ($this->uri->segment(3) == 'setting_api') ?'active':''; ?>">
+								<i class="nav-icon far fa-circle"></i>
+								<p>Setting API</p>
 							</a>
 						</li>
 					</ul>

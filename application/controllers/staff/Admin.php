@@ -1558,7 +1558,7 @@ class Admin extends CI_Controller {
 		if ($this->form_validation->run() === false) {
 			$data = $this->_dataMember();
 			$judul['title'] = "Setting | Administrator Billing System Manthabill V.2.0";
-			$dataSetting = $this->_dataSetting();
+			$dataSetting = $this->_dataSetting(TRUE);
 			$data = array_merge($data, $judul);
 			$data = array_merge($data, $dataSetting);
 			$view = 'v_settingumum';
@@ -1596,21 +1596,43 @@ class Admin extends CI_Controller {
 
 
 	/** Method untuk mempersiapkan data setting */
-	private function _dataSetting()
+	private function _dataSetting($type=TRUE)
 	{
 		$dataSetting = $this->admin->get_data_setting()->result_array();
-		foreach($dataSetting as $rowSetting){
-			$data['namaHosting'] = $rowSetting['nama_hosting'];
-			$data['judulHosting'] = $rowSetting['judul_hosting'];
-			$data['emailHosting'] = $rowSetting['email_hosting'];
-			$data['telponHosting'] = $rowSetting['telp_hosting'];
-			$data['alamatHosting'] = $rowSetting['alamat_hosting'];
-			$data['urlTos'] = $rowSetting['tos'];
-			$data['limitEmail'] = $rowSetting['limit_email'];
-			$data['pajak'] = $rowSetting['tax'];
-			$data['prefix'] = $rowSetting['prefix'];
+		$dataSMTP2GO = $this->admin->get_data_modul(1)->result_array();
+		if($type){
+			foreach($dataSetting as $rowSetting){
+				$data['namaHosting'] = $rowSetting['nama_hosting'];
+				$data['judulHosting'] = $rowSetting['judul_hosting'];
+				$data['emailHosting'] = $rowSetting['email_hosting'];
+				$data['telponHosting'] = $rowSetting['telp_hosting'];
+				$data['alamatHosting'] = $rowSetting['alamat_hosting'];
+				$data['urlTos'] = $rowSetting['tos'];
+				$data['limitEmail'] = $rowSetting['limit_email'];
+				$data['pajak'] = $rowSetting['tax'];
+				$data['prefix'] = $rowSetting['prefix'];
+			}
+		} else {
+			foreach($dataSetting as $rowSetting){
+				$data['apiWhois'] = $rowSetting['api_key'];
+			}
+			foreach($dataSMTP2GO as $rowModul){
+				$data['keySmtp'] = $rowModul['api_key'];
+			}
 		}
 		return $data;
+	}
+
+	/** Method untuk menampilkan halaman Setting API */
+	public function setting_api(){
+		$data = $this->_dataMember();
+		$dataSetting = $this->_dataSetting(FALSE);
+		$judul['title'] = "Setting | Administrator Billing System Manthabill V.2.0";
+		$data = array_merge($data, $judul);
+		$data = array_merge($data, $dataSetting);
+		$view = 'v_settingapi';
+		$this->_template($data, $view);
+
 	}
 
 	###########################################################################################

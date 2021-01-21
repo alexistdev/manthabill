@@ -31,6 +31,7 @@ class M_admin extends CI_Model{
 		$this->tableHosting = 'tbhosting';
 		$this->tableInvoice = 'tbinvoice';
 		$this->tableBerita = 'tbberita';
+		$this->tableModul = 'tbmodul';
 	}
 
 
@@ -321,6 +322,14 @@ class M_admin extends CI_Model{
 		return $this->db->get($this->tableInbox);
 	}
 
+	####################################################################################
+	#                                Tabel tbmodul                                     #
+	####################################################################################
+	/** Mendapatkan data tbmodul */
+	public function get_data_modul($data){
+		$this->db->where('id_modul', $data);
+		return $this->db->get($this->tableModul);
+	}
 
 
 

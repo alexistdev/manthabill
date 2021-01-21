@@ -15,6 +15,7 @@ class M_cron extends CI_Model{
 		$this->tableEmail = 'tbemail';
 		$this->tableSetting = 'tbsetting';
 		$this->tableLog = 'tblogmail';
+		$this->tableModul = 'tbmodul';
 	}
 
 	####################################################################################
@@ -45,8 +46,7 @@ class M_cron extends CI_Model{
 	####################################################################################
 
 	/** Mendapatkan limit email setiap kali dikirimkan */
-	public function get_emailLimit() {
-        $this->db->select('limit_email');
+	public function get_data_setting() {
         return $this->db->get($this->tableSetting)->row();
 	}
 
@@ -57,6 +57,17 @@ class M_cron extends CI_Model{
 	/** Menyimpan catatan pengiriman ke dalam tabel tblogmail */
 	public function simpan_log($data) {
         $this->db->insert($this->tableLog,$data);
+	}
+
+	####################################################################################
+	#                                Tabel tbmodul                                     #
+	####################################################################################
+
+	/** Mendapatkan data dari tbmodul */
+	public function get_data_modul($data)
+	{
+		$this->db->where('id_modul', $data);
+		return $this->db->get($this->tableModul);
 	}
 
 }
