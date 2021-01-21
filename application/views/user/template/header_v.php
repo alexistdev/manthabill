@@ -12,6 +12,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<link rel="icon" href="<?= base_url('gambar/') ?>myicon.png">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/fontawesome-free/css/all.min.css">
+	<!-- Select2 -->
+	<link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/select2/css/select2.min.css">
+	<link rel="stylesheet" href="<?= base_url('assets/AdminLTE3') ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- overlayScrollbars -->

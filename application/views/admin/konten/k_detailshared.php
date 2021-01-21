@@ -70,7 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<h4>Aksi</h4>
 									<ul class="list-group">
 										<li class="list-group-item border-0">
-											<a href=""><i class="far fa-credit-card"></i> Buat Invoice</a>
+											<a href="<?= base_url('staff/Admin/tambah_invoice/'.encrypt_url(cetak($idHosting))); ?>"><i class="far fa-credit-card"></i> Buat Invoice</a>
 										</li>
 										<li class="list-group-item border-0">
 											<i class="fas fa-envelope"></i> Kirim Pesan

@@ -174,8 +174,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<div class="card">
 						<div class="card-body bg-olive">
 								** Limit pengiriman email default 1, jika 0 maka tidak akan mengirimkan email. Ini adalah jumlah pengiriman email setiap kali cronjob dijalankan<br>
-								** Nomor urut user default dimulai dari 0, ini sebagai identitas user pengganti ID atau index sebagai nomor urut
-								** Judul Hosting untuk title html
+								** Nomor urut user default dimulai dari 0, ini sebagai identitas user pengganti ID atau index sebagai nomor urut<br>
+								** Judul Hosting digunakan untuk title html
 						</div>
 					</div>
 				</div>

@@ -34,6 +34,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									<a href="https://www.whoisxmlapi.com/" target="_blank">www.whoisxmlapi.com</a> </li>
 								<li>API SMPT2GO :Ini adalah setting api untuk pengiriman email dengan SMTP2GO . Untuk mendapatkan API nya, silahkan daftar di
 									<a href="https://www.smtp2go.com/" target="_blank">www.smtp2go.com</a> </li>
+								<li><span class="text-warning"> Untuk kepentingan demo disini, anda tidak dapat merubah api disini! Untuk versi Free nya anda bisa menggantinya</span></li>
 							</ul>
 						</div>
 					</div>

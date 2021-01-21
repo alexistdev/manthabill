@@ -409,7 +409,6 @@ class Admin extends CI_Controller {
 				redirect('staff/admin/user');
 			} else {
 				$data = $this->prepare_data_user($id);
-
 				$judul['title'] = "Edit User | Administrator Billing System Manthabill V.2.0";
 				$data = array_merge($data,$judul);
 				$view ='v_detailuser';
@@ -604,6 +603,26 @@ class Admin extends CI_Controller {
 					$this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Klien #' . '<span class="font-weight-bold">' . strtoupper($getName) . '</span>' . ' sudah pernah disuspend!</div>');
 					redirect('staff/Admin/detail_user/' . encrypt_url(cetak($id)));
 				} else {
+					/* Mengirimkan email saat akun user di suspend */
+					$emailTujuan = $getData->row()->email;
+					$namaDepan = $getData->row()->nama_depan;
+					$namaBelakang = $getData->row()->nama_belakang;
+					if($namaDepan == '' && $namaBelakang == ''){
+						$namaUser = 'Member';
+					} else if($namaDepan = ''){
+						$namaUser = $namaBelakang;
+					} else {
+						$namaUser = $namaDepan.' '.$namaBelakang;
+					}
+					$judul = "Akun anda di ". $this->namaUsaha ." telah disuspend";
+					$message = "
+							Yth .".$namaUser."<br><br>
+							Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>
+							Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>
+							Regards<br>
+							Admin
+						";
+					kirim_email($emailTujuan, $message, $judul);
 					$dataSuspend = [
 						'status' => 3
 					];
@@ -1327,6 +1346,97 @@ class Admin extends CI_Controller {
 		}
 		return $data;
 	}
+
+	/** Method untuk tambah Invoice */
+	public function tambah_invoice($idHosting=null)
+	{
+		if($idHosting != NULL || $idHosting != ''){
+			$id= decrypt_url($idHosting);
+			$cekDetail = $this->admin->get_data_hostingbyid($id)->num_rows();
+			if ($cekDetail < 1){
+				redirect('staff/Admin/invoice');
+			} else {
+				$this->form_validation->set_rules(
+					'deskripsi',
+					'Deskripsi',
+					'trim|min_length[3]|max_length[50]|required',
+					[
+						'max_length' => 'Panjang karakter Nama paket maksimal 50 karakter!',
+						'min_length' => 'Panjang karakter Nama paket minimal 3 karakter!',
+						'required' => 'Nama Paket harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'hargaHosting',
+					'Harga Hosting',
+					'trim|numeric|required',
+					[
+						'numeric' => 'Format harus angka!',
+						'required' => 'Harga Hosting harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'diskon',
+					'Diskon Hosting',
+					'trim|numeric|required',
+					[
+						'numeric' => 'Format harus angka!',
+						'required' => 'Diskon Hosting harus diisi !'
+					]
+				);
+				$this->form_validation->set_rules(
+					'pajak',
+					'Pajak Hosting',
+					'trim|numeric|required',
+					[
+						'numeric' => 'Format harus angka!',
+						'required' => 'Pajak Hosting harus diisi !'
+					]
+				);
+				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
+				if ($this->form_validation->run() === false) {
+					$this->session->set_flashdata('pesan', validation_errors());
+					$data = $this->_datatambahinvoice($id);
+					$judul['title'] = "Buat Invoice | Administrator Billing System Manthabill V.2.0";
+					$data = array_merge($data, $judul);
+					$data = array_merge($data, $this->_dataMember());
+					$view = 'v_buatinvoice';
+					$this->_template($data, $view);
+				}else{
+					$idHosting = $id;
+					$noInvoice = _angkaUnik();
+					$detailProduk = $this->input->post("deskripsi", TRUE);
+					$hargaProduk = $this->input->post("hargaHosting", TRUE);
+					$startDate = date('Y-m-d');
+					$dueInv = date("Y-m-d", strtotime($startDate . ' + 3 days'));
+					$diskonInv = ($this->input->post("diskon", TRUE)/100) * $hargaProduk;
+					$pajakInv = ($this->input->post("pajak", TRUE)/100) * $hargaProduk;
+					$hargaTotal = ($hargaProduk-$diskonInv) + $pajakInv;
+					$dataInvoice= [
+							
+					];
+				}
+			}
+		} else {
+			redirect('staff/Admin/invoice');
+		}
+
+
+
+	}
+
+	/** Method private data tambah invoice */
+	private function _datatambahinvoice($id=null)
+	{
+		$dataHosting = $this->admin->get_data_hostingbyid($id)->result_array();
+		foreach($dataHosting as $rowHosting){
+			$data['idHosting'] = $id;
+			$data['deskripsiHosting'] = $rowHosting['nama_hosting'];
+			$data['hargaHosting'] = $rowHosting['harga'];
+		}
+		return $data;
+	}
+
 
 	###########################################################################################
 	#                              Ini adalah menu inbox                                      #
