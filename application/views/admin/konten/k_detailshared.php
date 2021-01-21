@@ -151,32 +151,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 												<?php if($statusHosting == 1) { ?>
 													<small class="badge badge-success"> AKTIF </small>
 												<?php } else if($statusHosting == 2) { ?>
-													<?= form_open('staff/Admin/aktif'); ?>
-													<div class="form-group row">
-														<label class="col-sm-2 col-form-label"><small class="badge badge-warning"> PENDING </small></label>
-														<div class="col-sm-10">
-															<?= form_input(['name' => 'submit', 'type' => 'submit', 'class' => 'btn btn-success btn-sm float-right', 'value' => 'Aktifkan']); ?>
-														</div>
-													</div>
-													<?= form_close(); ?>
+													<small class="badge badge-warning"> PENDING </small>
 												<?php } else if($statusHosting == 3) { ?>
-													<?= form_open('staff/Admin/aktif'); ?>
-													<div class="form-group row">
-														<label class="col-sm-2 col-form-label"><small class="badge badge-danger"> SUSPEND </small></label>
-														<div class="col-sm-10">
-															<?= form_input(['name' => 'submit', 'type' => 'submit', 'class' => 'btn btn-success btn-sm float-right', 'value' => 'Aktifkan']); ?>
-														</div>
-													</div>
-													<?= form_close(); ?>
+													<small class="badge badge-danger"> SUSPEND </small>
 												<?php } else{ ?>
-													<?= form_open('staff/Admin/aktif'); ?>
-													<div class="form-group row">
-														<label class="col-sm-2 col-form-label"><small class="badge badge-primary"> TERMINATED </small></label>
-														<div class="col-sm-10">
-															<?= form_input(['name' => 'submit', 'type' => 'submit', 'class' => 'btn btn-success btn-sm float-right', 'value' => 'Aktifkan']); ?>
-														</div>
-													</div>
-													<?= form_close(); ?>
+													<small class="badge badge-primary"> TERMINATED </small>
 												<?php } ?>
 											</td>
 										</tr>

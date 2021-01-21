@@ -37,7 +37,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<div class="card card-dark">
 						<div class="card-header">
 							<h3 class="card-title">Daftar Invoice</h3>
-							<a href="<?= base_url('staff/Admin/tambah_invoice'); ?>"><button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i> Tambah</button></a>
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">

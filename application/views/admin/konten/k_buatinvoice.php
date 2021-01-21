@@ -68,22 +68,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								</div>
 							</div>
 
-							<!-- Pajak -->
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label for="pajak">Pajak (dalam %)</label><span class="text-danger sm"> *</span>
-										<?= form_input(['name' => 'pajak', 'type' => 'number', 'id' => 'pajak','class' => 'form-control', 'value' => set_value('pajak', 0), 'required' => 'required']); ?>
-									</div>
-								</div>
-							</div>
+
 
 							<!-- Tombol Simpan-->
 							<div class="row mt-5">
 								<div class="col-md-12">
 									<div class="form-group">
-										<button type="submit" name="submit" class="btn btn-primary">Tambah</button>
-										<a href=""><button type="button" class="btn btn-danger">Batal</button></a>
+										<button type="submit" name="submit" class="btn btn-primary">Buat Invoice</button>
+										<a href="<?= base_url('staff/Admin/detail_shared/'.encrypt_url(cetak($idHosting))); ?>"><button type="button" class="btn btn-danger">Batal</button></a>
 									</div>
 								</div>
 							</div>

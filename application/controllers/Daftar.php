@@ -176,13 +176,7 @@ class Daftar extends CI_Controller
 		}
 	}
 
-	###########################################################################
-	#                                                                         #
-	#                       Validasi Email dengan Ajax                        #
-	###########################################################################
-	/**
-	 * Method untuk mengecek email dengan ajax
-	 */
+	/** Method untuk mengecek email dengan ajax */
 	public function checkEmail()
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -196,9 +190,7 @@ class Daftar extends CI_Controller
 		}
 	}
 
-	/**
-	 * Method untuk mengirimkan token csrf via ajax
-	 */
+	/** Method untuk mengirimkan token csrf via ajax */
 	public function get_csrf()
 	{
 		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
@@ -210,6 +202,7 @@ class Daftar extends CI_Controller
 		}
 	}
 
+	/** Method menangani validasi yang dikirimkan via email */
 	public function validasi($keyx=null)
 	{
 		$id = $keyx;

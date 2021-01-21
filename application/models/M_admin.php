@@ -288,6 +288,12 @@ class M_admin extends CI_Model{
 		$this->db->update($this->tableInvoice,$data);
 	}
 
+	/** Menyimpan Invoice ke dalam tabel tbinvoice */
+	public function simpan_invoice($data)
+	{
+		$this->db->insert($this->tableInvoice, $data);
+	}
+
 	####################################################################################
 	#                               Halaman Dashboard                                  #
 	####################################################################################
@@ -582,9 +588,7 @@ class M_admin extends CI_Model{
 		$this->db->insert('tbhosting',$data);
 		return $this->db->insert_id();
 	}
-	public function simpan_invoice($inv){
-		$this->db->insert('tbinvoice',$inv);
-	}
+
 	function angkaUnik($length = 5) {
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);

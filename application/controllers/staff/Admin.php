@@ -1282,7 +1282,7 @@ class Admin extends CI_Controller {
 					Admin<br>
 				";
 				kirim_email($emailTujuan, $message, $judul);
-				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Status Invoice telah berhasil dirubah!</div>');
+				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Invoice telah berhasil dikonfirmasi!</div>');
 				redirect('staff/Admin/invoice');
 			}
 		}
@@ -1384,15 +1384,7 @@ class Admin extends CI_Controller {
 						'required' => 'Diskon Hosting harus diisi !'
 					]
 				);
-				$this->form_validation->set_rules(
-					'pajak',
-					'Pajak Hosting',
-					'trim|numeric|required',
-					[
-						'numeric' => 'Format harus angka!',
-						'required' => 'Pajak Hosting harus diisi !'
-					]
-				);
+
 				$this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">', '</div>');
 				if ($this->form_validation->run() === false) {
 					$this->session->set_flashdata('pesan', validation_errors());
@@ -1404,17 +1396,52 @@ class Admin extends CI_Controller {
 					$this->_template($data, $view);
 				}else{
 					$idHosting = $id;
+					/* Mendapatkan idUser dari idHosting */
+					$dataUserByHosting = $this->admin->get_data_hostingbyid($idHosting)->result_array();
+					foreach($dataUserByHosting as $rowUserByHosting){
+						$idUser = $rowUserByHosting['id_user'];
+						$emailTujuan = $rowUserByHosting['email'];
+					}
 					$noInvoice = _angkaUnik();
 					$detailProduk = $this->input->post("deskripsi", TRUE);
 					$hargaProduk = $this->input->post("hargaHosting", TRUE);
 					$startDate = date('Y-m-d');
 					$dueInv = date("Y-m-d", strtotime($startDate . ' + 3 days'));
 					$diskonInv = ($this->input->post("diskon", TRUE)/100) * $hargaProduk;
-					$pajakInv = ($this->input->post("pajak", TRUE)/100) * $hargaProduk;
-					$hargaTotal = ($hargaProduk-$diskonInv) + $pajakInv;
+					$hargaTotal = ($hargaProduk-$diskonInv);
 					$dataInvoice= [
-
+						'id_user' => $idUser,
+						'id_hosting' => $idHosting,
+						'no_invoice' => $noInvoice,
+						'detail_produk' => $detailProduk,
+						'due' => $dueInv,
+						'inv_date' => $startDate,
+						'sub_total' => $hargaProduk,
+						'diskon_inv' => $diskonInv,
+						'pajak_inv' => 0,
+						'total_jumlah' => $hargaTotal,
+						'status_inv' => 1
 					];
+					$this->admin->simpan_invoice($dataInvoice);
+
+					/* Kirim email */
+					$judul = "Konfirmasi Pembayaran";
+					$message = "
+						Yth.Pelanggan , kami telah menerima konfirmasi pembayaran anda:<br><br>
+						".$detailProduk."<br>
+						=====================================================================<br>
+						Nomor Invoice:" . strtoupper($noInvoice) . " <br>
+						Harga: Rp." . konversiRupiah($hargaTotal) . " <br>
+						Tanggal Invoice: " . konversiTanggal($startDate)  . "<br><br>
+					
+						Jika anda membutuhkan bantuan lebih lanjut, silahkan membuka support tiket melalui halaman dashboard akun anda.
+						<br><br>
+						Regards<br>
+						Admin<br>
+					";
+					kirim_email($emailTujuan, $message, $judul);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Invoice telah berhasil dibuat!</div>');
+					redirect('staff/Admin/invoice');
 				}
 			}
 		} else {
