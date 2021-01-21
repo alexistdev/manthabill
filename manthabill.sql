@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2021 at 03:20 AM
+-- Generation Time: Jan 21, 2021 at 01:30 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -67,7 +67,8 @@ INSERT INTO `inboxbalas` (`id_balas`, `is_admin`, `key_token`, `pesan`, `time`) 
 (5, 1, 'V7RvLDuSrDKnVyQNII38', 'gimana ada yang akan saya bantu atau tidak????', 1610963400),
 (6, 1, 'V7RvLDuSrDKnVyQNII38', 'Lorem Ipsum is simply dummy text of the printing and types', 1611033384),
 (7, 1, 'V7RvLDuSrDKnVyQNII38', 'imply dummy text of the printing and types', 1611077717),
-(8, 1, 'QB6PD2MFeDSR7CEusWKA', 'ini balasan admin untuk user samantha ini balasan admin untuk user samantha ini balasan admin untuk user samantha', 1611078669);
+(8, 1, 'QB6PD2MFeDSR7CEusWKA', 'ini balasan admin untuk user samantha ini balasan admin untuk user samantha ini balasan admin untuk user samantha', 1611078669),
+(9, 1, 'u6NAD2JMMIqTSbQjxCD8', 'gimana mas', 1611226973);
 
 -- --------------------------------------------------------
 
@@ -181,9 +182,7 @@ CREATE TABLE `tbdetailuser` (
 --
 
 INSERT INTO `tbdetailuser` (`id_detail`, `id_user`, `nama_depan`, `nama_belakang`, `nama_usaha`, `alamat`, `alamat2`, `kota`, `provinsi`, `negara`, `kodepos`, `phone`, `time_req`, `gambar`) VALUES
-(3, 29, 'Alexsander', 'Hendra Wijaya', 'Adrihost', 'Sidodadi', 'Wayngison', 'Pagelaran', 'Pringsewu', 'Indonesia', '35474', '085602013002', 1610909677, 'default.jpg'),
-(8, 34, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg'),
-(9, 35, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg');
+(11, 37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -280,6 +279,13 @@ CREATE TABLE `tbemail` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tbemail`
+--
+
+INSERT INTO `tbemail` (`id_email`, `email_pengirim`, `email_tujuan`, `subyek`, `email_pesan`, `status`) VALUES
+(1, 'support@adrihost.com', 'alexistdev@gmail.com', 'Anda berhasil mendaftar akun di AdriHosts', '\n							Selamat anda telah berhasil mendaftar akun di AdriHosts , berikut informasi akun anda:<br><br>\n							Username: alexistdev@gmail.com <br>\n							Password: 325339 <br><br>\n							Anda harus mengklik Link Aktivasi berikut: http://localhost/manthav2/Daftar/validasi/dfb116a2d9773479778178825806918c4240ca1b<br><br>\n							\n							Regards<br>\n							Admin\n						', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -299,25 +305,6 @@ CREATE TABLE `tbhosting` (
   `status_hosting` int(11) NOT NULL COMMENT '1=aktif , 2=pending,3=suspend,4=terminated'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbhosting`
---
-
-INSERT INTO `tbhosting` (`id_hosting`, `id_product`, `id_user`, `nama_hosting`, `user_cpanel`, `harga`, `start_hosting`, `end_hosting`, `domain`, `status_hosting`) VALUES
-(21, 4, 29, 'Personal Master adrihost.com', '', 360000, '2021-01-16', '2021-07-16', 'adrihost.com', 1),
-(22, 1, 29, 'Personal Junior adrihost.com', '', 15000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(23, 3, 29, 'Personal Corporate adrihost.com', '', 300000, '2021-01-16', '2021-07-16', 'adrihost.com', 2),
-(24, 3, 29, 'Personal Corporate adrihost.com', '', 50000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(25, 2, 29, 'Personal Senior adrihost.com', '', 35000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(26, 1, 29, 'Personal Junior adrihost.com', '', 15000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(27, 1, 29, 'Personal Junior adrihost.com', '', 15000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(28, 3, 29, 'Personal Corporate adrihost.com', '', 50000, '2021-01-16', '2021-02-16', 'adrihost.com', 2),
-(29, 7, 29, 'PRO-3 SGP adrihost.com', '', 3000000, '2021-01-16', '2021-02-16', 'adrihost.com', 1),
-(30, 2, 29, 'Personal Senior manthabill.com', '', 420000, '2021-01-17', '2022-01-17', 'manthabill.com', 1),
-(31, 2, 29, 'Personal Senior serviceku.com', '', 105000, '2021-01-17', '2021-04-17', 'serviceku.com', 1),
-(33, 2, 29, 'Personal Senior adrihost.com', '', 35000, '2021-01-21', '2021-02-21', 'adrihost.com', 2),
-(34, 3, 29, 'Personal Corporate siska.com', '', 300000, '2021-01-21', '2021-07-21', 'siska.com', 2);
-
 -- --------------------------------------------------------
 
 --
@@ -334,14 +321,6 @@ CREATE TABLE `tbinbox` (
   `time` int(11) NOT NULL,
   `status_inbox` int(11) NOT NULL COMMENT '1 = open\r\n2 = dibalas admin\r\n3 = closed'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbinbox`
---
-
-INSERT INTO `tbinbox` (`id_inbox`, `id_user`, `is_adm`, `judul`, `pesan`, `key_token`, `time`, `status_inbox`) VALUES
-(3, 29, 2, 'ini adlaah pesan', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five', 'V7RvLDuSrDKnVyQNII38', 1610768820, 2),
-(4, 29, 2, 'ini adalah judul pesan', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem', 'u6NAD2JMMIqTSbQjxCD8', 1611077118, 1);
 
 -- --------------------------------------------------------
 
@@ -365,25 +344,6 @@ CREATE TABLE `tbinvoice` (
   `token_inv` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tbinvoice`
---
-
-INSERT INTO `tbinvoice` (`id_invoice`, `id_user`, `id_hosting`, `no_invoice`, `detail_produk`, `due`, `inv_date`, `sub_total`, `diskon_inv`, `pajak_inv`, `total_jumlah`, `status_inv`, `token_inv`) VALUES
-(17, 29, 21, 'krhko', 'Personal Master adrihost.com  -  6 bulan', '2021-01-19', '2021-01-16', 360000, 877, 0, 359123, 1, ''),
-(18, 29, 22, 'ilmsu', 'Personal Junior adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 15000, 181, 0, 14819, 1, ''),
-(19, 29, 23, 'gcxu7', 'Personal Corporate adrihost.com  -  6 bulan', '2021-01-19', '2021-01-16', 300000, 335, 0, 299665, 1, ''),
-(20, 29, 24, 'ouqbk', 'Personal Corporate adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 50000, 717, 0, 49283, 1, ''),
-(21, 29, 25, 'g9bga', 'Personal Senior adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 35000, 119, 0, 34881, 1, ''),
-(22, 29, 26, 'boqom', 'Personal Junior adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 15000, 289, 0, 14711, 1, ''),
-(23, 29, 27, '3uclt', 'Personal Junior adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 15000, 759, 0, 14241, 1, ''),
-(24, 29, 28, '6yzlq', 'Personal Corporate adrihost.com  -  1 bulan', '2021-01-19', '2021-01-16', 50000, 437, 0, 49563, 1, ''),
-(25, 29, 29, 'go6t4', 'PRO-3 SGP adrihost.com  -  1 tahun', '2021-01-19', '2021-01-16', 3000000, 183, 0, 2999817, 1, ''),
-(26, 29, 30, 'n6kfq', 'Personal Senior manthabill.com  -  12 bulan', '2021-01-20', '2021-01-17', 420000, 463, 0, 419537, 1, ''),
-(27, 29, 31, 'eqvrc', 'Personal Senior serviceku.com  -  3 bulan', '2021-01-20', '2021-01-17', 105000, 114, 0, 104886, 1, ''),
-(29, 29, 33, 'zk0gq', 'Personal Senior adrihost.com  -  1 bulan', '2021-01-24', '2021-01-21', 35000, 325, 0, 34675, 1, ''),
-(30, 29, 34, 'aqg4h', 'Personal Corporate siska.com  -  6 bulan', '2021-01-24', '2021-01-21', 300000, 593, 0, 299407, 2, '');
-
 -- --------------------------------------------------------
 
 --
@@ -401,16 +361,6 @@ CREATE TABLE `tbkonfirmasi` (
   `total_bayar` int(11) NOT NULL,
   `status` int(11) NOT NULL COMMENT '1 = verified\r\n2= pending review'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tbkonfirmasi`
---
-
-INSERT INTO `tbkonfirmasi` (`id_konfirmasi`, `id_invoice`, `id_user`, `nama_pengirim`, `bank_pengirim`, `no_invoice`, `tanggal_konfirmasi`, `total_bayar`, `status`) VALUES
-(3, 17, 29, 'Alexsander Hendra Wijaya', 'BCA', 'krhko', '2021-01-16', 359123, 2),
-(4, 18, 29, 'Alexsa', 'BCA', 'ilmsu', '2021-01-16', 14819, 2),
-(5, 24, 29, 'Alex', 'BCA', '6yzlq', '2021-01-16', 49563, 2),
-(6, 25, 29, 'Alexsander', 'BCA', 'go6t4', '2021-01-17', 2999817, 2);
 
 -- --------------------------------------------------------
 
@@ -708,7 +658,7 @@ CREATE TABLE `tbsetting` (
 --
 
 INSERT INTO `tbsetting` (`id_setting`, `nama_hosting`, `judul_hosting`, `alamat_hosting`, `email_hosting`, `telp_hosting`, `tos`, `tax`, `limit_email`, `prefix`, `api_key`, `nama_bank`, `no_rekening`, `nama_pemilik`) VALUES
-(1, 'AdriHosts', 'AdriHost - Layanan Hosting Berkualitas di Indonesiaaaa', 'Jl.Bendungan Wayngison No.237 Bandarlampungs', 'supposrt@adrihost.com', '0856-0201-30021', 'https://adrihost.com/term-and-condition-of-services/', 10, 2, 1500, 'at_YJfP2jvzKqhB1chsVi5dhBCnclRS7', 'BCA KCU PRINGSEWU', '844-525-0712', 'VERONICA MAYA SANTI');
+(1, 'AdriHosts', 'AdriHost - Layanan Hosting Berkualitas di Indonesiaaaa', 'Jl.Bendungan Wayngison No.237 Bandarlampungs', 'support@adrihost.com', '0856-0201-30021', 'https://adrihost.com/term-and-condition-of-services/', 10, 2, 1500, 'at_YJfP2jvzKqhB1chsVi5dhBCnclRS7', 'BCA KCU PRINGSEWU', '844-525-0712', 'VERONICA MAYA SANTI');
 
 -- --------------------------------------------------------
 
@@ -756,7 +706,9 @@ INSERT INTO `tbtoken` (`id_token`, `id_user`, `token`, `time`) VALUES
 (37, 28, '5ff738f72775089a87f351458e09ce3495d6ddaa', 1610749121),
 (67, 32, 'd099778b268b93f521ce0d2df2ce9f2bbdb7be82', 1611035629),
 (71, 33, '496f9deb6aad33b36aa6c882c6c4a63fc7f01cb5', 1611078522),
-(78, 29, '309d6c891c24097f49e368f0021a4b34b3464c50', 1611194113);
+(81, 29, 'cf7f316a78d7d0a1a6d454544e9a6d3ae355308b', 1611225115),
+(85, 36, 'bf1f260c605a70db1ae821006459b39652dca58f', 1611231279),
+(87, 37, '4594132fe141b2d6898053de36ad4780ec132495', 1611231699);
 
 -- --------------------------------------------------------
 
@@ -774,6 +726,7 @@ CREATE TABLE `tbuser` (
   `status` int(11) NOT NULL COMMENT '1 = aktif\r\n2 = tidak aktif\r\n3= suspend',
   `time_req` int(11) DEFAULT NULL,
   `token_req` varchar(100) DEFAULT NULL,
+  `validasi_token` varchar(100) DEFAULT NULL,
   `timepin` int(11) DEFAULT NULL,
   `sec_pin` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -782,10 +735,8 @@ CREATE TABLE `tbuser` (
 -- Dumping data for table `tbuser`
 --
 
-INSERT INTO `tbuser` (`id_user`, `client`, `password`, `email`, `date_create`, `ip`, `status`, `time_req`, `token_req`, `timepin`, `sec_pin`) VALUES
-(29, 1, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'alexistdev@gmail.com', '2021-01-16', NULL, 1, 0, '5d551b60cc79ac53291ae6e7616962ad46d959fe', NULL, NULL),
-(34, 2, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'samantha@gmail.com', '2021-01-20', NULL, 1, NULL, NULL, NULL, NULL),
-(35, 3, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'alexistgame@yahoo.com', '2021-01-21', '::1', 2, NULL, NULL, NULL, NULL);
+INSERT INTO `tbuser` (`id_user`, `client`, `password`, `email`, `date_create`, `ip`, `status`, `time_req`, `token_req`, `validasi_token`, `timepin`, `sec_pin`) VALUES
+(37, 1500, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'alexistdev@gmail.com', '2021-01-21', '::1', 1, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1030,7 +981,7 @@ ALTER TABLE `tbvpstransit`
 -- AUTO_INCREMENT for table `inboxbalas`
 --
 ALTER TABLE `inboxbalas`
-  MODIFY `id_balas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_balas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tbadmin`
@@ -1060,7 +1011,7 @@ ALTER TABLE `tbconfig_option`
 -- AUTO_INCREMENT for table `tbdetailuser`
 --
 ALTER TABLE `tbdetailuser`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tbdomain`
@@ -1084,7 +1035,7 @@ ALTER TABLE `tbdomainwhois`
 -- AUTO_INCREMENT for table `tbemail`
 --
 ALTER TABLE `tbemail`
-  MODIFY `id_email` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_email` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbhosting`
@@ -1108,7 +1059,7 @@ ALTER TABLE `tbinvoice`
 -- AUTO_INCREMENT for table `tbkonfirmasi`
 --
 ALTER TABLE `tbkonfirmasi`
-  MODIFY `id_konfirmasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_konfirmasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tblocked`
@@ -1150,13 +1101,13 @@ ALTER TABLE `tbtld`
 -- AUTO_INCREMENT for table `tbtoken`
 --
 ALTER TABLE `tbtoken`
-  MODIFY `id_token` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id_token` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `tbuser`
 --
 ALTER TABLE `tbuser`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `tbvps`
