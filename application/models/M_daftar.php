@@ -51,6 +51,20 @@ class M_daftar extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	/** Mendapatkan data user berdasarkan validasi_token */
+	public function get_data_token($key)
+	{
+		$this->db->where('validasi_token', $key);
+		return $this->db->get($this->tableUser);
+	}
+
+	/** Menyimpan update tbuser */
+	public function update_user($data, $idUser)
+	{
+		$this->db->where('id_user', $idUser);
+		$this->db->update($this->tableUser, $data);
+	}
+
 	###########################################################################################
 	#                                                                                         #
 	#                     Ini adalah bagian untuk handle tbdetailuser                         #

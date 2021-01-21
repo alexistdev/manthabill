@@ -138,7 +138,7 @@ class Daftar extends CI_Controller
 				$preSimpan = $getMaxClient +1;
 			}
 			###############
-
+			$keyReq = sha1(time());
 			/* Menyimpan data ke tbuser */
 			$dataPengguna = [
 				'client' => $preSimpan,
@@ -146,7 +146,8 @@ class Daftar extends CI_Controller
 				'email' => $email,
 				'date_create' => $dateCreate,
 				'ip' => $ip,
-				'status' => 2
+				'status' => 2,
+				'validasi_token' => $keyReq
 			];
 			$idIduser = $this->daftar->simpan_daftar($dataPengguna);
 
@@ -164,13 +165,14 @@ class Daftar extends CI_Controller
 							Selamat anda telah berhasil mendaftar akun di ".$namaHosting." , berikut informasi akun anda:<br><br>
 							Username: " . $email . " <br>
 							Password: " . $password . " <br><br>
-							Anda bisa login di " . base_url() . "<br><br>
+							Anda harus mengklik Link Aktivasi berikut: " .base_url(). "Daftar/validasi/" . $keyReq . "<br><br>
+							
 							Regards<br>
 							Admin
 						";
 			kirim_email($email, $message, $judul);
 			$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
-			redirect('login');
+			redirect('Login');
 		}
 	}
 
@@ -205,6 +207,28 @@ class Daftar extends CI_Controller
 			echo json_encode($csrf);
 		} else {
 			redirect('Login');
+		}
+	}
+
+	public function validasi($keyx=null)
+	{
+		$id = $keyx;
+		if (empty($keyx) || $keyx==NULL) {
+			redirect("Login");
+		} else {
+			$cekReq = $this->daftar->get_data_token($id)->num_rows();
+			if($cekReq != 0){
+				$idUser = $this->daftar->get_data_token($id)->row()->id_user;
+				$dataStatus = [
+					'status' => 1,
+					'validasi_token' => NULL
+				];
+				$this->daftar->update_user($dataStatus,$idUser);
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil diaktifkan, silahkan login!</div>');
+				redirect('Login');
+			} else {
+				redirect('Login');
+			}
 		}
 	}
 }

@@ -63,7 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<?php } else if ($statusInv == 2) { ?>
 							<small class="badge badge-warning"> PENDING </small>
 						<?php } else if ($statusInv == 3){ ?>
-							<small class="badge badge-info"> SEDANG DIREVIEW </small>
+							<small class="badge badge-success"> SUDAH BAYAR </small>
 						<?php } else { ?>
 							<small class="badge badge-danger"> VOID </small>
 						<?php } ?>

@@ -163,11 +163,16 @@ class M_admin extends CI_Model{
 	####################################################################################
 	/** Menampilkan data ticket*/
 	public function get_data_inbox($data=null,$type=TRUE){
-		if($data){
+		if($data != null || $data != ''){
 			if($type){
 				$this->db->where('id_inbox',$data);
 			} else{
 				$this->db->where('key_token',$data);
+			}
+		} else {
+			if($type){
+				$this->db->join($this->tableUser, 'tbuser.id_user=tbinbox.id_user');
+				$this->db->join($this->tableDetailUser, 'tbdetailuser.id_user=tbuser.id_user');
 			}
 		}
 		return $this->db->get($this->tableInbox);

@@ -84,13 +84,28 @@ class Reset_password extends CI_Controller
 		}
 	}
 
+	/** validasi mengecek email apakah sudah disuspend */
+	public function _check_suspend($email)
+	{
+		$cekEmail = $this->login->get_data($email)->row()->status;
+		if($cekEmail ==3){
+			$this->form_validation->set_message('_check_suspend', 'Akun anda telah disuspend, silahkan hubungi administrator!');
+			return false;
+		} else if($cekEmail == 2){
+			$this->form_validation->set_message('_check_suspend', 'Akun anda belum terverifikasi, silahkan cek email untuk aktivasi!');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	/** Method index dari halaman reset password */
 	public function index()
 	{
 		$this->form_validation->set_rules(
 			'email',
 			'Email',
-			'trim|required|valid_email|callback__check_email|callback__check_request',
+			'trim|required|valid_email|callback__check_email|callback__check_suspend|callback__check_request',
 			[
 				'required' => 'Email tidak boleh kosong!',
 				'valid_email' => 'Email yang anda masukkan tidak valid!'

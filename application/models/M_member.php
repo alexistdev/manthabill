@@ -76,7 +76,8 @@ class M_member extends CI_Model
 
 	/** Mendapatkan data dari tabel user dan detail user */
 	public function get_all_datauser($id){
-		$this->db->join($this->tableDetailUser, $this->join1);
+		$this->db->where('tbuser.id_user',$id);
+		$this->db->join($this->tableDetailUser, "tbdetailuser.id_user = tbuser.id_user");
 		return $this->db->get($this->tableUser);
 	}
 

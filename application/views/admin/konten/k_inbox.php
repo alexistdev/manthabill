@@ -46,6 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<thead>
 								<tr>
 									<th class="text-center">No</th>
+									<th class="text-center">Client#</th>
 									<th class="text-center">Tanggal</th>
 									<th class="text-center">Subyek</th>
 									<th class="text-center">Status</th>
@@ -58,15 +59,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								foreach ($dataTicket as $rowTicket) :
 									$status = htmlentities($rowTicket['status_inbox'], ENT_QUOTES, 'UTF-8');
 									if ($status == 1) {
-										$statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
+										$statusPrint = "<small class=\"badge badge-warning\"> PENDING </small>";
 									} else if ($status == 2) {
-										$statusPrint = "<small class=\"badge badge-warning\"> DIBALAS </small>";
+										$statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
 									} else {
 										$statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
 									};
 									?>
 									<tr>
 										<td class="text-center"><?= cetak($no++); ?></td>
+										<td class="text-center"><a href="<?= base_url('staff/Admin/detail_user/'.encrypt_url(cetak($rowTicket['id_user']))); ?>"><?= cetak($rowTicket['client']); ?></a></td>
 										<td class="text-center"><?= cetak(konversiUnixTanggal($rowTicket['time'])); ?></td>
 										<td class="text-left"><?= cetak($rowTicket['judul']); ?></td>
 										<td class="text-center"><?= $statusPrint ?></td>

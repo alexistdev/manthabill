@@ -248,6 +248,7 @@ class Setting extends CI_Controller
 				$data = $this->_dataMember($this->idUser);
 				$view = "v_setting";
 				$this->_template($data, $view);
+
 			} else {
 				/* Mengecek waktu apakah sudah 5 menit , sebelum melakukan update password lagi */
 				$cekWaktu = $this->member->get_data_detail($this->idUser)->row()->time_req;

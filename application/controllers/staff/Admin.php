@@ -1413,7 +1413,7 @@ class Admin extends CI_Controller {
 					$pajakInv = ($this->input->post("pajak", TRUE)/100) * $hargaProduk;
 					$hargaTotal = ($hargaProduk-$diskonInv) + $pajakInv;
 					$dataInvoice= [
-							
+
 					];
 				}
 			}

@@ -64,7 +64,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 									} else if ($status == 2) {
 										$statusInvoice = "<small class=\"badge badge-warning\"> PENDING </small>";
 									} else if ($status == 3){
-										$statusInvoice = "<small class=\"badge badge-info\"> SEDANG DIREVIEW </small>";
+										$statusInvoice = "<small class=\"badge badge-success\"> SUDAH BAYAR </small>";
 									} else {
 										$statusInvoice = "<small class=\"badge badge-danger\"> VOID </small>";
 									};
@@ -77,7 +77,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<td class="text-center">Rp. <?= number_format(cetak($row['total_jumlah']), 0, ",", "."); ?>, -</td>
 										<td class="text-center"><?= $statusInvoice ?></td>
 										<td class="text-center">
-											<?php if ($status != 2){;?>
+											<?php if ($status == 1 || $status == 4){;?>
 												<a href="<?php echo base_url('staff/Admin/detail_invoice/'.encrypt_url(cetak($row['id_invoice'])));?>">
 													<button class="btn btn-primary btn-sm margin">VIEW</button></a>
 											<?php } else{;?>
