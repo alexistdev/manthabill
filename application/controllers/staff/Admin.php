@@ -729,6 +729,82 @@ class Admin extends CI_Controller {
 		$data['title'] = "Detail Service Shared Hosting | Administrator Billing System Manthabill V.2.0";
 		return $data;
 	}
+	/** Method untuk terminated service shared hosting */
+	public function terminated_shared($idx=null)
+	{
+		if ($this->tokenSession != $this->tokenServer) {
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_hostingbyid($id)->num_rows();
+			if (($idx==NULL) || ($idx=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/shared_hosting');
+			} else {
+				$dataService = $this->admin->get_data_hostingbyid($id)->result_array();
+				foreach($dataService as $rowService){
+					$namaProduct = $rowService['nama_hosting'];
+					$emailUser = $rowService['email'];
+					$statusHosting = $rowService['status_hosting'];
+				}
+				if($statusHosting != 4  ){
+					$dataStatusHosting = [
+						'status_hosting' => 4
+					];
+					$this->admin->update_data_hosting($dataStatusHosting,$id);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Layanan ini telah diakhiri!</div>');
+					redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+				} else {
+					$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Layanan ini sudah dinonaktifkan sebelumnya!</div>');
+					redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+				}
+			}
+		}
+	}
+
+	/** Method untuk suspend service shared hosting */
+	public function suspend_shared($idx=null)
+	{
+		if ($this->tokenSession != $this->tokenServer) {
+			_adminlogout();
+		} else {
+			$id = decrypt_url($idx);
+			$cekDetail = $this->admin->get_data_hostingbyid($id)->num_rows();
+			if (($idx==NULL) || ($idx=="") ||($cekDetail < 1)){
+				redirect('staff/Admin/shared_hosting');
+			} else {
+				$dataService = $this->admin->get_data_hostingbyid($id)->result_array();
+				foreach($dataService as $rowService){
+					$namaProduct = $rowService['nama_hosting'];
+					$emailUser = $rowService['email'];
+					$statusHosting = $rowService['status_hosting'];
+				}
+				if($statusHosting != 3 || $statusHosting != 4 ){
+					$dataStatusHosting = [
+						'status_hosting' => 3
+					];
+					$this->admin->update_data_hosting($dataStatusHosting,$id);
+
+					/* Mengirimkan email */
+					$judulEmail = "Layanan Hosting ". $namaProduct." telah dinonaktifkan!";
+
+					$pesanEmail = "
+							Mohon maaf, layanan anda ".$namaProduct." telah dinonaktifkan<br>
+							Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>
+							Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>
+							
+							Regards<br>
+							Admin
+						";
+					kirim_email($emailUser, $pesanEmail, $judulEmail);
+					$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Layanan ini telah dinonaktifkan!</div>');
+					redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+				} else {
+					$this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Layanan ini sudah tidak aktif sebelumnya!</div>');
+					redirect('staff/Admin/detail_shared/'.encrypt_url($id));
+				}
+			}
+		}
+	}
 
 	/** Method untuk mengaktifkan service shared hosting */
 	public function aktif_shared($idx=null)
@@ -799,14 +875,14 @@ class Admin extends CI_Controller {
 							Password: " . $passwordCpanel . " <br><br>
 							Anda bisa login di http://.".$namaDomain."/cpanel<br><br>
 
-							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!
+							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!<br>
 							Team kami akan membalas 1x24 jam Support tiket anda.
 
 							Regards<br>
 							Admin
 						";
 						kirim_email($emailUser, $pesanEmail, $judulEmail);
-						$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Layanan ini telah diaktifkan diaktifkan</div>');
+						$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Layanan ini telah diaktifkan</div>');
 						redirect('staff/Admin/detail_shared/'.encrypt_url($id));
 					}
 

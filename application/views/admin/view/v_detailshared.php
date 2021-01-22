@@ -30,6 +30,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			});
 		}, 2000);
 	});
+	$(document).on("click", "#tombolSuspend", function () {
+		var paketID = $(this).data('id');
+		var newUrl = "<?= base_url('/staff/Admin/suspend_shared/'); ?>" + paketID;
+		$("#urlSuspend").attr('href', newUrl);
+	});
+	$(document).on("click", "#tombolTerminate", function () {
+		var paketID = $(this).data('id');
+		var newUrl = "<?= base_url('/staff/Admin/terminated_shared/'); ?>" + paketID;
+		$("#urlTerminate").attr('href', newUrl);
+	});
 </script>
 </body>
 

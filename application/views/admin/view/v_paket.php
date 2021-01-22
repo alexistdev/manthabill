@@ -43,6 +43,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			var newUrl = "<?= base_url('/staff/Admin/hapus_paket/'); ?>" + paketID;
 			$("#urlHapus").attr('href', newUrl);
 		});
+
 	</script>
 </div>
 

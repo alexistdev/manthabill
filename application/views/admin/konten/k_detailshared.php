@@ -63,6 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					</div>
 					<!-- /End Detail Profil	-->
 					<!-- Tombol Aksi -->
+					<?php if($statusHosting != 4) {?>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
@@ -72,31 +73,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<li class="list-group-item border-0">
 											<a href="<?= base_url('staff/Admin/tambah_invoice/'.encrypt_url(cetak($idHosting))); ?>"><i class="far fa-credit-card"></i> Buat Invoice</a>
 										</li>
-										<li class="list-group-item border-0">
-											<i class="fas fa-envelope"></i> Kirim Pesan
-										</li>
+
 										<?php if($statusHosting == 1) { ?>
-										<li class="list-group-item border-0">
-											<i class="fas fa-lock"></i> Suspend Hosting
-										</li>
 											<li class="list-group-item border-0">
-												<i class="fas fa-trash"></i> Terminated Hosting
+												<a href="#" data-toggle="modal" id="tombolSuspend" data-target="#modalSuspend" data-id="<?= encrypt_url(cetak($idHosting)); ?>"><i class="fas fa-lock text-danger"></i> <span class="text-danger">Suspend Hosting</span></a>
+											</li>
+											<li class="list-group-item border-0">
+												<a href="#" data-toggle="modal" id="tombolTerminate" data-target="#modalTerminate" data-id="<?= encrypt_url(cetak($idHosting)); ?>"><i class="fas fa-trash text-danger"></i> <span class="text-danger">Terminated Hosting</span></a>
 											</li>
 										<?php } else if($statusHosting == 2) {?>
 											<li class="list-group-item border-0">
 												<a href="<?= base_url('staff/Admin/aktif_shared/'.encrypt_url(cetak($idHosting))); ?>"><i class="fas fa-check-square"></i> Aktifkan</a>
 											</li>
 											<li class="list-group-item border-0">
-												<i class="fas fa-trash"></i> Terminated Hosting
+												<a href="#" data-toggle="modal" id="tombolTerminate" data-target="#modalTerminate" data-id="<?= encrypt_url(cetak($idHosting)); ?>"><i class="fas fa-trash text-danger"></i> <span class="text-danger">Terminated Hosting</span></a>
 											</li>
 										<?php } else if($statusHosting == 3) { ?>
 											<li class="list-group-item border-0">
 												<a href="<?= base_url('staff/Admin/aktif_shared/'.encrypt_url(cetak($idHosting))); ?>"><i class="fas fa-check-square"></i> Aktifkan</a>
 											</li>
-										<?php } else if($statusHosting == 4) { ?>
 											<li class="list-group-item border-0">
-												<a href="<?= base_url('staff/Admin/aktif_shared/'.encrypt_url(cetak($idHosting))); ?>"><i class="fas fa-check-square"></i> Aktifkan</a>
+												<a href="#" data-toggle="modal" id="tombolTerminate" data-target="#modalTerminate" data-id="<?= encrypt_url(cetak($idHosting)); ?>"><i class="fas fa-trash text-danger"></i> <span class="text-danger">Terminated Hosting</span></a>
 											</li>
+										<?php } else if($statusHosting == 4) { ?>
+
 										<?php } ?>
 									</ul>
 
@@ -104,6 +104,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</div>
 						</div>
 					</div>
+					<?php } ?>
 					<!-- /End Tombol Aksi -->
 
 				</div>
@@ -155,23 +156,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 												<?php } else if($statusHosting == 3) { ?>
 													<small class="badge badge-danger"> SUSPEND </small>
 												<?php } else{ ?>
-													<small class="badge badge-primary"> TERMINATED </small>
+													<small class="badge badge-dark"> TERMINATED </small>
 												<?php } ?>
 											</td>
 										</tr>
 									</table>
+									<?php if($statusHosting == 4) {?>
+										<a href="<?= base_url('staff/Admin/shared_hosting'); ?>"><button class="btn btn-danger btn-sm mt-3">Kembali</button></a>
+									<?php } ?>
 								</div>
 							</div>
 						</div>
 					</div>
 
-
+					<?php if($statusHosting != 4) {?>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card card-dark">
 								<div class="card-header">
 									<h3 class="card-title">Upgrade / Downgrade</h3>
-									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 								</div>
 								<div class="card-body">
 									This is some text within a card body.
@@ -179,6 +182,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</div>
 						</div>
 					</div>
+					<?php } ?>
 				</div>
 				<!-- /END Profil Kanan -->
 			</div>
@@ -186,3 +190,40 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</section>
 </div>
 <!-- /.content-wrapper -->
+<!--	Modal Suspend	-->
+<div class="modal fade" id="modalSuspend" tabindex="-1" aria-labelledby="modalSuspendLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Suspend Hosting</h5>
+			</div>
+			<div class="modal-body">
+				Apakah anda yakin ingin mensuspend hosting ini ?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<a href="" id="urlSuspend"><button type="button" class="btn btn-danger">Suspend</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+<!--	/Modal Suspend	-->
+<!--	Modal Terminate	-->
+<div class="modal fade" id="modalTerminate" tabindex="-1" aria-labelledby="modalTerminateLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Terminated Hosting</h5>
+			</div>
+			<div class="modal-body">
+				Apakah anda yakin ingin menghentikan layanan hosting ini ?<br>
+				<span class="text-danger text-sm">** Layanan ini tidak dapat dibuka kembali !</span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<a href="" id="urlTerminate"><button type="button" class="btn btn-danger">Terminate</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+<!--	/Modal Suspend	-->
