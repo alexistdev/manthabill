@@ -82,10 +82,9 @@ class M_member extends CI_Model
 	}
 
 	/** Mengecek password berdasarkan id */
-	public function cek_password($idUser,$password)
+	public function cek_password($idUser)
 	{
 		$this->db->where('id_user', $idUser);
-		$this->db->where('password', sha1($password));
 		return $this->db->get($this->tableUser);
 	}
 

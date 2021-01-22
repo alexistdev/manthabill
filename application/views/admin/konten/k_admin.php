@@ -89,69 +89,48 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 			<!-- Untuk ROW Dibagian Tiket dan berita -->
 			<div class="row">
-				<!-- Start Kolom sebelah kiri -->
+
 				<div class="col-md-6">
+					<!-- AREA CHART -->
 					<div class="card card-primary">
 						<div class="card-header">
-							<h3 class="card-title">Berita Terbaru</h3>
-						</div>
-						<!-- /.card-header -->
-						<div class="card-body">
-							<h4><?= cetak($judulBerita); ?></h4>
-							<p><?= nl2br(cetak($isiBerita)); ?></p>
-							<p class="text-sm float-right">Diposting: <span class="text-primary font-weight-bold"><?= konversiTanggal(cetak($tanggalPosting)); ?></span></p>
-						</div>
-					</div> <!-- /.card -->
-				</div>
-				<!-- End Kolom sebelah kiri -->
-				<!-- Start Kolom sebelah kanan -->
-				<div class="col-md-6">
-					<div class="card card-danger">
-						<div class="card-header">
-							<h3 class="card-title">Support Ticket Terbaru</h3>
-						</div>
-						<!-- /.card-header -->
-						<div class="card-body">
-							<!-- Start Tabel -->
-							<div class="table-responsive">
-								<table class="table no-margin">
-									<thead>
-									<tr>
-										<th class="text-center">No Ticket</th>
-										<th class="text-center">Judul</th>
-										<th class="text-center">Status</th>
-										<th class="text-center">Tanggal</th>
-									</tr>
-									</thead>
-									<tbody>
-										<?php
-											$no = 1;
-											foreach($dataTicket->result_array() as $rowTicket):
-												$status = cetak($rowTicket['status_inbox']);
-												if($status == 1){
-													$statusPrint = "<small class=\"badge badge-success\"> OPEN </small>";
-												}else if($status == 2){
-													$statusPrint = "<small class=\"badge badge-warning\"> DIBALAS </small>";
-												} else {
-													$statusPrint = "<small class=\"badge badge-danger\"> CLOSED </small>";
-												}
-										?>
-										<tr>
-											<td class="text-center"><a href="<?= base_url('staff/Admin/lihat_ticket/'.cetak($rowTicket['key_token'])); ?>">#<?= cetak($no++); ?></a></td>
-											<td><?= cetak($rowTicket['judul']); ?></td>
-											<td class="text-center"><?= $statusPrint ?></td>
-											<td class="text-center"><?= konversiUnixTanggal(cetak($rowTicket['time'])); ?></td>
-										</tr>
-										<?php endforeach;?>
-									</tbody>
-								</table>
-							</div>
-							<!-- /.table-responsive -->
+							<h3 class="card-title">Penjualan</h3>
+
 
 						</div>
-					</div> <!-- /.card -->
+						<div class="card-body">
+							<div class="chart">
+								<canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+							</div>
+						</div>
+						<!-- /.card-body -->
+					</div>
+					<!-- /.card -->
 				</div>
-				<!-- End Kolom sebelah kanan -->
+				<div class="col-md-6">
+					<!-- PIE CHART -->
+					<div class="card card-danger">
+						<div class="card-header">
+							<h3 class="card-title">Produk Terjual</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+								<button type="button" class="btn btn-tool" data-card-widget="remove">
+									<i class="fas fa-times"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+						</div>
+						<!-- /.card-body -->
+					</div>
+					<!-- /.card -->
+				</div>
+
+
 			</div>
 			<!-- END ROW TIKET DAN BERITA -->
 	</section>

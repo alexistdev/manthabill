@@ -96,13 +96,16 @@ class Login extends CI_Controller{
 			$this->_template($data,$view);
 		} else {
 			$username = $this->input->post('username', TRUE);
-			$password = sha1($this->input->post('password', TRUE));
-			$cek = $this->admin->cek_login_admin($username,$password);
+			$password = $this->input->post('password', TRUE);
+			$cek = $this->admin->cek_login_admin($username)->row();
 			$waktu = date('Y-m-d H:i:s');
 			$key = sha1($waktu);
 			$logTime = strtotime($waktu);
 			/* Mengecek apakah password dan username sudah benar */
-			if($cek ==1){
+			if(!password_verify($password, $cek->password)){
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Username atau password anda salah!</div>');
+				redirect("staff/Login");
+			}else{
 				/* Cek apa token sudah ada apa belum, jika ada dihapus */
 				$cekToken = $this->admin->get_token_byId(0)->num_rows();
 				if($cekToken > 0){
@@ -121,9 +124,6 @@ class Login extends CI_Controller{
 				$this->admin->simpan_token($hashkey);
 				$this->session->set_userdata($data_session);
 				redirect("staff/Admin");
-			}else{
-				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Username atau password anda salah!</div>');
-				redirect("staff/Login");
 			}
 		}
 	}

@@ -201,14 +201,15 @@ class Reset_password extends CI_Controller
 				$this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
 				redirect("Reset_password/konfirm/$token");
 			} else {
-				$password1 = sha1($this->input->post('password1', TRUE));
+				$password1 = $this->input->post('password1', TRUE);
+				$inPass = password_hash($password1,PASSWORD_BCRYPT);
 				/* Mengupdate password */
 				$dataNewPass = [
-					'password' => $password1,
+					'password' => $inPass,
 					'token_req' => ''
 				];
 				$this->login->update_password($token, $dataNewPass);
-				//pesan berhasil diupdate passwordnya
+				/* pesan berhasil diupdate passwordnya */
 				$this->session->set_flashdata('pesan2', '<div class="alert alert-success" role="alert">Password anda berhasil diperbaharui!</div>');
 				redirect("Login");
 			}

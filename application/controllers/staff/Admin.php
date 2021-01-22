@@ -297,6 +297,7 @@ class Admin extends CI_Controller {
 			} else {
 				$email = $this->input->post("email", TRUE);
 				$password = $this->input->post("password", TRUE);
+				$inPass = password_hash($password,PASSWORD_BCRYPT);
 				$kirimEmail = $this->input->post("kirimEmail", TRUE);
 
 				############### Menambahkan data client id untuk perhitungan #############
@@ -331,7 +332,7 @@ class Admin extends CI_Controller {
 				//simpan ke tabel tbuser
 				$dataUser = [
 					'client' => $preSimpan,
-					'password' => sha1($password),
+					'password' => $inPass,
 					'email' => $email,
 					'date_create' => $tanggalDibuat,
 					'status' => 1

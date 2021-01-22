@@ -62,10 +62,9 @@ class M_admin extends CI_Model{
 	####################################################################################
 
 	/** Mengecek admin login */
-	public function cek_login_admin($username,$password) {
+	public function cek_login_admin($username) {
 		$this->db->where('username', $username);
-		$this->db->where('password', $password);
-		return $this->db->get($this->tableAdmin)->num_rows();
+		return $this->db->get($this->tableAdmin);
 	}
 
 	####################################################################################

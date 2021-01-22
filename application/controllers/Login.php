@@ -125,15 +125,17 @@ class Login extends CI_Controller
 			$this->_template($data,$view);
 		} else {
 			$username = $this->input->post('email', TRUE);
-			$password = sha1($this->input->post('password', TRUE));
-			$cekLogin = $this->login->validasi_login($username, $password)->num_rows();
+			$password = $this->input->post('password', TRUE);
+			$cekLogin = $this->login->validasi_login($username)->row();
 
-			/* Membuat key token untuk disimpan di database */
-			$waktu = date('Y-m-d H:i:s');
-			$key = sha1($waktu);
-			$logTime = strtotime($waktu);
+			if(!password_verify($password, $cekLogin->password)){
+				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Username atau password anda salah!</div>');
+				redirect("login");
+			} else {
+				$waktu = date('Y-m-d H:i:s');
+				$key = sha1($waktu);
+				$logTime = strtotime($waktu);
 
-			if ($cekLogin > 0) {
 				$idUser = $this->login->validasi_login($username, $password)->row()->id_user;
 
 				/* Cek apa token sudah ada apa belum, jika ada dihapus */
@@ -162,9 +164,6 @@ class Login extends CI_Controller
 				/* Mengeset data session */
 				$this->session->set_userdata($data_session);
 				redirect("member");
-			} else {
-				$this->session->set_flashdata('pesan2', '<div class="alert alert-danger" role="alert">Username atau password anda salah!</div>');
-				redirect("login");
 			}
 		}
 	}

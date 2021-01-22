@@ -77,10 +77,9 @@ class M_login extends CI_Model
 	}
 
 	/** Dapat data untuk disimpan di session */
-	public function validasi_login($username, $password)
+	public function validasi_login($username)
 	{
 		$this->db->where('email', $username);
-		$this->db->where('password', $password);
 		return $this->db->get($this->tableUser);
 	}
 

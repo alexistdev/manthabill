@@ -266,12 +266,12 @@ class Setting extends CI_Controller
 	/** Method untuk mengecek apakah password lama benar */
 	public function _check_password_lama($string)
 	{
-		$cekPass = $this->member->cek_password($this->idUser,$string)->num_rows();
-		if($cekPass != 0){
-			return TRUE;
-		}else{
+		$cekPass = $this->member->cek_password($this->idUser)->row();
+		if(!password_verify($string, $cekPass->password)){
 			$this->form_validation->set_message('_check_password_lama', 'Password yang anda masukkan salah!');
 			return FALSE;
+		}else{
+			return TRUE;
 		}
 	}
 
@@ -318,7 +318,7 @@ class Setting extends CI_Controller
 			} else {
 				$password = $this->input->post('passwordBaru', TRUE);
 				$dataPassword = [
-					'password' => sha1($password)
+					'password' => password_hash($password,PASSWORD_BCRYPT)
 				];
 				$this->member->update_data_user($dataPassword, $this->idUser);
 				$this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Password anda berhasil diperbaharui!</div>');

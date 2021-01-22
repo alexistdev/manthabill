@@ -121,7 +121,7 @@ class Daftar extends CI_Controller
 			$email = $this->input->post('email', TRUE);
 			$password = $this->input->post('password', TRUE);
 			$ip = $this->input->ip_address();
-			$inPass = sha1($password);
+			$inPass = password_hash($password,PASSWORD_BCRYPT);
 			$dateCreate = date("Y-m-d");
 
 			############### Menambahkan data client id untuk perhitungan #############
