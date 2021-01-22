@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2021 at 01:30 PM
+-- Generation Time: Jan 22, 2021 at 11:25 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -79,7 +79,7 @@ INSERT INTO `inboxbalas` (`id_balas`, `is_admin`, `key_token`, `pesan`, `time`) 
 CREATE TABLE `tbadmin` (
   `id_admin` int(11) NOT NULL,
   `username` varchar(10) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `level` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -89,7 +89,7 @@ CREATE TABLE `tbadmin` (
 --
 
 INSERT INTO `tbadmin` (`id_admin`, `username`, `password`, `level`, `status`) VALUES
-(1, 'admin', '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 1, 1);
+(1, 'admin', '$2y$10$6orcjjjTQnEAH0D2/xtEgOlR6m4NalD8daQaCWS7KKPjSiO2HvKgC', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -182,7 +182,9 @@ CREATE TABLE `tbdetailuser` (
 --
 
 INSERT INTO `tbdetailuser` (`id_detail`, `id_user`, `nama_depan`, `nama_belakang`, `nama_usaha`, `alamat`, `alamat2`, `kota`, `provinsi`, `negara`, `kodepos`, `phone`, `time_req`, `gambar`) VALUES
-(11, 37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg');
+(11, 37, 'Alexsander Hendra', 'Wijaya', 'Adrihost', 'Jl.Bendungan Wayngison No237', '', 'Sidodadi', 'Bandarlampung', 'Indonesia', '', '085602013002', NULL, 'default.jpg'),
+(12, 38, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg'),
+(13, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -284,7 +286,16 @@ CREATE TABLE `tbemail` (
 --
 
 INSERT INTO `tbemail` (`id_email`, `email_pengirim`, `email_tujuan`, `subyek`, `email_pesan`, `status`) VALUES
-(1, 'support@adrihost.com', 'alexistdev@gmail.com', 'Anda berhasil mendaftar akun di AdriHosts', '\n							Selamat anda telah berhasil mendaftar akun di AdriHosts , berikut informasi akun anda:<br><br>\n							Username: alexistdev@gmail.com <br>\n							Password: 325339 <br><br>\n							Anda harus mengklik Link Aktivasi berikut: http://localhost/manthav2/Daftar/validasi/dfb116a2d9773479778178825806918c4240ca1b<br><br>\n							\n							Regards<br>\n							Admin\n						', 2);
+(3, 'support@adrihost.com', 'alexistdev@gmail.com', 'Layanan Hosting Personal Master adrihost.com telah dinonaktifkan!', '\n							Mohon maaf, layanan anda Personal Master adrihost.com telah dinonaktifkan<br>\n							Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>\n							Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>\n							\n							Regards<br>\n							Admin\n						', 2),
+(4, 'support@adrihost.com', 'alexistdev@gmail.com', 'Akun anda di AdriHosts telah disuspend', '\n							Yth . Wijaya<br><br>\n							Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>\n							Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>\n							Regards<br>\n							Admin\n						', 2),
+(5, 'support@adrihost.com', 'alexistdev@gmail.com', 'Akun anda di AdriHosts telah disuspend', '\n							Yth . Wijaya<br><br>\n							Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>\n							Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>\n							Regards<br>\n							Admin\n						', 2),
+(6, 'support@adrihost.com', 'alexistdev@gmail.com', 'Akun anda di AdriHosts telah disuspend', '\n							Yth . Wijaya<br><br>\n							Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>\n							Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>\n							Regards<br>\n							Admin\n						', 2),
+(7, 'support@adrihost.com', 'alexistdev@gmail.com', 'Layanan Hosting Personal Master adrihost.com telah diaktifkan!', '\n							Selamat layanan anda Personal Master adrihost.com telah berhasil diaktifkan<br>\n							Dan berikut detail informasi cpanel nya:<br><br>\n							Username: wakanda <br>\n							Password: 3256532 <br><br>\n							Anda bisa login di http://.adrihost.com/cpanel<br><br>\n\n							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!<br>\n							Team kami akan membalas 1x24 jam Support tiket anda.\n\n							Regards<br>\n							Admin\n						', 2),
+(8, 'support@adrihost.com', 'alexistdev@gmail.com', 'Layanan Hosting Personal Master adrihost.com telah dinonaktifkan!', '\n							Mohon maaf, layanan anda Personal Master adrihost.com telah dinonaktifkan<br>\n							Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>\n							Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>\n							\n							Regards<br>\n							Admin\n						', 2),
+(9, 'support@adrihost.com', 'alexistdev@gmail.com', 'Layanan Hosting Personal Master adrihost.com telah diaktifkan!', '\n							Selamat layanan anda Personal Master adrihost.com telah berhasil diaktifkan<br>\n							Dan berikut detail informasi cpanel nya:<br><br>\n							Username: siminti <br>\n							Password: wakakakaka <br><br>\n							Anda bisa login di http://.adrihost.com/cpanel<br><br>\n\n							Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!<br>\n							Team kami akan membalas 1x24 jam Support tiket anda.\n\n							Regards<br>\n							Admin\n						', 2),
+(10, 'support@adrihost.com', 'alexistdev@gmail.com', 'Layanan Hosting Personal Master adrihost.com telah dinonaktifkan!', '\n							Mohon maaf, layanan anda Personal Master adrihost.com telah dinonaktifkan<br>\n							Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>\n							Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>\n							\n							Regards<br>\n							Admin\n						', 2),
+(11, 'support@adrihost.com', 'sumanto@gmail.com', 'Anda berhasil mendaftar akun di AdriHosts', '\n							Selamat anda telah berhasil mendaftar akun di AdriHosts , berikut informasi akun anda:<br><br>\n							Username: sumanto@gmail.com <br>\n							Password: 325339 <br><br>\n							Anda harus mengklik Link Aktivasi berikut: http://localhost/manthav2/Daftar/validasi/6e2e1d66dbbb3d33c8ab1afa6e376fd8c521d51b<br><br>\n							\n							Regards<br>\n							Admin\n						', 2),
+(12, 'support@adrihost.com', 'sumanto@gmail.com', 'Permintaan Reset Password', '\n				Anda telah meminta reset password untuk akun anda, silahkan klik link dibawah ini:<br>\n				Reset Password: http://localhost/manthav2/reset_password/konfirm/69b53e5b1caac99f3d48a92d794bd6277c89e13b<br>\n\n				Jika anda tidak merasa melakukan permintaan reset password, abaikan saja email ini. Email ini akan expired setelah 24 jam.<br>\n				<br>\n				Regards<br>\n				Admin\n 			', 2);
 
 -- --------------------------------------------------------
 
@@ -304,6 +315,14 @@ CREATE TABLE `tbhosting` (
   `domain` varchar(50) NOT NULL,
   `status_hosting` int(11) NOT NULL COMMENT '1=aktif , 2=pending,3=suspend,4=terminated'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbhosting`
+--
+
+INSERT INTO `tbhosting` (`id_hosting`, `id_product`, `id_user`, `nama_hosting`, `user_cpanel`, `harga`, `start_hosting`, `end_hosting`, `domain`, `status_hosting`) VALUES
+(35, 4, 37, 'Personal Master adrihost.com', '', 180000, '2021-01-21', '2021-04-21', 'adrihost.com', 4),
+(36, 4, 37, 'Personal Master adrihost.com', '', 720000, '2021-01-21', '2022-01-21', 'adrihost.com', 3);
 
 -- --------------------------------------------------------
 
@@ -344,6 +363,20 @@ CREATE TABLE `tbinvoice` (
   `token_inv` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tbinvoice`
+--
+
+INSERT INTO `tbinvoice` (`id_invoice`, `id_user`, `id_hosting`, `no_invoice`, `detail_produk`, `due`, `inv_date`, `sub_total`, `diskon_inv`, `pajak_inv`, `total_jumlah`, `status_inv`, `token_inv`) VALUES
+(31, 37, 35, 'xlfr4', 'Personal Master adrihost.com  -  3 bulan', '2021-01-24', '2021-01-21', 180000, 164, 0, 179836, 1, ''),
+(32, 37, 35, 'ZBJvZ', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 180000, 0, 0, 180000, 1, ''),
+(33, 37, 35, 'rRuCh', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 180000, 18000, 0, 162000, 1, ''),
+(34, 37, 35, 'jqBoR', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 180000, 9000, 0, 171000, 1, ''),
+(35, 37, 35, 'f4lal', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 180000, 45000, 0, 135000, 1, ''),
+(36, 37, 36, 'lsvjx', 'Personal Master adrihost.com  -  12 bulan', '2021-01-24', '2021-01-21', 720000, 243, 0, 719757, 1, ''),
+(37, 37, 36, 'nnF2E', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 720000, 360000, 0, 360000, 1, ''),
+(38, 37, 36, 'i5I24', 'Personal Master adrihost.com', '2021-01-24', '2021-01-21', 720000, 144000, 0, 576000, 1, '');
+
 -- --------------------------------------------------------
 
 --
@@ -361,6 +394,14 @@ CREATE TABLE `tbkonfirmasi` (
   `total_bayar` int(11) NOT NULL,
   `status` int(11) NOT NULL COMMENT '1 = verified\r\n2= pending review'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbkonfirmasi`
+--
+
+INSERT INTO `tbkonfirmasi` (`id_konfirmasi`, `id_invoice`, `id_user`, `nama_pengirim`, `bank_pengirim`, `no_invoice`, `tanggal_konfirmasi`, `total_bayar`, `status`) VALUES
+(8, 31, 37, 'Alexsander Hendra', 'BCA', 'xlfr4', '2021-01-21', 179836, 2),
+(9, 36, 37, 'Alexsander', 'BCA', 'lsvjx', '2021-01-21', 719757, 2);
 
 -- --------------------------------------------------------
 
@@ -708,7 +749,9 @@ INSERT INTO `tbtoken` (`id_token`, `id_user`, `token`, `time`) VALUES
 (71, 33, '496f9deb6aad33b36aa6c882c6c4a63fc7f01cb5', 1611078522),
 (81, 29, 'cf7f316a78d7d0a1a6d454544e9a6d3ae355308b', 1611225115),
 (85, 36, 'bf1f260c605a70db1ae821006459b39652dca58f', 1611231279),
-(87, 37, '4594132fe141b2d6898053de36ad4780ec132495', 1611231699);
+(96, 37, '6ac55c5fd71996bf00578299f0276f63b7615653', 1611307451),
+(101, 38, '4547bf9bf2fdbeefba64817c43280b11b6a4f07b', 1611310613),
+(105, 39, '58f71e1a885f5550696f144b14c1caca386bb6ad', 1611311028);
 
 -- --------------------------------------------------------
 
@@ -719,7 +762,7 @@ INSERT INTO `tbtoken` (`id_token`, `id_user`, `token`, `time`) VALUES
 CREATE TABLE `tbuser` (
   `id_user` int(11) NOT NULL,
   `client` int(11) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(50) NOT NULL,
   `date_create` date NOT NULL,
   `ip` varchar(20) DEFAULT NULL,
@@ -736,7 +779,9 @@ CREATE TABLE `tbuser` (
 --
 
 INSERT INTO `tbuser` (`id_user`, `client`, `password`, `email`, `date_create`, `ip`, `status`, `time_req`, `token_req`, `validasi_token`, `timepin`, `sec_pin`) VALUES
-(37, 1500, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'alexistdev@gmail.com', '2021-01-21', '::1', 1, NULL, NULL, NULL, NULL, NULL);
+(37, 1500, '1bff10ca1e9743c39dc90a14fb165f6b6e9dcb4b', 'alexistdev@gmail.com', '2021-01-21', '::1', 1, NULL, NULL, NULL, NULL, NULL),
+(38, 1501, '$2y$10$6orcjjjTQnEAH0D2/xtEgOlR6m4NalD8daQaCWS7KKPjSiO2HvKgC', 'sumanto@gmail.com', '2021-01-22', '::1', 1, 0, '', NULL, NULL, NULL),
+(39, 1502, '$2y$10$FCuEVEcu8AxESSeA4GFFguBcyy.kwZicXO3Vces1AkjZEZr96zu2y', 'silvia@gmail.com', '2021-01-22', NULL, 1, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1011,7 +1056,7 @@ ALTER TABLE `tbconfig_option`
 -- AUTO_INCREMENT for table `tbdetailuser`
 --
 ALTER TABLE `tbdetailuser`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbdomain`
@@ -1035,13 +1080,13 @@ ALTER TABLE `tbdomainwhois`
 -- AUTO_INCREMENT for table `tbemail`
 --
 ALTER TABLE `tbemail`
-  MODIFY `id_email` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_email` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbhosting`
 --
 ALTER TABLE `tbhosting`
-  MODIFY `id_hosting` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_hosting` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `tbinbox`
@@ -1053,13 +1098,13 @@ ALTER TABLE `tbinbox`
 -- AUTO_INCREMENT for table `tbinvoice`
 --
 ALTER TABLE `tbinvoice`
-  MODIFY `id_invoice` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_invoice` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `tbkonfirmasi`
 --
 ALTER TABLE `tbkonfirmasi`
-  MODIFY `id_konfirmasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_konfirmasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tblocked`
@@ -1101,13 +1146,13 @@ ALTER TABLE `tbtld`
 -- AUTO_INCREMENT for table `tbtoken`
 --
 ALTER TABLE `tbtoken`
-  MODIFY `id_token` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id_token` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `tbuser`
 --
 ALTER TABLE `tbuser`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `tbvps`
