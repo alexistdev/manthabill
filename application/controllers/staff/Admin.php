@@ -1773,6 +1773,20 @@ class Admin extends CI_Controller {
 	}
 
 	###########################################################################################
+	#                              Ini adalah menu Help                                       #
+	###########################################################################################
+
+	/** Method untuk menampilkan halaman Help */
+	public function help()
+	{
+		$data = $this->_dataMember();
+		$judul['title'] = "Help | Administrator Billing System Manthabill V.2.0";
+		$data = array_merge($data, $judul);
+		$view = 'v_help';
+		$this->_template($data, $view);
+	}
+
+	###########################################################################################
 	#                              Ini adalah menu checkpoint                                 #
 	###########################################################################################
 

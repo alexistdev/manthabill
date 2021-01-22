@@ -102,10 +102,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Tandai Sudah Dibayar</h5>
 			</div>
 			<div class="modal-body">
-				Apakah anda yakin ingin menghapus data ini ?
+				Apakah anda yakin ingin mengubah status Invoice menjadi LUNAS ?
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

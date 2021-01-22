@@ -73,3 +73,15 @@ function tanggalSQL($date)
 	$tanggalKonversi = date("Y-m-d", strtotime($date));
 	return $tanggalKonversi;
 }
+
+/** Untuk fungsi informasi*/
+function informasi()
+{
+	$data=[];
+	$data['Versi Software'] = "v.2.1";
+	$data['Tipe'] = "FREE";
+	$data['License'] = "LITE-E8EE6D545B8211EBA381F23C";
+	$data['Author'] = "Alexsander Hendra Wijaya";
+	$data['Email'] = "Alexistdev@gmail.com";
+	return $data;
+}

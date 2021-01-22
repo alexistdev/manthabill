@@ -267,7 +267,7 @@ class M_admin extends CI_Model{
 			$this->db->order_by("status_inv ASC, id_invoice DESC");
 		} else{
 			$this->db->join($this->tableUser, "tbuser.id_user = tbinvoice.id_user");
-			$this->db->order_by('id_invoice', 'DESC');
+			$this->db->order_by("status_inv DESC, id_invoice DESC");
 		}
 		return $this->db->get($this->tableInvoice);
 	}

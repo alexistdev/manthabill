@@ -98,9 +98,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 										<li class="list-group-item border-0">
 											<a href="<?= base_url('staff/Admin/suspend_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-lock"></i> Suspend Akun</a>
 										</li>
-										<li class="list-group-item border-0">
-											<i class="fas fa-trash"></i> Delete Akun
-										</li>
 										<?php } else { ?>
 											<li class="list-group-item border-0">
 												<a href="<?= base_url('staff/Admin/edit_user/'.encrypt_url(cetak($idUser))); ?>"><i class="fas fa-user-edit"></i> Edit Akun</a>
@@ -130,7 +127,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								<div class="card card-dark">
 									<div class="card-header">
 										<h3 class="card-title">Service</h3>
-										<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 									</div>
 									<div class="card-body">
 										<table id="tblService" class="table table-bordered table-hover" style="width:100%">
@@ -188,7 +184,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="card card-dark">
 								<div class="card-header">
 									<h3 class="card-title">Invoice</h3>
-									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 								</div>
 								<div class="card-body">
 									<table id="tabelInvoice" class="table table-bordered table-hover" style="width:100%">
@@ -251,7 +246,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<div class="card card-dark">
 								<div class="card-header">
 									<h3 class="card-title">Ticket</h3>
-									<button class="btn btn-sm btn-primary float-right"><i class="fas fa-plus-square"></i></button>
 								</div>
 								<div class="card-body">
 									<table id="tabelInbox" class="table table-bordered table-hover">
