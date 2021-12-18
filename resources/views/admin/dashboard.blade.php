@@ -1,0 +1,1 @@
+<x-adminlte.userlayout/>
