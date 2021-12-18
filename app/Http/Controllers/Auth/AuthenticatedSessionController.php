@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -29,10 +30,21 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
-
         $request->session()->regenerate();
+        $role = Auth::user();
+        /** Simpan log */
+        AppHelper::logData("Login ke dalam akun",$role->id);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        /** Cek Auth Role */
+        if($role->role_id == 1){
+            return redirect()->intended(RouteServiceProvider::SUPERADMIN);
+        } elseif($role->role_id  == 2) {
+            return redirect()->intended(RouteServiceProvider::ADMIN);
+        } elseif($role->role_id  == 3) {
+            return redirect()->intended(RouteServiceProvider::STORE);
+        } else {
+            return redirect()->intended(RouteServiceProvider::USER);
+        }
     }
 
     /**
