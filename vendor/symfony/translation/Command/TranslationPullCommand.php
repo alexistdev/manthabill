@@ -110,7 +110,7 @@ You can overwrite existing translations (and remove the missing ones on local si
 
 Full example:
 
-  <info>php %command.full_name% provider --force --domains=messages,validators --locales=en</>
+  <info>php %command.full_name% provider --force --domains=messages --domains=validators --locales=en</>
 
 This command pulls all translations associated with the <comment>messages</> and <comment>validators</> domains for the <comment>en</> locale.
 Local translations for the specified domains and locale are deleted if they're not present on the provider and overwritten if it's the case.
@@ -141,7 +141,7 @@ EOF
 
         switch ($format) {
             case 'xlf20': $xliffVersion = '2.0';
-            // no break
+                // no break
             case 'xlf12': $format = 'xlf';
         }
 
@@ -159,7 +159,7 @@ EOF
 
         if ($force) {
             foreach ($providerTranslations->getCatalogues() as $catalogue) {
-                $operation = new TargetOperation((new MessageCatalogue($catalogue->getLocale())), $catalogue);
+                $operation = new TargetOperation(new MessageCatalogue($catalogue->getLocale()), $catalogue);
                 if ($intlIcu) {
                     $operation->moveMessagesToIntlDomainsIfPossible();
                 }
