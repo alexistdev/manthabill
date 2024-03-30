@@ -24,14 +24,14 @@ namespace Symfony\Component\HttpFoundation;
  */
 class JsonResponse extends Response
 {
-    protected $data;
-    protected $callback;
+    protected mixed $data;
+    protected ?string $callback = null;
 
     // Encode <, >, ', &, and " characters in the JSON, making it also safe to be embedded into HTML.
     // 15 === JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
     public const DEFAULT_ENCODING_OPTIONS = 15;
 
-    protected $encodingOptions = self::DEFAULT_ENCODING_OPTIONS;
+    protected int $encodingOptions = self::DEFAULT_ENCODING_OPTIONS;
 
     /**
      * @param bool $json If the data is already a JSON string
@@ -44,9 +44,7 @@ class JsonResponse extends Response
             throw new \TypeError(sprintf('"%s": If $json is set to true, argument $data must be a string or object implementing __toString(), "%s" given.', __METHOD__, get_debug_type($data)));
         }
 
-        if (null === $data) {
-            $data = new \ArrayObject();
-        }
+        $data ??= new \ArrayObject();
 
         $json ? $this->setJson($data) : $this->setData($data);
     }
@@ -60,7 +58,7 @@ class JsonResponse extends Response
      *         ->setSharedMaxAge(300);
      *
      * @param string $data    The JSON response string
-     * @param int    $status  The response status code
+     * @param int    $status  The response status code (200 "OK" by default)
      * @param array  $headers An array of response headers
      */
     public static function fromJsonString(string $data, int $status = 200, array $headers = []): static
@@ -77,7 +75,7 @@ class JsonResponse extends Response
      *
      * @throws \InvalidArgumentException When the callback name is not valid
      */
-    public function setCallback(string $callback = null): static
+    public function setCallback(?string $callback): static
     {
         if (null !== $callback) {
             // partially taken from https://geekality.net/2011/08/03/valid-javascript-identifier/
@@ -127,7 +125,7 @@ class JsonResponse extends Response
         try {
             $data = json_encode($data, $this->encodingOptions);
         } catch (\Exception $e) {
-            if ('Exception' === \get_class($e) && str_starts_with($e->getMessage(), 'Failed calling ')) {
+            if ('Exception' === $e::class && str_starts_with($e->getMessage(), 'Failed calling ')) {
                 throw $e->getPrevious() ?: $e;
             }
             throw $e;

@@ -47,40 +47,34 @@ use Carbon\CarbonInterface;
 $daysOfWeek = ['svētdiena', 'pirmdiena', 'otrdiena', 'trešdiena', 'ceturtdiena', 'piektdiena', 'sestdiena'];
 $daysOfWeekLocativum = ['svētdien', 'pirmdien', 'otrdien', 'trešdien', 'ceturtdien', 'piektdien', 'sestdien'];
 
-$transformDiff = function ($input) {
-    return strtr($input, [
-        // Nominative => "pirms/pēc" Dative
-        'gads' => 'gada',
-        'gadi' => 'gadiem',
-        'gadu' => 'gadiem',
-        'mēnesis' => 'mēneša',
-        'mēneši' => 'mēnešiem',
-        'mēnešu' => 'mēnešiem',
-        'nedēļa' => 'nedēļas',
-        'nedēļas' => 'nedēļām',
-        'nedēļu' => 'nedēļām',
-        'diena' => 'dienas',
-        'dienas' => 'dienām',
-        'dienu' => 'dienām',
-        'stunda' => 'stundas',
-        'stundas' => 'stundām',
-        'stundu' => 'stundām',
-        'minūte' => 'minūtes',
-        'minūtes' => 'minūtēm',
-        'minūšu' => 'minūtēm',
-        'sekunde' => 'sekundes',
-        'sekundes' => 'sekundēm',
-        'sekunžu' => 'sekundēm',
-    ]);
-};
+$transformDiff = static fn (string $input) => strtr($input, [
+    // Nominative => "pirms/pēc" Dative
+    'gads' => 'gada',
+    'gadi' => 'gadiem',
+    'gadu' => 'gadiem',
+    'mēnesis' => 'mēneša',
+    'mēneši' => 'mēnešiem',
+    'mēnešu' => 'mēnešiem',
+    'nedēļa' => 'nedēļas',
+    'nedēļas' => 'nedēļām',
+    'nedēļu' => 'nedēļām',
+    'diena' => 'dienas',
+    'dienas' => 'dienām',
+    'dienu' => 'dienām',
+    'stunda' => 'stundas',
+    'stundas' => 'stundām',
+    'stundu' => 'stundām',
+    'minūte' => 'minūtes',
+    'minūtes' => 'minūtēm',
+    'minūšu' => 'minūtēm',
+    'sekunde' => 'sekundes',
+    'sekundes' => 'sekundēm',
+    'sekunžu' => 'sekundēm',
+]);
 
 return [
-    'ago' => function ($time) use ($transformDiff) {
-        return 'pirms '.$transformDiff($time);
-    },
-    'from_now' => function ($time) use ($transformDiff) {
-        return 'pēc '.$transformDiff($time);
-    },
+    'ago' => static fn (string $time) => 'pirms '.$transformDiff($time),
+    'from_now' => static fn (string $time) => 'pēc '.$transformDiff($time),
 
     'year' => '0 gadu|:count gads|:count gadi',
     'y' => ':count g.',
@@ -159,7 +153,7 @@ return [
     'calendar' => [
         'sameDay' => '[šodien] [plkst.] LT',
         'nextDay' => '[rīt] [plkst.] LT',
-        'nextWeek' => function (CarbonInterface $current, CarbonInterface $other) use ($daysOfWeekLocativum) {
+        'nextWeek' => static function (CarbonInterface $current, CarbonInterface $other) use ($daysOfWeekLocativum) {
             if ($current->week !== $other->week) {
                 return '[nākošo] ['.$daysOfWeekLocativum[$current->dayOfWeek].'] [plkst.] LT';
             }
@@ -167,7 +161,7 @@ return [
             return '['.$daysOfWeekLocativum[$current->dayOfWeek].'] [plkst.] LT';
         },
         'lastDay' => '[vakar] [plkst.] LT',
-        'lastWeek' => function (CarbonInterface $current) use ($daysOfWeekLocativum) {
+        'lastWeek' => static function (CarbonInterface $current) use ($daysOfWeekLocativum) {
             return '[pagājušo] ['.$daysOfWeekLocativum[$current->dayOfWeek].'] [plkst.] LT';
         },
         'sameElse' => 'L',
@@ -176,7 +170,8 @@ return [
     'weekdays' => $daysOfWeek,
     'weekdays_short' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'],
     'weekdays_min' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'],
-    'months' => ['janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'],
+    'months' => ['janvāris', 'februāris', 'marts', 'aprīlis', 'maijs', 'jūnijs', 'jūlijs', 'augusts', 'septembris', 'oktobris', 'novembris', 'decembris'],
+    'months_standalone' => ['janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'],
     'months_short' => ['janv.', 'febr.', 'martā', 'apr.', 'maijā', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'],
     'meridiem' => ['priekšpusdiena', 'pēcpusdiena'],
 ];

@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-// @codeCoverageIgnoreStart
-
 use Carbon\CarbonInterface;
 use Symfony\Component\Translation\PluralizationRules;
 
-if (class_exists('Symfony\\Component\\Translation\\PluralizationRules')) {
-    PluralizationRules::set(function ($number) {
+// @codeCoverageIgnoreStart
+if (class_exists(PluralizationRules::class)) {
+    PluralizationRules::set(static function ($number) {
         return (($number % 10 == 1) && ($number % 100 != 11)) ? 0 : ((($number % 10 >= 2) && ($number % 10 <= 4) && (($number % 100 < 10) || ($number % 100 >= 20))) ? 1 : 2);
     }, 'be');
 }
@@ -118,39 +117,27 @@ return [
         'nextDay' => '[Заўтра ў] LT',
         'nextWeek' => '[У] dddd [ў] LT',
         'lastDay' => '[Учора ў] LT',
-        'lastWeek' => function (CarbonInterface $current) {
-            switch ($current->dayOfWeek) {
-                case 1:
-                case 2:
-                case 4:
-                    return '[У мінулы] dddd [ў] LT';
-                default:
-                    return '[У мінулую] dddd [ў] LT';
-            }
+        'lastWeek' => static fn (CarbonInterface $current) => match ($current->dayOfWeek) {
+            1, 2, 4 => '[У мінулы] dddd [ў] LT',
+            default => '[У мінулую] dddd [ў] LT',
         },
         'sameElse' => 'L',
     ],
-    'ordinal' => function ($number, $period) {
-        switch ($period) {
-            case 'M':
-            case 'd':
-            case 'DDD':
-            case 'w':
-            case 'W':
-                return ($number % 10 === 2 || $number % 10 === 3) && ($number % 100 !== 12 && $number % 100 !== 13) ? $number.'-і' : $number.'-ы';
-            case 'D':
-                return $number.'-га';
-            default:
-                return $number;
-        }
+    'ordinal' => static fn ($number, $period) => match ($period) {
+        'M', 'd', 'DDD', 'w', 'W' => ($number % 10 === 2 || $number % 10 === 3) &&
+                ($number % 100 !== 12 && $number % 100 !== 13) ? $number.'-і' : $number.'-ы',
+        'D' => $number.'-га',
+        default => $number,
     },
-    'meridiem' => function ($hour) {
+    'meridiem' => static function ($hour) {
         if ($hour < 4) {
             return 'ночы';
         }
+
         if ($hour < 12) {
             return 'раніцы';
         }
+
         if ($hour < 17) {
             return 'дня';
         }

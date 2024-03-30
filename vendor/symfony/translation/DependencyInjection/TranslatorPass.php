@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class TranslatorPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('translator.default')) {
             return;
@@ -48,6 +48,23 @@ class TranslatorPass implements CompilerPassInterface
             ->replaceArgument(0, ServiceLocatorTagPass::register($container, $loaderRefs))
             ->replaceArgument(3, $loaders)
         ;
+
+        if ($container->hasDefinition('validator') && $container->hasDefinition('translation.extractor.visitor.constraint')) {
+            $constraintVisitorDefinition = $container->getDefinition('translation.extractor.visitor.constraint');
+            $constraintClassNames = [];
+
+            foreach ($container->getDefinitions() as $definition) {
+                if (!$definition->hasTag('validator.constraint_validator')) {
+                    continue;
+                }
+                // Resolve constraint validator FQCN even if defined as %foo.validator.class% parameter
+                $className = $container->getParameterBag()->resolveValue($definition->getClass());
+                // Extraction of the constraint class name from the Constraint Validator FQCN
+                $constraintClassNames[] = str_replace('Validator', '', substr(strrchr($className, '\\'), 1));
+            }
+
+            $constraintVisitorDefinition->setArgument(0, $constraintClassNames);
+        }
 
         if (!$container->hasParameter('twig.default_path')) {
             return;

@@ -34,8 +34,8 @@ final class Headers
         'cc' => MailboxListHeader::class,
         'bcc' => MailboxListHeader::class,
         'message-id' => IdentificationHeader::class,
-        'in-reply-to' => UnstructuredHeader::class, // `In-Reply-To` and `References` are less strict than RFC 2822 (3.6.4) to allow users entering the original email's ...
-        'references' => UnstructuredHeader::class, // ... `Message-ID`, even if that is no valid `msg-id`
+        'in-reply-to' => [UnstructuredHeader::class, IdentificationHeader::class], // `In-Reply-To` and `References` are less strict than RFC 2822 (3.6.4) to allow users entering the original email's ...
+        'references' => [UnstructuredHeader::class, IdentificationHeader::class], // ... `Message-ID`, even if that is no valid `msg-id`
         'return-path' => PathHeader::class,
     ];
 
@@ -61,7 +61,7 @@ final class Headers
         }
     }
 
-    public function setMaxLineLength(int $lineLength)
+    public function setMaxLineLength(int $lineLength): void
     {
         $this->lineLength = $lineLength;
         foreach ($this->all() as $header) {
@@ -137,12 +137,18 @@ final class Headers
      */
     public function addHeader(string $name, mixed $argument, array $more = []): static
     {
-        $parts = explode('\\', self::HEADER_CLASS_MAP[strtolower($name)] ?? UnstructuredHeader::class);
+        $headerClass = self::HEADER_CLASS_MAP[strtolower($name)] ?? UnstructuredHeader::class;
+        if (\is_array($headerClass)) {
+            $headerClass = $headerClass[0];
+        }
+        $parts = explode('\\', $headerClass);
         $method = 'add'.ucfirst(array_pop($parts));
         if ('addUnstructuredHeader' === $method) {
             $method = 'addTextHeader';
         } elseif ('addIdentificationHeader' === $method) {
             $method = 'addIdHeader';
+        } elseif ('addMailboxListHeader' === $method && !\is_array($argument)) {
+            $argument = [$argument];
         }
 
         return $this->$method($name, $argument, $more);
@@ -184,7 +190,7 @@ final class Headers
         return array_shift($values);
     }
 
-    public function all(string $name = null): iterable
+    public function all(?string $name = null): iterable
     {
         if (null === $name) {
             foreach ($this->headers as $name => $collection) {
@@ -220,10 +226,22 @@ final class Headers
     public static function checkHeaderClass(HeaderInterface $header): void
     {
         $name = strtolower($header->getName());
-
-        if (($c = self::HEADER_CLASS_MAP[$name] ?? null) && !$header instanceof $c) {
-            throw new LogicException(sprintf('The "%s" header must be an instance of "%s" (got "%s").', $header->getName(), $c, get_debug_type($header)));
+        $headerClasses = self::HEADER_CLASS_MAP[$name] ?? [];
+        if (!\is_array($headerClasses)) {
+            $headerClasses = [$headerClasses];
         }
+
+        if (!$headerClasses) {
+            return;
+        }
+
+        foreach ($headerClasses as $c) {
+            if ($header instanceof $c) {
+                return;
+            }
+        }
+
+        throw new LogicException(sprintf('The "%s" header must be an instance of "%s" (got "%s").', $header->getName(), implode('" or "', $headerClasses), get_debug_type($header)));
     }
 
     public function toString(): string
@@ -248,7 +266,7 @@ final class Headers
         return $arr;
     }
 
-    public function getHeaderBody(string $name)
+    public function getHeaderBody(string $name): mixed
     {
         return $this->has($name) ? $this->get($name)->getBody() : null;
     }
