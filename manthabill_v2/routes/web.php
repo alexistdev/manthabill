@@ -28,13 +28,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Route::middleware(['role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminDash::class, 'index'])->middleware('role:admin')->name('adm.dashboard');
-//});
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDash::class, 'index'])->name('adm.dashboard');
+});
 
-//Route::middleware(['role:staff'])->group(function () {
-    Route::get('/staff/dashboard', [StaffDash::class, 'index'])->middleware('role:staff')->name('staff.dashboard');
-//});
+Route::middleware(['role:staff'])->group(function () {
+    Route::get('/staff/dashboard', [StaffDash::class, 'index'])->name('staff.dashboard');
+});
 
 
 require __DIR__.'/auth.php';
