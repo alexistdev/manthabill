@@ -243,6 +243,7 @@
       <path value="$PROJECT_DIR$/manthabill_v2/vendor/dragonmantank/cron-expression" />
       <path value="$PROJECT_DIR$/manthabill_v2/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/manthabill_v2/vendor/composer" />
+      <path value="$PROJECT_DIR$/manthabill_v2/vendor/laravel/breeze" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
