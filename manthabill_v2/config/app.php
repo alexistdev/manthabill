@@ -1,4 +1,13 @@
 <?php
+/*
+ *
+ *  * Copyright (c) 2024.
+ *  * Develop By: Alexsander Hendra Wijaya
+ *  * Github: https://github.com/alexistdev
+ *  * Phone : 0823-7140-8678
+ *  * Email : Alexistdev@gmail.com
+ *
+ */
 
 return [
 
@@ -14,6 +23,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+
+    'version' => env('APP_VERSION', "1.0"),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +133,7 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+
 
 ];

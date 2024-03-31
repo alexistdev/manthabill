@@ -12,17 +12,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
 
+    protected User $user;
+
     public function __construct()
     {
-
+        $this->user = Auth::user();
     }
 
     public function index()
     {
-        echo "administrator";
+        return view('admin.upcube.dashboard', array(
+            'title' => "Dashboard Administrator | Manthabill v.2.0",
+            'firstMenu' => 'dashboard',
+            'secondMenu' => 'dashboard',
+        ));
     }
 }
