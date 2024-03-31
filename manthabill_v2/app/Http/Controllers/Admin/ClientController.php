@@ -15,9 +15,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class DashboardController extends Controller
+class ClientController extends Controller
 {
-
     protected User $user;
 
     public function __construct()
@@ -27,10 +26,10 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('admin.upcube.dashboard', array(
-            'title' => "Dashboard Administrator | ". config('app.name')." v.".config('app.version'),
-            'firstMenu' => 'dashboard',
-            'secondMenu' => 'dashboard',
+        return view('admin.upcube.client', array(
+            'title' => "Master Data Client Administrator | ". config('app.name')." v.".config('app.version'),
+            'firstMenu' => 'clients',
+            'secondMenu' => 'clients',
         ));
     }
 }

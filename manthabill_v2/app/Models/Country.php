@@ -19,5 +19,5 @@ class Country extends Model
     use SoftDeletes;
 
     protected $table = 'countries';
-    protected $fillable = 'name';
+    protected $fillable = ['name'];
 }

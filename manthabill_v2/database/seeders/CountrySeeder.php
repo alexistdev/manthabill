@@ -11,7 +11,10 @@
 
 namespace Database\Seeders;
 
+
+use App\Models\Country;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class CountrySeeder extends Seeder
 {
@@ -24,5 +27,6 @@ class CountrySeeder extends Seeder
             $temp2 = ['name' => $temp1[$i],'created_at' => $date,'updated_at' => $date];
             array_push($result, $temp2);
         }
+        Country::insert($result);
     }
 }
