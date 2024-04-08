@@ -32,6 +32,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <div class="card-header">
+                            <button class="btn btn-sm btn-primary">Tambah</button>
+                        </div>
                         <div class="card-body">
                             <table id="tableCountries" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
@@ -76,11 +79,14 @@
                                 defaultContent: '',
                                 orderable: false,
                                 searchable: false,
-                                width: '5%',
+                                width: '10%',
                                 render: function (data, type, row, meta) {
                                     return meta.row + meta.settings._iDisplayStart + 1; //auto increment
                                 }
                             },
+                            {data: 'name', class: 'text-left'},
+                            {data: 'created_at', class: 'text-center', width: '15%'},
+                            {data: 'action', class: 'text-center', width: '15%', orderable: false},
                         ],
                         "bDestroy": true
                     });

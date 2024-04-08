@@ -4,22 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="feat(admin-layout): add layout admin">
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/ClientController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/CountriesController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/admin/upcube/client.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/admin/upcube/countries.blade.php" afterDir="false" />
+    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="feat(admin-countries): create controller and database migration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/DashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Models/Country.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Models/Country.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/database/seeders/CountrySeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/database/seeders/CountrySeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/database/seeders/ProvinceSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/database/seeders/ProvinceSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/admin-template-layout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/admin-template-layout.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/header-layout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/header-layout.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/sidebar-layout.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/sidebar-layout.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -366,7 +352,7 @@
       <updated>1711777409108</updated>
       <workItem from="1711777410216" duration="1033000" />
       <workItem from="1711784761783" duration="7731000" />
-      <workItem from="1711859941568" duration="14204000" />
+      <workItem from="1711859941568" duration="15145000" />
     </task>
     <task id="LOCAL-00001" summary="chore(laravel-11): Update Laravel 11">
       <option name="closed" value="true" />
@@ -408,7 +394,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711868563849</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(admin-countries): create controller and database migration">
+      <option name="closed" value="true" />
+      <created>1711877674734</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711877674734</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -421,7 +415,8 @@
     <MESSAGE value="feat(template): add template" />
     <MESSAGE value="feat(region): add countries and provinces model" />
     <MESSAGE value="feat(admin-layout): add layout admin" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(admin-layout): add layout admin" />
+    <MESSAGE value="feat(admin-countries): create controller and database migration" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(admin-countries): create controller and database migration" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
