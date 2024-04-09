@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="feat(admin-countries): create controller and database migration">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="feat(admin-countries): create layout and add service to show the datas">
+      <change beforePath="$PROJECT_DIR$/manthabill_v2/~$$databasescheme.~vsdx" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/~$$databasescheme.~vsdx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,14 +30,12 @@
     &quot;assignee&quot;: &quot;alexistdev&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="bfc71f23-ae8f-40be-85ce-2cdf892a7ad3" />
-        <option name="url" value="https://github.com/alexistdev/manthabill.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/alexistdev/manthabill.git",
+    "accountId": "bfc71f23-ae8f-40be-85ce-2cdf892a7ad3"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -312,7 +310,7 @@
     "RunOnceActivity.laravel-idea.search-composer-json": "true",
     "RunOnceActivity.laravel-idea.update-module-directories": "true",
     "git-widget-placeholder": "development",
-    "last_opened_file_path": "D:/LARAVEL/manthabill/manthabill_v2/resources/views/admin/upcube",
+    "last_opened_file_path": "D:/LARAVEL/myklinik/WEB/myklinik",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -338,7 +336,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-php-predefined-ba97393d7c68-6f8e3395a2b4-com.jetbrains.php.sharedIndexes-PS-233.15026.12" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PS-241.14494.237" />
+        <option value="bundled-php-predefined-ba97393d7c68-8f0632a2a215-com.jetbrains.php.sharedIndexes-PS-241.14494.237" />
       </set>
     </attachedChunks>
   </component>
@@ -353,6 +352,7 @@
       <workItem from="1711777410216" duration="1033000" />
       <workItem from="1711784761783" duration="7731000" />
       <workItem from="1711859941568" duration="15145000" />
+      <workItem from="1712550699802" duration="1232000" />
     </task>
     <task id="LOCAL-00001" summary="chore(laravel-11): Update Laravel 11">
       <option name="closed" value="true" />
@@ -402,7 +402,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711877674734</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="feat(admin-countries): create layout and add service to show the datas">
+      <option name="closed" value="true" />
+      <created>1712551932812</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1712551932812</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -416,7 +424,8 @@
     <MESSAGE value="feat(region): add countries and provinces model" />
     <MESSAGE value="feat(admin-layout): add layout admin" />
     <MESSAGE value="feat(admin-countries): create controller and database migration" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(admin-countries): create controller and database migration" />
+    <MESSAGE value="feat(admin-countries): create layout and add service to show the datas" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(admin-countries): create layout and add service to show the datas" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

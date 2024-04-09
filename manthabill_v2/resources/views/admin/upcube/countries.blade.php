@@ -33,7 +33,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <button class="btn btn-sm btn-primary">Tambah</button>
+                            <button class="btn btn-sm btn-primary"><i class="mdi mdi-account-multiple-plus-outline"></i> Add</button>
                         </div>
                         <div class="card-body">
                             <table id="tableCountries" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
