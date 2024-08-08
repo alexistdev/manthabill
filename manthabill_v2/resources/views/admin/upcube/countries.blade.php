@@ -1,4 +1,4 @@
-<x-upcube.admin.admin-template-layout >
+<x-upcube.admin.admin-template-layout>
     @push('customCSS')
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
         <!--datatable responsive css-->
@@ -27,16 +27,21 @@
             </div>
             <!-- end page title -->
 
-
+            <div class="row">
+                <x-upcube.admin.notification-message />
+            </div>
 
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <button class="btn btn-sm btn-primary"><i class="mdi mdi-account-multiple-plus-outline"></i> Add</button>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                                <i class="mdi mdi-folder-multiple-plus"></i> Add
+                            </button>
                         </div>
                         <div class="card-body">
-                            <table id="tableCountries" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="tableCountries" class="table table-bordered dt-responsive nowrap"
+                                   style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                 <tr>
                                     <th>No.</th>
@@ -54,43 +59,78 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{route('adm.countries.save')}}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Data</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label
+                                    for="name" class="form-label">NAMA NEGARA</label>
+                                <input type="text" name="name" id="name" class="form-control"
+                                       value="{{old('name')}}" maxlength="255"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     @push('customJS')
-            <!-- Required datatable js -->
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-                    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-            <!--datatable js-->
-            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-            <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-            <script>
-                $(document).ready(function () {
-                    let base_url = "{{route('adm.countries')}}";
-                    $('#tableCountries').DataTable({
-                        ajax: {
-                            type: 'GET',
-                            url: base_url,
-                            async: true,
-                            dataType: 'json',
+        <!-- Required datatable js -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!--datatable js-->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                let base_url = "{{route('adm.countries')}}";
+
+                setTimeout(function () {
+                        $('.alert').fadeOut('slow');
+                    }, 2000
+                );
+
+                $('#tableCountries').DataTable({
+                    ajax: {
+                        type: 'GET',
+                        url: base_url,
+                        async: true,
+                        dataType: 'json',
+                    },
+                    columns: [
+                        {
+                            data: 'index',
+                            class: 'text-center',
+                            defaultContent: '',
+                            orderable: false,
+                            searchable: false,
+                            width: '10%',
+                            render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1; //auto increment
+                            }
                         },
-                        columns: [
-                            {
-                                data: 'index',
-                                class: 'text-center',
-                                defaultContent: '',
-                                orderable: false,
-                                searchable: false,
-                                width: '10%',
-                                render: function (data, type, row, meta) {
-                                    return meta.row + meta.settings._iDisplayStart + 1; //auto increment
-                                }
-                            },
-                            {data: 'name', class: 'text-left'},
-                            {data: 'created_at', class: 'text-center', width: '15%'},
-                            {data: 'action', class: 'text-center', width: '15%', orderable: false},
-                        ],
-                        "bDestroy": true
-                    });
+                        {data: 'name', class: 'text-left'},
+                        {data: 'created_at', class: 'text-center', width: '15%'},
+                        {data: 'action', class: 'text-center', width: '15%', orderable: false},
+                    ],
+                    "bDestroy": true
                 });
-            </script>
+            });
+        </script>
+
     @endpush
 </x-upcube.admin.admin-template-layout>

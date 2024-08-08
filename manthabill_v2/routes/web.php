@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDash::class, 'index'])->name('adm.dashboard');
     Route::get('/admin/countries', [AdminCountry::class, 'index'])->name('adm.countries');
+    Route::post('/admin/countries', [AdminCountry::class, 'store'])->name('adm.countries.save');
     Route::get('/admin/clients', [AdminClient::class, 'index'])->name('adm.clients');
 });
 

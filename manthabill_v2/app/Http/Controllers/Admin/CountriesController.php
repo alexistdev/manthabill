@@ -12,9 +12,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CountryRequest;
 use App\Interfaces\CountryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Utilities\Request;
 
 class CountriesController extends Controller
@@ -38,5 +40,19 @@ class CountriesController extends Controller
             'firstMenu' => 'dashboard',
             'secondMenu' => 'dashboard',
         ));
+    }
+
+    public function store(CountryRequest $request)
+    {
+        $request->validated();
+        DB::beginTransaction();
+        try {
+
+            DB::commit();
+            return redirect(route('adm.countries'))->with(['success' => "Data Country berhasil ditambahkan!"]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect(route('adm.countries'))->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace App\Interfaces;
 interface CountryInterface
 {
     public function getAllCountries($request);
+
+//    public function
 }
 
 
