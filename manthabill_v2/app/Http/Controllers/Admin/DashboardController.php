@@ -27,6 +27,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+
         return view('admin.upcube.dashboard', array(
             'title' => "Dashboard Administrator | ". config('app.name')." v.".config('app.version'),
             'firstMenu' => 'dashboard',

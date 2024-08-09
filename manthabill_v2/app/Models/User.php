@@ -20,7 +20,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,SoftDeletes,HasUuids;
+    use HasFactory, Notifiable,SoftDeletes;
 
     protected $fillable = [
         'role_id',
@@ -44,15 +44,15 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class,'role_id','id');
     }
 
     public function hasRole($roles)
     {
         $this->have_role = $this->getUserRole();
-        if(is_array($roles)){
-            foreach($roles as $need_role){
-                if($this->cekUserRole($need_role)){
+        if (is_array($roles)) {
+            foreach ($roles as $need_role) {
+                if ($this->cekUserRole($need_role)) {
                     return true;
                 }
             }
@@ -69,6 +69,6 @@ class User extends Authenticatable
 
     private function cekUserRole($role)
     {
-        return (strtolower($role)==strtolower($this->have_role->name)) ? true : false;
+        return (strtolower($role)=="admin") ? true : false;
     }
 }

@@ -20,7 +20,7 @@ class CekRole
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (! $request->user()->hasRole($role)) {
-            abort(404, 'NOT FOUND');
+            abort(404, 'NOT FOUND 2');
         }
         return $next($request);
     }

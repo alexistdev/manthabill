@@ -13,6 +13,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,19 +34,17 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        $roleId = (Int) $user->role_id;
-        switch ($roleId) {
-            case 1:
+        $role = Role::findOrFail($user->role_id);
+        switch ($role->name) {
+            case "admin":
                 return redirect()->intended(route('adm.dashboard', absolute: false));
-            case 2:
+            case "staff":
                 return redirect()->intended(route('staff.dashboard', absolute: false));
             default:
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 abort('404', 'NOT FOUND');
         }
-
-//        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function destroy(Request $request): RedirectResponse

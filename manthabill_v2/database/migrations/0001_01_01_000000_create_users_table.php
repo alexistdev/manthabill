@@ -28,7 +28,7 @@ return new class extends Migration
         });
 
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->uuid('role_id')->constrained();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

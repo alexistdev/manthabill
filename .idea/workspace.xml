@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="feat(admin-countries): create country repository service">
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Requests/Admin/CountryRequest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/app/View/Components/Upcube/Admin/NotificationMessage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/components/upcube/admin/notification-message.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/blade.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/blade.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/CountriesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/CountriesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Interfaces/CountryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Interfaces/CountryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/resources/views/admin/upcube/countries.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/resources/views/admin/upcube/countries.blade.php" afterDir="false" />
+    <list default="true" id="780b1004-bc43-4e5e-9979-2382047d9a25" name="Changes" comment="fix(uuids): change id to uuids">
+      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Admin/DashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Auth/AuthenticatedSessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Controllers/Auth/AuthenticatedSessionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Http/Middleware/CekRole.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Http/Middleware/CekRole.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manthabill_v2/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/app/Models/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/manthabill_v2/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/manthabill_v2/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manthabill_v2/~$$databasescheme.~vsdx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -310,27 +305,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.laravel-idea.search-composer-json": "true",
-    "RunOnceActivity.laravel-idea.update-module-directories": "true",
-    "git-widget-placeholder": "development",
-    "last_opened_file_path": "D:/LARAVEL/manthabill",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "php.override.implement.member.chooser.php.doc": "NONE",
-    "settings.editor.selected.configurable": "actions.on.save",
-    "update.copyright.on.save": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.laravel-idea.search-composer-json&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.laravel-idea.update-module-directories&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;development&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/LARAVEL/manthabill&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
+    &quot;update.copyright.on.save&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\LARAVEL\manthabill\manthabill_v2\resources\views\admin\upcube" />
@@ -369,6 +364,7 @@
       <workItem from="1712550699802" duration="1232000" />
       <workItem from="1712628644783" duration="3806000" />
       <workItem from="1723128859334" duration="53000" />
+      <workItem from="1723133860296" duration="6405000" />
     </task>
     <task id="LOCAL-00001" summary="chore(laravel-11): Update Laravel 11">
       <option name="closed" value="true" />
@@ -434,11 +430,30 @@
       <option name="project" value="LOCAL" />
       <updated>1712629701870</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix(uuids): change id to uuids">
+      <option name="closed" value="true" />
+      <created>1723137640648</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723137640648</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -450,7 +465,8 @@
     <MESSAGE value="feat(admin-countries): create controller and database migration" />
     <MESSAGE value="feat(admin-countries): create layout and add service to show the datas" />
     <MESSAGE value="feat(admin-countries): create country repository service" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(admin-countries): create country repository service" />
+    <MESSAGE value="fix(uuids): change id to uuids" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(uuids): change id to uuids" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
