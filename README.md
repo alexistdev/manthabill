@@ -10,10 +10,12 @@ Dikembangkan dengan:<br>
 
 Installasi:</br>
 1. git clone https://github.com/alexistdev/manthabill.git</br>
-2. Buat database kosong dengan nama manthabill, lakukan konfigurasi database di file .env</br>
-3. Jalankan perintah: php artisan key:generate</br>
-4. Jalankan perintah: php artisan migrate:fresh --seed</br>
-5. Jalankan perintah: php artisan serve
+2. arahkan terminal ke directory manthabill_v2 kemudian ketikkan: composer install
+3. ketikkan di terminal: npm run build
+4. Buat database kosong dengan nama manthabill, lakukan konfigurasi database di file .env</br>
+5. Jalankan perintah: php artisan key:generate</br>
+6. Jalankan perintah: php artisan migrate:fresh --seed</br>
+7. Jalankan perintah: php artisan serve
 </br></br>
 
 Upgrade:</br>
