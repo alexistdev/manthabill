@@ -28,7 +28,7 @@
             <!-- end page title -->
 
             <div class="row">
-                <x-upcube.admin.notification-message />
+                <x-upcube.admin.notification-message/>
             </div>
 
             <div class="row">
@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- START: Modal Tambah -->
     <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -87,6 +87,52 @@
             </div>
         </div>
     </div>
+    <!-- END: Modal Tambah -->
+
+    <!-- START: Modal EDIT -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{route('adm.countries.update')}}" method="post">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                @if($errors->edit->has('country_id'))
+                                    <span
+                                        class="text-danger errorMessage">{{$errors->edit->first('country_id')}}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" name="country_id" class="form-control" id="country_id"
+                                       value="{{old('country_id')}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label
+                                    for="name" class="form-label">NAMA NEGARA</label>
+                                <input type="text" name="name" id="editName" class="form-control"
+                                       value="{{old('name')}}" maxlength="255"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal EDIT -->
     @push('customJS')
         <!-- Required datatable js -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -103,6 +149,15 @@
                         $('.alert').fadeOut('slow');
                     }, 2000
                 );
+
+                /** saat tombol edit di klik */
+                $(document).on("click", ".open-edit", function (e) {
+                    e.preventDefault();
+                    let fid = $(this).data('id');
+                    let fname = $(this).data('name');
+                    $('#country_id').val(fid);
+                    $('#editName').val(fname);
+                });
 
                 $('#tableCountries').DataTable({
                     ajax: {

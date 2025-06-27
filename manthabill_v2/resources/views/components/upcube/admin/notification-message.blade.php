@@ -8,6 +8,15 @@
         </div>
     @endif
 
+        @if ($message = Session::get('warning'))
+            <div class="col-lg-12">
+                <div class="alert alert-warning  alert-dismissible alert-outline fade show" role="alert">
+                    <strong> Success ! </strong> - {!! $message !!}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
     @if ($message = Session::get('delete'))
         <div class="col-lg-12">
             <div class="alert alert-danger  alert-dismissible alert-outline fade show" role="alert">

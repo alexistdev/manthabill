@@ -11,6 +11,7 @@
 
 namespace App\Http\Repository\Admin;
 
+use App\Http\Requests\Admin\CountryRequest;
 use App\Interfaces\CountryInterface;
 use App\Models\Country;
 
@@ -32,5 +33,13 @@ class CountryRepository implements CountryInterface
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function save(CountryRequest $request):void
+    {
+        $country = new Country();
+        $country->name = $request->name;
+        $country->save();
+    }
+
 
 }

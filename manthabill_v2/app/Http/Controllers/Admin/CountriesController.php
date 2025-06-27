@@ -47,9 +47,23 @@ class CountriesController extends Controller
         $request->validated();
         DB::beginTransaction();
         try {
-
+            $this->countryRepository->save($request);
             DB::commit();
             return redirect(route('adm.countries'))->with(['success' => "Data Country berhasil ditambahkan!"]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect(route('adm.countries'))->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function update(CountryRequest $request)
+    {
+        $request->validated();
+        DB::beginTransaction();
+        try {
+
+            DB::commit();
+            return redirect(route('adm.countries'))->with(['warning' => "Data Country berhasil diperbaharui!"]);
         } catch (Exception $e) {
             DB::rollback();
             return redirect(route('adm.countries'))->withErrors(['error' => $e->getMessage()]);
