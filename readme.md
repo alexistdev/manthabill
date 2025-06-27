@@ -1,5 +1,7 @@
-NOTE: Sedang dalam pengembangan Manthabill versi 2 dengan menggunakan Laravel 11 : <a href="https://github.com/alexistdev/manthabill/tree/development">Link</a>
-
+NOTE: </br>
+Sedang dalam pengembangan Manthabill versi 2 dengan menggunakan Laravel 11 : <a href="https://github.com/alexistdev/manthabill/tree/development">Link</a> </br>
+Sedang dalam pengembangan GeoBill versi 1 dengan menggunakan Angular dan Springboot : [<a href="https://github.com/alexistdev/manthabill/tree/development">Link</a>
+](https://github.com/alexistdev/geobill)</br></br>
 Manthabill adalah software manajemen billing /invoice untuk pemilik Hosting atau yang sedang menjalankan bisnis Hosting. Software ini gratis, tapi mohon untuk tidak menghilangkan link copyrightnya.<br>
 Dikembangkan dengan:<br>
 <ul>
