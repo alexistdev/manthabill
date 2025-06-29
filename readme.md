@@ -1,74 +1,70 @@
-NOTE: </br>
-Sedang dalam pengembangan Manthabill versi 2 dengan menggunakan Laravel 11 : <a href="https://github.com/alexistdev/manthabill/tree/development">Link</a> </br>
-Sedang dalam pengembangan GeoBill versi 1 dengan menggunakan Angular dan Springboot :<a href="https://github.com/alexistdev/geobill">Link</a> </br></br>
-Manthabill adalah software manajemen billing /invoice untuk pemilik Hosting atau yang sedang menjalankan bisnis Hosting. Software ini gratis, tapi mohon untuk tidak menghilangkan link copyrightnya.<br>
-Dikembangkan dengan:<br>
-<ul>
-	<li>Framework : Codeigniter 3</li>
-	<li>Template : https://adminlte.io/</li>
-	<li>PHP version : PHP 5.6 <a href="https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/5.6.3/" target="_blank">Download disini</a></li>
-</ul>
-<br><br>
+# Manthabill
 
-Installasi di Hosting:</br>
-1. git clone https://github.com/alexistdev/manthabill.git</br>
-2. Upload dan pastikan ubah PHP version menjadi 5.6.
-3. Buat database dan upload database di folder dengan nama file: manthabill.sql</br>
-4. Buka file config/database dan lakukan pengaturan username, database, dan passwordnya.</br>
-5. Buka file config/email lakukan pengaturan smtp untuk mengirimkan email.</br>
-6. pasang cronjob di cpanel anda dengan contoh penulisan spt ini wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
-</br></br>
+**Note:**
+- Development is ongoing for Manthabill version 2 using Laravel 11: [Link](https://github.com/alexistdev/manthabill/tree/development)
+- Development is ongoing for GeoBill version 1 using Angular and Spring Boot: [Link](https://github.com/alexistdev/geobill)
 
-Installasi di Localhost:</br>
-1. Pastikan system anda sudah menggunakan php 5.6, ketik di cmd : php -v
-2. Buat database manthabill dan import database manthabill.sql
-3. Buka file config/database.php dan lakukan pengaturan konfigurasi database, username, password
-4. Buka file config/config.php dan ubah url menjadi dibawah ini (pastikan sama dengan url saat aplikasi anda diakses):
-<pre>
-$config['base_url'] = 'http://localhost/manthabill/'; </pre>
+Manthabill is a free billing/invoice management software for hosting owners or those running a hosting business. Please do not remove the copyright link.
 
-5. login dengan info berikut:
-<pre>
-Administrator
-URL: http://localhost/manthabill/staff
-username: admin
-password: admin
+## Technologies Used
+- **Framework:** CodeIgniter 3
+- **Template:** [AdminLTE](https://adminlte.io/)
+- **PHP Version:** PHP 5.6 ([Download here](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/5.6.3/))
 
-User
-URL http://localhost/manthabill/
-silahkan registrasi untuk dapat login</pre>
+## Installation on Hosting
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/alexistdev/manthabill.git
+   ```
+2. Upload the files and ensure the PHP version is set to 5.6.
+3. Create a database and import the `manthabill.sql` file.
+4. Edit the `config/database.php` file to configure your database username, database name, and password.
+5. Configure SMTP settings for sending emails in `config/email.php`.
+6. Set up a cron job in your cPanel similar to:
+   ```bash
+   wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
+   ```
 
-Catatan:</br>
-Ongoing development untuk versi laravel 11
+## Installation on Localhost
 
-Silahkan digunakan, jika ada yang butuh bantuan bisa kontak saya di email: alexistdev@gmail.com</br>
-atau buka saja issue di github
+1. Ensure your system has PHP 5.6 installed:
+   ```bash
+   php -v
+   ```
+2. Create the `manthabill` database and import `manthabill.sql`.
+3. Configure database settings in `config/database.php` with your database details.
+4. Edit `config/config.php` to update the URL:
+   ```php
+   $config['base_url'] = 'http://localhost/manthabill/';
+   ```
+5. Login Credentials:
 
+   **Administrator**
+   - URL: `http://localhost/manthabill/staff`
+   - Username: `admin`
+   - Password: `admin`
 
-Gambar:</br>
+   **User**
+   - URL: `http://localhost/manthabill/`
+   - Register to create an account.
 
-#### Gambar:Halaman Administrator:
-<br />
-<img src="https://github.com/alexistdev/manthabill/blob/master/Photo/gambar1.png?raw=true" width="1200px">
-<br />
+## Note
+Ongoing development for Laravel 11 version is in progress. For assistance, contact me via email at [alexistdev@gmail.com](mailto:alexistdev@gmail.com) or open an issue on GitHub.
 
-#### Gambar:Halaman Client:
-<br />
-<img src="https://github.com/alexistdev/manthabill/blob/master/Photo/gambar2.png?raw=true" width="1200px">
-<br />
+## Screenshots
 
-#### Gambar:Halaman Service:
-<br />
-<img src="https://github.com/alexistdev/manthabill/blob/master/Photo/gambar3.png?raw=true" width="1200px">
-<br />
+#### Administrator Page:
+![Administrator Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar1.png?raw=true)
 
-#### Gambar:Halaman Detail User:
-<br />
-<img src="https://github.com/alexistdev/manthabill/blob/master/Photo/gambar4.png?raw=true" width="1200px">
-<br />
+#### Client Page:
+![Client Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar2.png?raw=true)
 
-#### Gambar:Halaman Detail Invoice:
-<br />
-<img src="https://github.com/alexistdev/manthabill/blob/master/Photo/gambar5.png?raw=true" width="1200px">
-<br />
+#### Service Page:
+![Service Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar3.png?raw=true)
+
+#### User Detail Page:
+![User Detail Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar4.png?raw=true)
+
+#### Invoice Detail Page:
+![Invoice Detail Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar5.png?raw=true)
