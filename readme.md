@@ -5,6 +5,8 @@
 - Development is ongoing for GeoBill version 1 using Angular and Spring Boot: [Link](https://github.com/alexistdev/geobill)
 
 Manthabill is a free billing/invoice management software for hosting owners or those running a hosting business. Please do not remove the copyright link.
+## DEMO
+https://manthabill.my.id/
 
 ## Technologies Used
 - **Framework:** CodeIgniter 3
