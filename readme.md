@@ -27,6 +27,14 @@ https://manthabill.my.id/
    ```bash
    wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
    ```
+7. Create file a .htaccess and place it in the public_html directory :
+   ```bash
+   RewriteEngine on
+	RewriteCond $1 !^(index\.php|resources|robots\.txt)
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+   ```
 
 ## Installation on Localhost
 
