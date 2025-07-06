@@ -25,7 +25,7 @@ https://manthabill.my.id/
 5. Configure SMTP settings for sending emails in `config/email.php`.
 6. Set up a cron job in your cPanel similar to:
    ```bash
-   wget -qO- http://manthabill.com/Cronjob > /dev/null 2>&1
+   wget -qO- http://[your-domain]/Cronjob > /dev/null 2>&1
    ```
 7. Create file a .htaccess and place it in the public_html directory :
    ```bash
