@@ -12,11 +12,16 @@ namespace App\Interfaces;
 
 use App\Http\Requests\Admin\CountryRequest;
 
+
 interface CountryInterface
 {
     public function getAllCountries($request);
 
     public function save(CountryRequest $request):void;
+
+    public function update(CountryRequest $request):void;
+
+    public function delete(CountryRequest $request):void;
 
 //    public function
 }

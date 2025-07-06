@@ -111,7 +111,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="text" name="country_id" class="form-control" id="country_id"
+                                <input type="hidden" name="country_id" class="form-control" id="country_id"
                                        value="{{old('country_id')}}">
                             </div>
                         </div>
@@ -133,6 +133,48 @@
         </div>
     </div>
     <!-- END: Modal EDIT -->
+
+    <!-- START: Modal DELETE -->
+    <div class="modal fade" id="modalHapus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{route('adm.countries.delete')}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Data</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                @if($errors->delete->has('country_id'))
+                                    <span
+                                        class="text-danger errorMessage">{{$errors->delete->first('country_id')}}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" name="country_id" class="form-control" id="country_delete_id"
+                                       value="{{old('country_id')}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p>Apakah anda ingin menghapus data ini ?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: Modal DELETE -->
     @push('customJS')
         <!-- Required datatable js -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -157,6 +199,14 @@
                     let fname = $(this).data('name');
                     $('#country_id').val(fid);
                     $('#editName').val(fname);
+                });
+
+                /** saat tombol hapus di klik */
+                $(document).on("click", ".open-hapus", function (e) {
+                    e.preventDefault();
+                    let fid = $(this).data('id');
+                    $('#country_delete_id').val(fid);
+
                 });
 
                 $('#tableCountries').DataTable({

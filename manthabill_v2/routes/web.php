@@ -35,6 +35,7 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/countries', [AdminCountry::class, 'index'])->name('adm.countries');
     Route::post('/admin/countries', [AdminCountry::class, 'store'])->name('adm.countries.save');
     Route::put('/admin/countries', [AdminCountry::class, 'update'])->name('adm.countries.update');
+    Route::delete('/admin/countries', [AdminCountry::class, 'destroy'])->name('adm.countries.delete');
     Route::get('/admin/clients', [AdminClient::class, 'index'])->name('adm.clients');
 });
 

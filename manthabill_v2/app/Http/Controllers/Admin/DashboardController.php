@@ -22,6 +22,11 @@ class DashboardController extends Controller
 
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
+            $this->users = Auth::user();
+            return $next($request);
+        });
+
         $this->user = Auth::user();
     }
 

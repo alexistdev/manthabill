@@ -14,6 +14,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CountryRequest;
 use App\Interfaces\CountryInterface;
+use App\Models\Country;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,11 @@ class CountriesController extends Controller
 
     public function __construct(CountryInterface $countryRepository)
     {
+        $this->middleware(function ($request, $next) {
+            $this->users = Auth::user();
+            return $next($request);
+        });
+
         $this->user = Auth::user();
         $this->countryRepository = $countryRepository;
     }
@@ -61,9 +67,23 @@ class CountriesController extends Controller
         $request->validated();
         DB::beginTransaction();
         try {
-
+            $this->countryRepository->update($request);
             DB::commit();
             return redirect(route('adm.countries'))->with(['warning' => "Data Country berhasil diperbaharui!"]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect(route('adm.countries'))->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy(CountryRequest $request)
+    {
+        $request->validated();
+        DB::beginTransaction();
+        try {
+            $this->countryRepository->delete($request);
+            DB::commit();
+            return redirect(route('adm.countries'))->with(['delete' => "Data Country berhasil dihapus!"]);
         } catch (Exception $e) {
             DB::rollback();
             return redirect(route('adm.countries'))->withErrors(['error' => $e->getMessage()]);
