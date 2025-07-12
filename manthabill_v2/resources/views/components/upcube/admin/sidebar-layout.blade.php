@@ -26,7 +26,7 @@
             </a>
             <ul class="sub-menu" aria-expanded="false">
                 <li><a href="{{route('adm.countries')}}">Countries</a></li>
-                <li><a href="auth-register.html">Provinces / States</a></li>
+                <li><a href="{{route('adm.provincies')}}">Provinces / States</a></li>
             </ul>
         </li>
 

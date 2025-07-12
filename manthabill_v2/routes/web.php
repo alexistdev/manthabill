@@ -11,7 +11,8 @@
 
 use App\Http\Controllers\Admin\{ClientController as AdminClient,
     CountriesController as AdminCountry,
-    DashboardController as AdminDash};
+    DashboardController as AdminDash,
+    ProvinceController as AdminProvince};
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\DashboardController as StaffDash;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::post('/admin/countries', [AdminCountry::class, 'store'])->name('adm.countries.save');
     Route::put('/admin/countries', [AdminCountry::class, 'update'])->name('adm.countries.update');
     Route::delete('/admin/countries', [AdminCountry::class, 'destroy'])->name('adm.countries.delete');
+
+    Route::get('/admin/provincies', [AdminProvince::class, 'index'])->name('adm.provincies');
+    Route::post('/admin/provincies', [AdminProvince::class, 'store'])->name('adm.provincies.save');
     Route::get('/admin/clients', [AdminClient::class, 'index'])->name('adm.clients');
 });
 

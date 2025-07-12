@@ -12,7 +12,9 @@
 namespace App\Providers;
 
 use App\Http\Repository\Admin\CountryRepository;
+use App\Http\Repository\Admin\ProvinceRepository;
 use App\Interfaces\CountryInterface;
+use App\Interfaces\ProvinceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(CountryInterface::class, CountryRepository::class);
+        $this->app->bind(ProvinceInterface::class, ProvinceRepository::class);
     }
 
     /**
