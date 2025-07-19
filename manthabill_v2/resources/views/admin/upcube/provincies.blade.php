@@ -106,7 +106,7 @@
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{route('adm.countries.update')}}" method="post">
+                <form action="{{route('adm.provincies.update')}}" method="post">
                     @csrf
                     @method('PUT')
                     <div class="modal-header">
@@ -116,24 +116,39 @@
                     <div class="modal-body">
                         <div class="row justify-content-center">
                             <div class="col-md-12">
-                                @if($errors->edit->has('country_id'))
+                                @if($errors->edit->has('province_id'))
                                     <span
-                                        class="text-danger errorMessage">{{$errors->edit->first('country_id')}}</span>
+                                        class="text-danger errorMessage">{{$errors->edit->first('province_id')}}</span>
                                 @endif
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="hidden" name="country_id" class="form-control" id="country_id"
-                                       value="{{old('country_id')}}">
+                                <input type="hidden" name="province_id" class="form-control" id="province_id_edit"
+                                       value="{{old('province_id')}}">
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-12">
                                 <label
                                     for="name" class="form-label">NAMA NEGARA</label>
+                                <select name="country_id" id="country_id_edit" class="form-control" required>
+                                    <option value="">-</option>
+                                    @foreach($optionCountry as $row)
+                                        <option value="{{$row->id}}" @if(($row->id) == old('country_id')) SELECTED @endif>{{$row->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-1">
+                            <div class="col-lg-12">
+                                <label
+                                    for="name" class="form-label">NAMA PROVINSI</label>
                                 <input type="text" name="name" id="editName" class="form-control"
-                                       value="{{old('name')}}" maxlength="255"/>
+                                       value="{{old('name')}}" maxlength="255" required/>
                             </div>
                         </div>
                     </div>
@@ -209,8 +224,10 @@
                 $(document).on("click", ".open-edit", function (e) {
                     e.preventDefault();
                     let fid = $(this).data('id');
+                    let fcountry = $(this).data('country');
                     let fname = $(this).data('name');
-                    $('#country_id').val(fid);
+                    $('#province_id_edit').val(fid);
+                    $('#country_id_edit').val(fcountry);
                     $('#editName').val(fname);
                 });
 

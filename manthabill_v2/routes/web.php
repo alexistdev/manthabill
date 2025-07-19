@@ -40,6 +40,7 @@ Route::middleware(['role:admin'])->group(function () {
 
     Route::get('/admin/provincies', [AdminProvince::class, 'index'])->name('adm.provincies');
     Route::post('/admin/provincies', [AdminProvince::class, 'store'])->name('adm.provincies.save');
+    Route::put('/admin/provincies', [AdminProvince::class, 'update'])->name('adm.provincies.update');
     Route::get('/admin/clients', [AdminClient::class, 'index'])->name('adm.clients');
 });
 

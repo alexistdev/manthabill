@@ -58,4 +58,23 @@ class ProvinceController extends Controller
             return redirect(route('adm.provincies'))->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+    public function update(ProvinceRequest $request)
+    {
+        $request->validated();
+        DB::beginTransaction();
+        try {
+            $this->provinceRepository->update($request);
+            DB::commit();
+            return redirect(route('adm.provincies'))->with(['warning' => "Data Provinsi berhasil diperbaharui!"]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect(route('adm.provincies'))->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy(ProvinceRequest $request)
+    {
+        $request->validated();
+    }
 }

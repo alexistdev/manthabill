@@ -9,8 +9,10 @@
 
 namespace App\Http\Repository\Admin;
 
+use App\Http\Requests\Admin\CountryRequest;
 use App\Http\Requests\Admin\ProvinceRequest;
 use App\Interfaces\ProvinceInterface;
+use App\Models\Country;
 use App\Models\Province;
 
 class ProvinceRepository implements ProvinceInterface
@@ -28,7 +30,8 @@ class ProvinceRepository implements ProvinceInterface
             })
             ->addColumn('action', function ($row) {
                 $id = $row->id;
-                $btn = "<button class=\"btn btn-sm btn-primary open-edit\" data-name =\"$row->name\" data-id=\"$id\"data-bs-toggle=\"modal\" data-bs-target=\"#modalEdit\"><i class=\"fas fa-edit\"></i> Edit</button>";
+                $countryId = $row->country?->id;
+                $btn = "<button class=\"btn btn-sm btn-primary open-edit\" data-name =\"$row->name\" data-id=\"$id\" data-country =\"$countryId\" data-bs-toggle=\"modal\" data-bs-target=\"#modalEdit\"><i class=\"fas fa-edit\"></i> Edit</button>";
                 $btn = $btn . " <a href=\"#\" class=\"btn btn-sm btn-danger ml-auto open-hapus\" data-id=\"$id\" data-bs-toggle=\"modal\" data-bs-target=\"#modalHapus\"><i class=\"fas fa-trash\"></i> Delete</i></a>";
                 return $btn;
             })
@@ -42,6 +45,20 @@ class ProvinceRepository implements ProvinceInterface
         $province->country_id = $request->country_id;
         $province->name = $request->name;
         $province->save();
+    }
+
+    public function update(ProvinceRequest $request): void
+    {
+        $province = Province::findOrFail($request->province_id);
+        $province->update([
+            'country_id' => $request->country_id,
+            'name' => $request->name
+        ]);
+    }
+
+    public function delete(ProvinceRequest $request): void
+    {
+        // TODO: Implement delete() method.
     }
 
 
