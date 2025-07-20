@@ -114,14 +114,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                @if($errors->edit->has('province_id'))
-                                    <span
-                                        class="text-danger errorMessage">{{$errors->edit->first('province_id')}}</span>
-                                @endif
-                            </div>
-                        </div>
 
                         <div class="row">
                             <div class="col-md-12">
@@ -166,7 +158,7 @@
     <div class="modal fade" id="modalHapus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{route('adm.countries.delete')}}" method="post">
+                <form action="{{route('adm.provincies.delete')}}" method="post">
                     @csrf
                     @method('DELETE')
                     <div class="modal-header">
@@ -174,18 +166,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-12">
-                                @if($errors->delete->has('country_id'))
-                                    <span
-                                        class="text-danger errorMessage">{{$errors->delete->first('country_id')}}</span>
-                                @endif
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="hidden" name="country_id" class="form-control" id="country_delete_id"
-                                       value="{{old('country_id')}}">
+                                <input type="text" name="province_id" class="form-control" id="province_delete_id"
+                                       value="{{old('province_id')}}">
                             </div>
                         </div>
                         <div class="row">
@@ -235,7 +219,7 @@
                 $(document).on("click", ".open-hapus", function (e) {
                     e.preventDefault();
                     let fid = $(this).data('id');
-                    $('#country_delete_id').val(fid);
+                    $('#province_delete_id').val(fid);
 
                 });
 

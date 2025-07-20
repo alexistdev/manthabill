@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProvinceRequest;
 use App\Interfaces\ProvinceInterface;
 use App\Models\Country;
-use App\Models\Province;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -76,5 +75,14 @@ class ProvinceController extends Controller
     public function destroy(ProvinceRequest $request)
     {
         $request->validated();
+        DB::beginTransaction();
+        try {
+            $province = strtoupper($this->provinceRepository->delete($request));
+            DB::commit();
+            return redirect(route('adm.provincies'))->with(['delete' => "Data Provinsi <b>$province</b> berhasil dihapus!"]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect(route('adm.provincies'))->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }

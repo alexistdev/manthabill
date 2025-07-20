@@ -12,5 +12,5 @@ interface ProvinceInterface
 
     public function update(ProvinceRequest $request):void;
 
-    public function delete(ProvinceRequest $request):void;
+    public function delete(ProvinceRequest $request):string;
 }

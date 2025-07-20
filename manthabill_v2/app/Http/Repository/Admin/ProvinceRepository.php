@@ -9,10 +9,8 @@
 
 namespace App\Http\Repository\Admin;
 
-use App\Http\Requests\Admin\CountryRequest;
 use App\Http\Requests\Admin\ProvinceRequest;
 use App\Interfaces\ProvinceInterface;
-use App\Models\Country;
 use App\Models\Province;
 
 class ProvinceRepository implements ProvinceInterface
@@ -56,10 +54,11 @@ class ProvinceRepository implements ProvinceInterface
         ]);
     }
 
-    public function delete(ProvinceRequest $request): void
+    public function delete(ProvinceRequest $request): string
     {
-        // TODO: Implement delete() method.
+        $province = Province::findOrFail($request->province_id);
+        Province::where('id',$province->id)->delete();
+        return $province->name ?? '';
     }
-
 
 }
