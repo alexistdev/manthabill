@@ -1,25 +1,60 @@
-ManthabillV2 adalah software manajemen billing /invoice untuk pemilik Hosting atau yang sedang menjalankan bisnis Hosting. Software ini gratis, tapi mohon untuk tidak menghilangkan link copyrightnya.<br>
-Dikembangkan dengan:<br>
-<ul>
-	<li>Framework : Laravel 11</li>
-  <li>PHP : 8.2</li>
-  <li>MySQL : 1.8</li>
-	<li>Template : upcube</li>
-</ul>
-<br><br>
+# ManthabillV2
 
-Installasi:</br>
-1. git clone https://github.com/alexistdev/manthabill.git</br>
-2. arahkan terminal ke directory manthabill_v2 kemudian ketikkan: composer install
-3. ketikkan di terminal: npm run build
-4. Buat database kosong dengan nama manthabill, lakukan konfigurasi database di file .env</br>
-5. Jalankan perintah: php artisan key:generate</br>
-6. Jalankan perintah: php artisan migrate:fresh --seed</br>
-7. Jalankan perintah: php artisan serve
-</br></br>
+ManthabillV2 is a billing/invoice management software for Hosting providers or those running a Hosting business. This software is free to use, but please maintain the copyright links.
 
-Upgrade:</br>
-1. Lakukan git fetch dan git pull di dalam folder manthabill anda.<br><br>
+## Tech Stack
 
-Silahkan digunakan, jika ada yang butuh bantuan bisa kontak saya di email: alexistdev@gmail.com</br>
-atau buka saja issue di github
+- **Framework:** Laravel 11
+- **PHP Version:** 8.2
+- **Database:** MySQL 1.8
+- **Template:** Upcube
+- **Frontend:** TailwindCSS, AlpineJS
+- **Package Manager:** NPM
+
+## Requirements
+
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL
+
+## Installation
+
+1. Clone the repository:
+```
+git clone -b development https://github.com/alexistdev/manthabill.git
+```
+2. Navigate to project directory:
+```
+cd manthabill_v2	
+```
+3. Install dependencies:
+```
+composer install
+```
+4. Build assets:
+```
+npm run build
+```
+5. Configure application:
+   - Copy `.env.example` to `.env`
+   - Create an empty database named `manthabill`
+   - Update database configuration in `.env` file
+6. Generate application key:
+```
+php artisan key:generate
+```
+7. Run database migrations:
+```
+php artisan migrate:fresh --seed
+```
+8. Start the application:
+```
+php artisan serve
+```
+## Support
+
+Need help? You can:
+- Email: alexistdev@gmail.com
+- Open an [Issue on GitHub](https://github.com/alexistdev/manthabill/issues)
+
