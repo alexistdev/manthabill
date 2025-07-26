@@ -13,8 +13,10 @@ namespace App\Providers;
 
 use App\Http\Repository\Admin\CountryRepository;
 use App\Http\Repository\Admin\ProvinceRepository;
+use App\Http\Repository\Admin\RegencyRepository;
 use App\Interfaces\CountryInterface;
 use App\Interfaces\ProvinceInterface;
+use App\Interfaces\RegencyInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(CountryInterface::class, CountryRepository::class);
         $this->app->bind(ProvinceInterface::class, ProvinceRepository::class);
+        $this->app->bind(RegencyInterface::class, RegencyRepository::class);
     }
 
     /**

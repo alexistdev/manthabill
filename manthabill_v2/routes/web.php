@@ -12,7 +12,9 @@
 use App\Http\Controllers\Admin\{ClientController as AdminClient,
     CountriesController as AdminCountry,
     DashboardController as AdminDash,
-    ProvinceController as AdminProvince};
+    ProvinceController as AdminProvince,
+    RegencyController as AdminRegency
+};
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\DashboardController as StaffDash;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +44,12 @@ Route::middleware(['role:admin'])->group(function () {
     Route::post('/admin/provincies', [AdminProvince::class, 'store'])->name('adm.provincies.save');
     Route::put('/admin/provincies', [AdminProvince::class, 'update'])->name('adm.provincies.update');
     Route::delete('/admin/provincies', [AdminProvince::class, 'destroy'])->name('adm.provincies.delete');
+
+    Route::get('/admin/regencies', [AdminRegency::class, 'index'])->name('adm.regencies');
+    Route::post('/admin/regencies', [AdminRegency::class, 'store'])->name('adm.regencies.save');
+    Route::put('/admin/regencies', [AdminRegency::class, 'update'])->name('adm.regencies.update');
+    Route::delete('/admin/regencies', [AdminRegency::class, 'destroy'])->name('adm.regencies.delete');
+
     Route::get('/admin/clients', [AdminClient::class, 'index'])->name('adm.clients');
 });
 
