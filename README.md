@@ -8,7 +8,7 @@ ManthabillV2 is a billing/invoice management software for Hosting providers or t
 - **PHP Version:** 8.2
 - **Database:** MySQL 1.8
 - **Template:** Upcube
-- **Frontend:** TailwindCSS, AlpineJS
+- **Frontend:** Blade, Bootstrap 5
 - **Package Manager:** NPM
 
 ## Requirements
