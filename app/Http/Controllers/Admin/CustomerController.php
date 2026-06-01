@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
     public function show(string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::with('detail')->find($id) : null;
 
         if (! $user) {
@@ -85,7 +85,7 @@ class CustomerController extends Controller
 
     public function edit(string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::with('detail')->find($id) : null;
 
         if (! $user) {
@@ -103,7 +103,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::with('detail')->find($id) : null;
 
         if (! $user) {
@@ -137,7 +137,7 @@ class CustomerController extends Controller
 
     public function destroy(string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::find($id) : null;
 
         if (! $user) {
@@ -154,7 +154,7 @@ class CustomerController extends Controller
 
     public function suspend(string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::find($id) : null;
 
         if (! $user) {
@@ -173,7 +173,7 @@ class CustomerController extends Controller
 
     public function activate(string $encrypted)
     {
-        $id   = decrypt_url($encrypted);
+        $id   = $this->decryptId($encrypted);
         $user = $id ? User::find($id) : null;
 
         if (! $user) {
@@ -188,6 +188,15 @@ class CustomerController extends Controller
         }
 
         return redirect()->route('admin.customers.show', $encrypted);
+    }
+
+    private function decryptId(string $encrypted): ?string
+    {
+        try {
+            return decrypt($encrypted);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     public function checkEmail(Request $request)

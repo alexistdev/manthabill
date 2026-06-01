@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Detail User <span class="text-primary font-weight-bold">{{ ucwords(cetak($user->detail?->nama_depan ?? '')) }}</span></h1>
+                    <h1>Detail User <span class="text-primary font-weight-bold">{{ ucwords($user->detail?->nama_depan ?? '') }}</span></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -33,19 +33,19 @@
                         <div class="card-body box-profile">
                             <h3 class="profile-username text-center">
                                 @if(($user->detail?->nama_depan ?? '') === '' && ($user->detail?->nama_belakang ?? '') === '')
-                                    Member #{{ cetak($user->client) }}
+                                    Member #{{ $user->client }}
                                 @else
-                                    {{ ucwords(cetak($user->detail?->nama_depan ?? '')) }} {{ ucwords(cetak($user->detail?->nama_belakang ?? '')) }}
+                                    {{ ucwords($user->detail?->nama_depan ?? '') }} {{ ucwords($user->detail?->nama_belakang ?? '') }}
                                 @endif
                             </h3>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>No Telepon</b>
-                                    <a class="float-right">{{ ($user->detail?->phone ?? '') === '' ? 'NA' : cetak($user->detail->phone) }}</a>
+                                    <a class="float-right">{{ ($user->detail?->phone ?? '') === '' ? 'NA' : $user->detail->phone }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Email</b>
-                                    <a class="float-right">{{ cetak($user->email) }}</a>
+                                    <a class="float-right">{{ $user->email }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Status</b>
@@ -65,7 +65,7 @@
                                         @if(($user->detail?->alamat ?? '') === '' && ($user->detail?->alamat2 ?? '') === '')
                                             NN
                                         @else
-                                            {{ cetak($user->detail?->alamat ?? '') }} {{ cetak($user->detail?->alamat2 ?? '') }}
+                                            {{ $user->detail?->alamat ?? '' }} {{ $user->detail?->alamat2 ?? '' }}
                                         @endif
                                     </a>
                                 </li>
@@ -80,23 +80,23 @@
                             <ul class="list-group">
                                 @if($user->status != 3)
                                     <li class="list-group-item border-0">
-                                        <a href="{{ route('admin.customers.edit', encrypt_url(cetak($user->id_user))) }}">
+                                        <a href="{{ route('admin.customers.edit', encrypt($user->id_user)) }}">
                                             <i class="fas fa-user-edit"></i> Edit Akun
                                         </a>
                                     </li>
                                     <li class="list-group-item border-0">
-                                        <a href="{{ url('staff/Admin/suspend_user/' . encrypt_url(cetak($user->id_user))) }}">
+                                        <a href="{{ url('staff/Admin/suspend_user/' . encrypt($user->id_user)) }}">
                                             <i class="fas fa-lock"></i> Suspend Akun
                                         </a>
                                     </li>
                                 @else
                                     <li class="list-group-item border-0">
-                                        <a href="{{ route('admin.customers.edit', encrypt_url(cetak($user->id_user))) }}">
+                                        <a href="{{ route('admin.customers.edit', encrypt($user->id_user)) }}">
                                             <i class="fas fa-user-edit"></i> Edit Akun
                                         </a>
                                     </li>
                                     <li class="list-group-item border-0">
-                                        <a href="{{ url('staff/Admin/aktifkan_user/' . encrypt_url(cetak($user->id_user))) }}">
+                                        <a href="{{ url('staff/Admin/aktifkan_user/' . encrypt($user->id_user)) }}">
                                             <i class="fas fa-unlock"></i> Aktifkan
                                         </a>
                                     </li>

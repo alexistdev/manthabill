@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ cetak($title) }}</title>
+    <title>{{ $title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('gambar/myicon.png') }}">
@@ -17,7 +17,7 @@
 <body class="hold-transition login-page bg-dark">
 <div class="login-box">
     <div class="login-logo">
-        <b>{{ cetak($namaHosting) }}</b> Daftar
+        <b>{{ $namaHosting }}</b> Daftar
     </div>
     <div class="card">
         <div class="card-body register-card-body">
@@ -67,7 +67,7 @@
                         <div class="icheck-primary">
                             <input type="checkbox" name="tos" id="agreeTerms" value="1">
                             <label for="agreeTerms">
-                                Setuju <a href="{{ cetak($tos) }}" target="_blank">T.O.S</a>
+                                Setuju <a href="{{ $tos }}" target="_blank">T.O.S</a>
                             </label>
                         </div>
                     </div>

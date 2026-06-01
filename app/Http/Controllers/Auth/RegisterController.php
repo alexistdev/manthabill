@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -20,7 +21,7 @@ class RegisterController extends Controller
         }
 
         $setting = Setting::current();
-        $word    = _angkaUnik(6);
+        $word    = strtolower(Str::random(6));
         session(['captchaword' => $word]);
 
         return view('auth.register', [

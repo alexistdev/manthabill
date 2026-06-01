@@ -108,7 +108,7 @@ class CustomerManagementTest extends TestCase
         $this->createSetting();
         $user = $this->createUser();
 
-        $response = $this->get('/staff/Admin/detail_user/' . encrypt_url($user->id_user));
+        $response = $this->get('/staff/Admin/detail_user/' . encrypt($user->id_user));
 
         $response->assertStatus(200);
         $response->assertSee('Detail User');
@@ -129,7 +129,7 @@ class CustomerManagementTest extends TestCase
         $this->createSetting();
         $user = $this->createUser();
 
-        $response = $this->get('/staff/Admin/edit_user/' . encrypt_url($user->id_user));
+        $response = $this->get('/staff/Admin/edit_user/' . encrypt($user->id_user));
 
         $response->assertStatus(200);
         $response->assertSee('Edit User');
@@ -139,7 +139,7 @@ class CustomerManagementTest extends TestCase
     {
         $this->createSetting();
         $user      = $this->createUser();
-        $encrypted = encrypt_url($user->id_user);
+        $encrypted = encrypt($user->id_user);
 
         $response = $this->put('/staff/Admin/update_user/' . $encrypted, [
             'namaDepan'    => 'Ahmad',
@@ -167,7 +167,7 @@ class CustomerManagementTest extends TestCase
         $this->createSetting();
         $user = $this->createUser();
 
-        $response = $this->delete('/staff/Admin/hapus_user/' . encrypt_url($user->id_user));
+        $response = $this->delete('/staff/Admin/hapus_user/' . encrypt($user->id_user));
 
         $response->assertRedirect(route('admin.customers.index'));
         $this->assertDatabaseMissing('tbuser', ['id_user' => $user->id_user]);
@@ -177,7 +177,7 @@ class CustomerManagementTest extends TestCase
     {
         $this->createSetting();
         $user      = $this->createUser();
-        $encrypted = encrypt_url($user->id_user);
+        $encrypted = encrypt($user->id_user);
 
         $response = $this->get('/staff/Admin/suspend_user/' . $encrypted);
 
@@ -190,7 +190,7 @@ class CustomerManagementTest extends TestCase
         $this->createSetting();
         $user = $this->createUser(['status' => User::STATUS_SUSPENDED]);
 
-        $this->get('/staff/Admin/suspend_user/' . encrypt_url($user->id_user));
+        $this->get('/staff/Admin/suspend_user/' . encrypt($user->id_user));
 
         $this->assertSame(User::STATUS_SUSPENDED, $user->fresh()->status);
     }
@@ -199,7 +199,7 @@ class CustomerManagementTest extends TestCase
     {
         $this->createSetting();
         $user      = $this->createUser(['status' => User::STATUS_SUSPENDED]);
-        $encrypted = encrypt_url($user->id_user);
+        $encrypted = encrypt($user->id_user);
 
         $response = $this->get('/staff/Admin/aktifkan_user/' . $encrypted);
 
@@ -212,7 +212,7 @@ class CustomerManagementTest extends TestCase
         $this->createSetting();
         $user = $this->createUser(['status' => User::STATUS_ACTIVE]);
 
-        $this->get('/staff/Admin/aktifkan_user/' . encrypt_url($user->id_user));
+        $this->get('/staff/Admin/aktifkan_user/' . encrypt($user->id_user));
 
         $this->assertSame(User::STATUS_ACTIVE, $user->fresh()->status);
     }

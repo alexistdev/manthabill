@@ -52,13 +52,13 @@
                                 @foreach ($dataUser as $user)
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td class="text-center">{{ cetak($user->email) }}</td>
+                                        <td class="text-center">{{ $user->email }}</td>
                                         <td class="text-center">{{ $user->date_create ? $user->date_create->format('d-m-Y') : '-' }}</td>
                                         <td class="text-center">
-                                            <a class="btn btn-primary btn-sm" href="{{ route('admin.customers.show', encrypt_url($user->id_user)) }}">Detail</a>
+                                            <a class="btn btn-primary btn-sm" href="{{ route('admin.customers.show', encrypt($user->id_user)) }}">Detail</a>
                                             <button type="button" class="btn btn-danger btn-sm" id="tombolHapus"
                                                 data-toggle="modal" data-target="#modalHapus"
-                                                data-id="{{ encrypt_url($user->id_user) }}">Hapus</button>
+                                                data-id="{{ encrypt($user->id_user) }}">Hapus</button>
                                         </td>
                                     </tr>
                                 @endforeach
