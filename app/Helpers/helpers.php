@@ -123,7 +123,7 @@ if (!function_exists('kirim_email')) {
         $setting = Setting::current();
         $sender  = $setting?->email_hosting ?? config('mail.from.address', 'noreply@manthabill.com');
 
-        \App\Models\Email::create([
+        \App\Models\EmailQueue::create([
             'email_pengirim' => $sender,
             'email_tujuan'   => $emailTujuan,
             'subyek'         => $judul,
