@@ -8,6 +8,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test/layout', function () {
+    return view('test.layout-test');
+})->name('test.layout');
+
 /*
 |--------------------------------------------------------------------------
 | Public Registration Routes
