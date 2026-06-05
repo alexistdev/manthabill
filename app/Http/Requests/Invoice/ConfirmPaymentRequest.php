@@ -2,13 +2,26 @@
 
 namespace App\Http\Requests\Invoice;
 
+use App\Models\Invoice;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ConfirmPaymentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $encrypted = $this->route('encrypted');
+
+        try {
+            $id = decrypt($encrypted);
+        } catch (\Throwable) {
+            return false;
+        }
+
+        return Invoice::where('user_id', Auth::id())
+            ->whereIn('status_inv', [Invoice::STATUS_PENDING, Invoice::STATUS_CONFIRMED])
+            ->where('id', (int) $id)
+            ->exists();
     }
 
     public function rules(): array
@@ -16,9 +29,10 @@ class ConfirmPaymentRequest extends FormRequest
         return [
             'nomorInvoice' => ['required'],
             'jmlTransfer'  => ['required', 'numeric'],
-            'tanggal'      => ['required'],
+            'tanggal'      => ['required', 'date'],
             'namaPengirim' => ['required', 'min:3', 'max:100'],
             'namaBank'     => ['required', 'min:3', 'max:50'],
+            'bukti'        => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
         ];
     }
 
