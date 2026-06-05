@@ -80,8 +80,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/Member', [MemberController::class, 'index'])->name('member.index');
     Route::get('/Member/logout', [MemberController::class, 'logout'])->name('logout');
 
-    // Domain (legacy — link present in sidebar but non-functional in v2.0)
+    // Domain — TLD listing, domain purchase form, and order submission
     Route::get('/Domain', [DomainController::class, 'index'])->name('domain.index');
+    Route::get('/Domain/beli', [DomainController::class, 'beli'])->name('domain.beli');
+    Route::post('/Domain/beli', [DomainController::class, 'storeBeli'])->name('domain.beli.store');
 
     // Invoice
     Route::prefix('Invoice')->name('invoice.')->group(function () {
