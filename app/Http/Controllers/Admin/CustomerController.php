@@ -199,6 +199,16 @@ class CustomerController extends Controller
         }
     }
 
+    public function message(string $encrypted)
+    {
+        abort(501);
+    }
+
+    public function sendMessage(Request $request, string $encrypted)
+    {
+        abort(501);
+    }
+
     public function checkEmail(Request $request)
     {
         if (! $request->ajax()) {

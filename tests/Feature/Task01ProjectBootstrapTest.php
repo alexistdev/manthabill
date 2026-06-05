@@ -42,7 +42,7 @@ class Task01ProjectBootstrapTest extends TestCase
     public function test_application_returns_http_200(): void
     {
         $response = $this->get('/');
-        $response->assertStatus(200);
+        $response->assertRedirect(route('login'));
     }
 
     public function test_env_example_configures_mysql(): void

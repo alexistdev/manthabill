@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Admin;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -11,6 +12,20 @@ use Tests\TestCase;
 class CustomerManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $admin = Admin::create([
+            'username' => 'admin',
+            'password' => bcrypt('admin123'),
+            'level'    => 1,
+            'status'   => 1,
+        ]);
+
+        $this->actingAs($admin, 'admin');
+    }
 
     private function createSetting(): Setting
     {

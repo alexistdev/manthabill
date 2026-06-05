@@ -17,7 +17,7 @@ class RegisterController extends Controller
     public function index()
     {
         if (session('is_login_in')) {
-            return redirect('/Member');
+            return redirect()->route('member.index');
         }
 
         $setting = Setting::current();
@@ -59,13 +59,13 @@ class RegisterController extends Controller
 
         session()->flash('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
 
-        return redirect('/Login');
+        return redirect()->route('login');
     }
 
     public function checkEmail(Request $request)
     {
         if ($request->method() !== 'POST') {
-            return redirect('/Daftar');
+            return redirect()->route('register');
         }
 
         $exists = User::where('email', $request->input('email'))->exists();
@@ -76,7 +76,7 @@ class RegisterController extends Controller
     public function getCsrf(Request $request)
     {
         if (! $request->ajax()) {
-            return redirect('/Login');
+            return redirect()->route('login');
         }
 
         return response()->json([
@@ -90,7 +90,7 @@ class RegisterController extends Controller
         $user = User::where('validasi_token', $token)->first();
 
         if (! $user) {
-            return redirect('/Login');
+            return redirect()->route('login');
         }
 
         $user->update([
@@ -100,6 +100,6 @@ class RegisterController extends Controller
 
         session()->flash('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil diaktifkan, silahkan login!</div>');
 
-        return redirect('/Login');
+        return redirect()->route('login');
     }
 }

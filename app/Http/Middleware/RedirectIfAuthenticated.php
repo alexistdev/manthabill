@@ -16,8 +16,8 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 return match ($guard) {
-                    'admin' => redirect('/staff/Admin'),
-                    default => redirect('/Member'),
+                    'admin' => redirect()->route('admin.dashboard'),
+                    default => redirect()->route('member.index'),
                 };
             }
         }
