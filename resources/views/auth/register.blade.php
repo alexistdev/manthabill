@@ -1,47 +1,37 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ $title }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('gambar/myicon.png') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('assets/AdminLTE3/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="{{ asset('assets/AdminLTE3/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- AdminLTE -->
-    <link rel="stylesheet" href="{{ asset('assets/AdminLTE3/dist/css/adminlte.min.css') }}">
-</head>
-<body class="hold-transition login-page bg-dark">
+@extends('layouts.guest')
+
+@section('title', $title)
+
+@section('content')
 <div class="login-box">
     <div class="login-logo">
         <b>{{ $namaHosting }}</b> Daftar
     </div>
     <div class="card">
         <div class="card-body register-card-body">
-            {{-- Flash messages --}}
-            @if(session('pesan'))
+            @if (session('pesan'))
                 <div class="alert alert-danger">{{ session('pesan') }}</div>
             @endif
-            @if($errors->any())
+            @if (session('pesan2'))
+                {!! session('pesan2') !!}
+            @endif
+            @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
-                        @foreach($errors->all() as $err)
-                            <li>{{ $err }}</li>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
 
-            <form action="{{ url('/Daftar') }}" method="POST">
+            <form action="{{ route('register.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="_token" id="csrftoken" class="token_csrf" value="{{ csrf_token() }}">
 
                 <div class="input-group mb-3">
                     <input type="email" name="email" id="email" class="form-control" placeholder="Email"
-                        value="{{ old('email') }}" required>
+                           value="{{ old('email') }}" required>
                     <div class="input-group-append">
                         <div class="input-group-text"><span class="fas fa-envelope"></span></div>
                     </div>
@@ -90,27 +80,16 @@
             </form>
 
             <div class="col-md-12 mt-3">Sudah Memiliki Akun?</div>
-            <a href="{{ url('/') }}">
+            <a href="{{ route('login') }}">
                 <button type="button" class="btn btn-primary btn-block btn-flat">Login</button>
             </a>
         </div>
     </div>
 </div>
+@endsection
 
-<!-- jQuery -->
-<script src="{{ asset('assets/AdminLTE3/plugins/jquery/jquery.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{ asset('assets/AdminLTE3/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE -->
-<script src="{{ asset('assets/AdminLTE3/dist/js/adminlte.min.js') }}"></script>
-
+@push('scripts')
 <script>
-    $(window).bind('load', function () {
-        window.setTimeout(function () {
-            $('.alert').fadeTo(500, 0).slideUp(500, function () { $(this).remove(); });
-        }, 3000);
-    });
-
     $(function () {
         $('input').iCheck({ checkboxClass: 'icheckbox_square-blue', radioClass: 'iradio_square-blue', increaseArea: '20%' });
     });
@@ -120,7 +99,7 @@
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
-                url: '{{ url("/Daftar/get_csrf") }}',
+                url: '{{ route("register.get-csrf") }}',
                 success: function (data) {
                     $('#csrftoken').attr('name', data.csrf_name).val(data.csrf_token);
                 }
@@ -133,7 +112,7 @@
             var email = $(this).val();
             $.ajax({
                 type: 'POST',
-                url: '{{ url("/Daftar/checkEmail") }}',
+                url: '{{ route("register.check-email") }}',
                 data: { [csrfName]: csrfHash, email: email },
                 success: function (data) {
                     if (data === 'ok') {
@@ -155,5 +134,4 @@
         });
     });
 </script>
-</body>
-</html>
+@endpush

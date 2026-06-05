@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
@@ -11,8 +13,12 @@ class MemberController extends Controller
         abort(501);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        abort(501);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }
