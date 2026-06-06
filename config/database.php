@@ -114,6 +114,19 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'ci3' => [
+            'driver'    => 'mysql',
+            'host'      => env('CI3_DB_HOST', '127.0.0.1'),
+            'port'      => env('CI3_DB_PORT', '3306'),
+            'database'  => env('CI3_DB_DATABASE', 'manthabill_ci3'),
+            'username'  => env('CI3_DB_USERNAME', env('DB_USERNAME', 'root')),
+            'password'  => env('CI3_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'charset'   => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
     ],
 
     /*
