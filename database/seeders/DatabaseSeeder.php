@@ -15,9 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(AdminSeeder::class);
+        $this->call(TldSeeder::class);
+
         User::create([
             'client'      => 1,
-            'email'       => 'test@example.com',
+            'email'       => 'user@gmail.com',
             'password'    => bcrypt('password'),
             'date_create' => now()->toDateString(),
             'status'      => User::STATUS_ACTIVE,

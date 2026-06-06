@@ -25,7 +25,7 @@ class SettingController extends Controller
         $validated  = $request->validated();
         $limitEmail = ($validated['limitEmail'] ?? 0) ?: 1;
 
-        Setting::first()->update([
+        Setting::current()->update([
             'nama_hosting'   => $validated['namaHosting'],
             'judul_hosting'  => $validated['judulHosting'],
             'alamat_hosting' => $validated['alamatHosting'],

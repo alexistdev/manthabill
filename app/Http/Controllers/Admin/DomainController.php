@@ -133,9 +133,9 @@ class DomainController extends Controller
     public function storeService(Request $request)
     {
         $request->validate([
-            'tld'      => ['required', 'min:2', 'max:6'],
-            'hargaTld' => ['required', 'numeric'],
-            'status'   => ['required', 'integer'],
+            'tld'      => ['required', 'min:2', 'max:20'],
+            'hargaTld' => ['required', 'numeric', 'min:0'],
+            'status'   => ['required', 'integer', 'in:0,1'],
             'default'  => ['nullable', 'integer'],
         ]);
 

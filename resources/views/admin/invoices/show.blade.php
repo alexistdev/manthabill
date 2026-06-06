@@ -93,11 +93,9 @@
                         </div>
                         <div class="card-footer text-right">
                             @if($invoice->status_inv != 1)
-                                <a href="{{ route('admin.invoices.pay', $encrypted) }}"
-                                   class="btn btn-success"
-                                   onclick="return confirm('Konfirmasi pembayaran invoice ini?')">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalKonfirmasiPay">
                                     <i class="fas fa-check-circle"></i> Bayar Invoice
-                                </a>
+                                </button>
                             @endif
                             <a href="{{ route('admin.invoices.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
@@ -169,4 +167,31 @@
         </div>
     </section>
 </div>
+
+@if($invoice->status_inv != 1)
+{{-- Confirmation Modal --}}
+<div class="modal fade" id="modalKonfirmasiPay" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiPayLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalKonfirmasiPayLabel">Konfirmasi Pembayaran</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Konfirmasi pembayaran invoice <strong>{{ strtoupper($invoice->no_invoice) }}</strong>?</p>
+                <p class="text-muted mb-0">Tindakan ini tidak dapat dibatalkan.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a href="{{ route('admin.invoices.pay', $encrypted) }}" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Konfirmasi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection

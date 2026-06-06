@@ -39,9 +39,9 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Nama TLD <span class="text-danger">*</span></label>
-                                    <input type="text" name="namaTld" class="form-control @error('namaTld') is-invalid @enderror"
-                                           value="{{ old('namaTld') }}" maxlength="20" placeholder="contoh: .com">
-                                    @error('namaTld')
+                                    <input type="text" name="tld" class="form-control @error('tld') is-invalid @enderror"
+                                           value="{{ old('tld') }}" maxlength="20" placeholder="contoh: .com">
+                                    @error('tld')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -55,9 +55,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <select name="statusTld" class="form-control">
-                                        <option value="1" {{ old('statusTld', 1) == 1 ? 'selected' : '' }}>Aktif</option>
-                                        <option value="0" {{ old('statusTld') == 0 ? 'selected' : '' }}>Nonaktif</option>
+                                    <select name="status" class="form-control">
+                                        <option value="1" {{ old('status', 1) == 1 ? 'selected' : '' }}>Aktif</option>
+                                        <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Nonaktif</option>
                                     </select>
                                 </div>
                                 <div class="d-flex justify-content-between">

@@ -79,11 +79,12 @@
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             @if($inv->status_inv != 1)
-                                            <a href="{{ route('admin.invoices.pay', encrypt($inv->id)) }}"
-                                               class="btn btn-xs btn-success"
-                                               onclick="return confirm('Konfirmasi pembayaran invoice {{ strtoupper($inv->no_invoice) }}?')">
+                                            <button type="button"
+                                                    class="btn btn-xs btn-success btn-confirm-pay"
+                                                    data-invoice="{{ strtoupper($inv->no_invoice) }}"
+                                                    data-url="{{ route('admin.invoices.pay', encrypt($inv->id)) }}">
                                                 <i class="fas fa-check"></i>
-                                            </a>
+                                            </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -101,10 +102,40 @@
 </div>
 @endsection
 
+{{-- Confirmation Modal --}}
+<div class="modal fade" id="modalKonfirmasi" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalKonfirmasiLabel">Konfirmasi Pembayaran</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Konfirmasi pembayaran untuk invoice <strong id="modalNoInvoice"></strong>?</p>
+                <p class="text-muted mb-0">Tindakan ini tidak dapat dibatalkan.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <a id="modalConfirmBtn" href="#" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Konfirmasi
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     $(function () {
         $('#tabelInvoice').DataTable({ responsive: true, order: [[0, 'desc']] });
+
+        $(document).on('click', '.btn-confirm-pay', function () {
+            $('#modalNoInvoice').text($(this).data('invoice'));
+            $('#modalConfirmBtn').attr('href', $(this).data('url'));
+            $('#modalKonfirmasi').modal('show');
+        });
     });
 </script>
 @endpush

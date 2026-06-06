@@ -41,6 +41,28 @@
                     </a>
                 </li>
 
+                <!-- Domain (treeview) -->
+                <li class="nav-item has-treeview {{ request()->is('staff/Admin/domain*') || request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') || request()->is('staff/Admin/edit_domain*') || request()->is('staff/Admin/tambah_domain*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('staff/Admin/domain*') || request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') || request()->is('staff/Admin/edit_domain*') || request()->is('staff/Admin/tambah_domain*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-globe"></i>
+                        <p>Domain <i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('staff/Admin/domain') }}" class="nav-link {{ request()->is('staff/Admin/domain') || request()->is('staff/Admin/tambah_domain*') || request()->is('staff/Admin/edit_domain*') ? 'active' : '' }}">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>Domain</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('staff/Admin/service_domain') }}" class="nav-link {{ request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') ? 'active' : '' }}">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>TLD</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- Service (treeview) -->
                 <li class="nav-item has-treeview {{ request()->is('staff/Admin/shared_hosting*') || request()->is('staff/Admin/detail_shared*') || request()->is('staff/Admin/aktif_shared*') || request()->is('staff/Admin/vpshosting*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">

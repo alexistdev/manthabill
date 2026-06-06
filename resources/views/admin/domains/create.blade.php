@@ -39,37 +39,37 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Nama Domain <span class="text-danger">*</span></label>
-                                    <input type="text" name="namaDomain" class="form-control @error('namaDomain') is-invalid @enderror"
-                                           value="{{ old('namaDomain') }}" maxlength="80" placeholder="contoh: example.com">
-                                    @error('namaDomain')
+                                    <input type="text" name="nama_domain" class="form-control @error('nama_domain') is-invalid @enderror"
+                                           value="{{ old('nama_domain') }}" maxlength="80" placeholder="contoh: example.com">
+                                    @error('nama_domain')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label>TLD <span class="text-danger">*</span></label>
-                                    <select name="tldDomain" class="form-control @error('tldDomain') is-invalid @enderror">
+                                    <select name="tld_id" class="form-control @error('tld_id') is-invalid @enderror">
                                         <option value="">-- Pilih TLD --</option>
-                                        @foreach($dataTld as $tld)
-                                            <option value="{{ $tld->id }}" {{ old('tldDomain') == $tld->id ? 'selected' : '' }}>
-                                                {{ $tld->nama_tld }}
+                                        @foreach($tlds as $tld)
+                                            <option value="{{ $tld->id }}" {{ old('tld_id') == $tld->id ? 'selected' : '' }}>
+                                                {{ $tld->tld }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('tldDomain')
+                                    @error('tld_id')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label>Client <span class="text-danger">*</span></label>
-                                    <select name="userId" class="form-control @error('userId') is-invalid @enderror">
+                                    <select name="user_id" class="form-control @error('user_id') is-invalid @enderror">
                                         <option value="">-- Pilih Client --</option>
-                                        @foreach($dataUser as $user)
-                                            <option value="{{ $user->id_user }}" {{ old('userId') == $user->id_user ? 'selected' : '' }}>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id_user }}" {{ old('user_id') == $user->id_user ? 'selected' : '' }}>
                                                 #{{ $user->client }} — {{ $user->detail?->nama_depan }} {{ $user->detail?->nama_belakang }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('userId')
+                                    @error('user_id')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -77,9 +77,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Tanggal Mulai <span class="text-danger">*</span></label>
-                                            <input type="date" name="startDomain" class="form-control @error('startDomain') is-invalid @enderror"
-                                                   value="{{ old('startDomain') }}">
-                                            @error('startDomain')
+                                            <input type="date" name="date_register" class="form-control @error('date_register') is-invalid @enderror"
+                                                   value="{{ old('date_register') }}">
+                                            @error('date_register')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -87,29 +87,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Tanggal Expired <span class="text-danger">*</span></label>
-                                            <input type="date" name="endDomain" class="form-control @error('endDomain') is-invalid @enderror"
-                                                   value="{{ old('endDomain') }}">
-                                            @error('endDomain')
+                                            <input type="date" name="due_date" class="form-control @error('due_date') is-invalid @enderror"
+                                                   value="{{ old('due_date') }}">
+                                            @error('due_date')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Harga (Rp) <span class="text-danger">*</span></label>
-                                    <input type="number" name="hargaDomain" class="form-control @error('hargaDomain') is-invalid @enderror"
-                                           value="{{ old('hargaDomain') }}" min="0">
-                                    @error('hargaDomain')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
                                     <label>Status</label>
-                                    <select name="statusDomain" class="form-control">
-                                        <option value="2" {{ old('statusDomain', 2) == 2 ? 'selected' : '' }}>Pending</option>
-                                        <option value="1" {{ old('statusDomain') == 1 ? 'selected' : '' }}>Active</option>
-                                        <option value="3" {{ old('statusDomain') == 3 ? 'selected' : '' }}>Suspended</option>
-                                        <option value="4" {{ old('statusDomain') == 4 ? 'selected' : '' }}>Terminated</option>
+                                    <select name="status" class="form-control">
+                                        <option value="2" {{ old('status', 2) == 2 ? 'selected' : '' }}>Pending</option>
+                                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Active</option>
+                                        <option value="3" {{ old('status') == 3 ? 'selected' : '' }}>Suspended</option>
+                                        <option value="4" {{ old('status') == 4 ? 'selected' : '' }}>Terminated</option>
                                     </select>
                                 </div>
                                 <div class="d-flex justify-content-between">

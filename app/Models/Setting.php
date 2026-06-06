@@ -32,8 +32,22 @@ class Setting extends Model
         'prefix'      => 'integer',
     ];
 
-    public static function current(): ?self
+    public static function current(): self
     {
-        return static::first();
+        return static::firstOrCreate([], [
+            'nama_hosting'   => 'ManthaBill',
+            'judul_hosting'  => 'ManthaBill - Billing System',
+            'alamat_hosting' => '',
+            'email_hosting'  => '',
+            'telp_hosting'   => '',
+            'tos'            => '',
+            'tax'            => 0,
+            'limit_email'    => 50,
+            'prefix'         => 1,
+            'api_key'        => '',
+            'nama_bank'      => '',
+            'no_rekening'    => '',
+            'nama_pemilik'   => '',
+        ]);
     }
 }

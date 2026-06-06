@@ -51,7 +51,7 @@
                                     @forelse($dataTld as $i => $tld)
                                     <tr>
                                         <td class="text-center">{{ $i + 1 }}</td>
-                                        <td><strong>{{ $tld->nama_tld }}</strong></td>
+                                        <td><strong>{{ $tld->tld }}</strong></td>
                                         <td class="text-right">Rp {{ konversiRupiah((int)$tld->harga_tld) }}</td>
                                         <td class="text-center">
                                             @if($tld->status_tld == 1)

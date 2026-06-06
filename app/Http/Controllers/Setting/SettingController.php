@@ -38,7 +38,7 @@ class SettingController extends Controller
         ];
 
         if ($request->hasFile('gambar')) {
-            $oldGambar = $detail->gambar;
+            $oldGambar = $detail?->gambar;
 
             $path = $request->file('gambar')->store('avatars', 'public');
             $updateData['gambar'] = $path;
@@ -49,7 +49,7 @@ class SettingController extends Controller
             }
         }
 
-        $detail->update($updateData);
+        $user->detail()->updateOrCreate(['id_user' => $user->id_user], $updateData);
 
         session()->flash('pesan2', '<div class="alert alert-success" role="alert">Data Informasi Anda telah diperbaharui!</div>');
 
