@@ -12,8 +12,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
-use App\Http\Controllers\Cron\CrondailyController;
-use App\Http\Controllers\Cron\CronjobController;
 use App\Http\Controllers\Domain\DomainController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Member\MemberController;
@@ -32,15 +30,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn () => redirect()->route('login'))->name('home');
 
 Route::get('/test/layout', fn () => view('test.layout-test'))->name('test.layout');
-
-/*
-|--------------------------------------------------------------------------
-| Cron Routes — no auth (called externally by server cron scheduler)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/Cronjob', [CronjobController::class, 'index'])->name('cron.email');
-Route::get('/Crondaily', [CrondailyController::class, 'index'])->name('cron.daily');
 
 /*
 |--------------------------------------------------------------------------
