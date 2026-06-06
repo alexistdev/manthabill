@@ -49,6 +49,7 @@
 <script src="{{ asset('assets/AdminLTE3/plugins/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('assets/AdminLTE3/plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
 <script>
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
     $(window).bind("load", function () {
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () { $(this).remove(); });

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCustomerRequest;
 use App\Http\Requests\Admin\UpdateCustomerRequest;
+use App\Models\Inbox;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
@@ -68,7 +70,7 @@ class CustomerController extends Controller
     public function show(string $encrypted)
     {
         $id   = $this->decryptId($encrypted);
-        $user = $id ? User::with('detail')->find($id) : null;
+        $user = $id ? User::with(['detail', 'hostings.product', 'invoices'])->find($id) : null;
 
         if (! $user) {
             return redirect()->route('admin.customers.index');
@@ -201,12 +203,56 @@ class CustomerController extends Controller
 
     public function message(string $encrypted)
     {
-        abort(501);
+        $id   = $this->decryptId($encrypted);
+        $user = $id ? User::with('detail')->find($id) : null;
+
+        if (! $user) {
+            return redirect()->route('admin.customers.index');
+        }
+
+        $setting = Setting::current();
+
+        return view('admin.customers.message', [
+            'user'      => $user,
+            'namaUsaha' => $setting?->nama_hosting ?? 'ManthaBill',
+            'title'     => 'Kirim Pesan | Manthabill',
+        ]);
     }
 
     public function sendMessage(Request $request, string $encrypted)
     {
-        abort(501);
+        $id   = $this->decryptId($encrypted);
+        $user = $id ? User::find($id) : null;
+
+        if (! $user) {
+            return redirect()->route('admin.customers.index');
+        }
+
+        $request->validate([
+            'judulPesan' => ['required', 'min:5', 'max:80'],
+            'isiPesan'   => ['required', 'min:10', 'max:400'],
+        ], [
+            'judulPesan.required' => 'Judul pesan harus diisi !',
+            'judulPesan.min'      => 'Panjang karakter Judul Pesan minimal 5 karakter!',
+            'judulPesan.max'      => 'Panjang karakter Judul Pesan maksimal 80 karakter!',
+            'isiPesan.required'   => 'Isi Pesan harus diisi !',
+            'isiPesan.min'        => 'Panjang karakter Isi Pesan minimal 10 karakter!',
+            'isiPesan.max'        => 'Panjang karakter Isi Pesan maksimal 400 karakter!',
+        ]);
+
+        Inbox::create([
+            'user_id'      => $user->id_user,
+            'is_adm'       => Inbox::AUTHOR_ADMIN,
+            'judul'        => $request->judulPesan,
+            'pesan'        => $request->isiPesan,
+            'key_token'    => Str::random(20),
+            'time'         => time(),
+            'status_inbox' => Inbox::STATUS_OPEN,
+        ]);
+
+        session()->flash('pesan', '<div class="alert alert-success" role="alert">Pesan telah dikirimkan ke user!</div>');
+
+        return redirect()->route('admin.customers.show', $encrypted);
     }
 
     public function checkEmail(Request $request)
