@@ -24,15 +24,6 @@ Homestead.yaml
 Thumbs.db
 docs/
 
-# CI3 generated files
-/application/cache/*
-/application/logs/*
-!/application/cache/index.html
-!/application/logs/index.html
-/file/sessions/*
-/captcha/*.jpg
-/captcha/*.png
-
 # Uploaded user files — keep .gitkeep, ignore actual uploads
 storage/app/public/avatars/*
 !storage/app/public/avatars/.gitkeep
