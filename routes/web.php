@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('login'))->name('home');
 
-Route::get('/test/layout', fn () => view('test.layout-test'))->name('test.layout');
-
 /*
 |--------------------------------------------------------------------------
 | Guest Routes — unauthenticated users only (web guard)
