@@ -32,3 +32,15 @@ docs/
 /file/sessions/*
 /captcha/*.jpg
 /captcha/*.png
+
+# Uploaded user files — keep .gitkeep, ignore actual uploads
+storage/app/public/avatars/*
+!storage/app/public/avatars/.gitkeep
+storage/app/public/konfirmasi/*
+!storage/app/public/konfirmasi/.gitkeep
+storage/app/public/files/*
+!storage/app/public/files/.gitkeep
+storage/app/public/images/*
+!storage/app/public/images/.gitkeep
+storage/app/public/captcha/*
+!storage/app/public/captcha/.gitkeep
