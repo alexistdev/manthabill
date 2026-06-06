@@ -22,7 +22,7 @@ class ChangePasswordRequest extends FormRequest
                 function (string $attr, mixed $value, \Closure $fail): void {
                     $user = auth()->user();
                     if ($user && !Hash::check($value, $user->password)) {
-                        $fail('Password yang anda masukkan salah!');
+                        $fail('Password lama salah!');
                     }
                 },
             ],

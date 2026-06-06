@@ -40,4 +40,13 @@ class UserDetail extends Model
     {
         return $this->gambar ?: 'default.jpg';
     }
+
+    public function avatarUrl(): string
+    {
+        $gambar = $this->gambar ?: 'default.jpg';
+        if (str_starts_with($gambar, 'avatars/')) {
+            return asset('storage/' . $gambar);
+        }
+        return asset('gambar/' . $gambar);
+    }
 }

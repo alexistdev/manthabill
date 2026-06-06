@@ -25,6 +25,7 @@ class UpdateProfileRequest extends FormRequest
             'provinsi'     => ['required', 'min:3', 'max:50'],
             'kodepos'      => ['nullable', 'min:3', 'max:10'],
             'negara'       => ['required', 'min:3', 'max:30'],
+            'gambar'       => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 
@@ -58,6 +59,9 @@ class UpdateProfileRequest extends FormRequest
             'negara.required'       => 'Nama Negara harus diisi !',
             'negara.min'            => 'Panjang karakter Negara minimal 3 karakter!',
             'negara.max'            => 'Panjang karakter Negara maksimal 30 karakter!',
+            'gambar.file'           => 'File foto tidak valid!',
+            'gambar.mimes'          => 'Format foto tidak valid! Harus jpg, jpeg, png, atau webp.',
+            'gambar.max'            => 'Ukuran foto maksimal 2MB!',
         ];
     }
 }

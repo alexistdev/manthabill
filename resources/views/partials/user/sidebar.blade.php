@@ -19,7 +19,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('gambar/' . $gambarUser) }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ $detail?->avatarUrl() ?? asset('gambar/default.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info ml-3">
                 <a href="{{ url('Member') }}" class="d-block">{{ $namaUser }}</a>
