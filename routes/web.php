@@ -38,15 +38,15 @@ Route::get('/', fn () => redirect()->route('login'))->name('home');
 Route::middleware('guest')->group(function () {
 
     // User Login
-    Route::get('/Login', [LoginController::class, 'index'])->name('login');
-    Route::post('/Login', [LoginController::class, 'store'])->name('login.store');
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 
     // User Registration
-    Route::get('/Daftar', [RegisterController::class, 'index'])->name('register');
-    Route::post('/Daftar', [RegisterController::class, 'store'])->name('register.store');
-    Route::post('/Daftar/checkEmail', [RegisterController::class, 'checkEmail'])->name('register.check-email');
-    Route::get('/Daftar/get_csrf', [RegisterController::class, 'getCsrf'])->name('register.get-csrf');
-    Route::get('/Daftar/validasi/{token}', [RegisterController::class, 'validasi'])->name('register.validasi');
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    Route::post('/register/checkEmail', [RegisterController::class, 'checkEmail'])->name('register.check-email');
+    Route::get('/register/get_csrf', [RegisterController::class, 'getCsrf'])->name('register.get-csrf');
+    Route::get('/register/validasi/{token}', [RegisterController::class, 'validasi'])->name('register.validasi');
 
     // Password Reset
     Route::get('/Reset_password', [ResetPasswordController::class, 'index'])->name('password.request');
@@ -120,8 +120,8 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware('guest:admin')->group(function () {
-    Route::get('/staff/Login', [AdminLoginController::class, 'index'])->name('admin.login');
-    Route::post('/staff/Login', [AdminLoginController::class, 'store'])->name('admin.login.store');
+    Route::get('/staff/login', [AdminLoginController::class, 'index'])->name('admin.login');
+    Route::post('/staff/login', [AdminLoginController::class, 'store'])->name('admin.login.store');
 });
 
 /*
