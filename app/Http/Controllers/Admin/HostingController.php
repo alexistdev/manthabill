@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\GenericMail;
 use App\Models\Hosting;
 use App\Models\Vps;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HostingController extends Controller
 {
@@ -114,18 +116,15 @@ class HostingController extends Controller
         $emailTujuan = $hosting->user?->email ?? '';
         if ($emailTujuan) {
             $judulEmail = "Layanan Hosting {$hosting->nama_hosting} telah diaktifkan!";
-            $pesanEmail = "
-                Selamat layanan anda {$hosting->nama_hosting} telah berhasil diaktifkan<br>
-                Dan berikut detail informasi cpanel nya:<br><br>
-                Username: {$request->usernameCpanel} <br>
-                Password: {$request->passwordCpanel} <br><br>
-                Anda bisa login di http://{$hosting->domain}/cpanel<br><br>
-                Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!<br>
-                Team kami akan membalas 1x24 jam Support tiket anda.<br><br>
-                Regards<br>
-                Admin
-            ";
-            kirim_email($emailTujuan, $pesanEmail, $judulEmail);
+            $pesanEmail = "Selamat layanan anda <strong>{$hosting->nama_hosting}</strong> telah berhasil diaktifkan<br>"
+                . "Dan berikut detail informasi cpanel nya:<br><br>"
+                . "Username: {$request->usernameCpanel}<br>"
+                . "Password: {$request->passwordCpanel}<br><br>"
+                . "Anda bisa login di http://{$hosting->domain}/cpanel<br><br>"
+                . "Jika anda membutuhkan bantuan kami, maka anda bisa membuka support tiket di halaman dashboard akun anda!<br>"
+                . "Team kami akan membalas 1x24 jam Support tiket anda.<br><br>"
+                . "Regards<br>Admin";
+            Mail::to($emailTujuan)->queue(new GenericMail($judulEmail, $pesanEmail));
         }
 
         session()->flash('pesan', '<div class="alert alert-success" role="alert">Layanan ini telah diaktifkan</div>');
@@ -153,14 +152,11 @@ class HostingController extends Controller
         $emailTujuan = $hosting->user?->email ?? '';
         if ($emailTujuan) {
             $judulEmail = "Layanan Hosting {$hosting->nama_hosting} telah dinonaktifkan!";
-            $pesanEmail = "
-                Mohon maaf, layanan anda {$hosting->nama_hosting} telah dinonaktifkan<br>
-                Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>
-                Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>
-                Regards<br>
-                Admin
-            ";
-            kirim_email($emailTujuan, $pesanEmail, $judulEmail);
+            $pesanEmail = "Mohon maaf, layanan anda <strong>{$hosting->nama_hosting}</strong> telah dinonaktifkan<br>"
+                . "Dikarenakan telah habis masa aktifnya atau telah melanggar ketentuan layanan kami<br><br>"
+                . "Jika anda membutuhkan informasi lebih lanjut, silahkan hubungi costumer service kami.<br><br>"
+                . "Regards<br>Admin";
+            Mail::to($emailTujuan)->queue(new GenericMail($judulEmail, $pesanEmail));
         }
 
         session()->flash('pesan', '<div class="alert alert-danger" role="alert">Layanan ini telah dinonaktifkan!</div>');

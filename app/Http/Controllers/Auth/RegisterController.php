@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Mail\ActivationMail;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class RegisterController extends Controller
@@ -46,16 +48,12 @@ class RegisterController extends Controller
             'validasi_token' => $token,
         ]);
 
-        $judul   = "Anda berhasil mendaftar akun di {$namaHosting}";
-        $message = "
-            Selamat anda telah berhasil mendaftar akun di {$namaHosting} , berikut informasi akun anda:<br><br>
-            Username: {$request->email} <br>
-            Password: {$request->password} <br><br>
-            Anda harus mengklik Link Aktivasi berikut: " . url('/Daftar/validasi/' . $token) . "<br><br>
-            Regards<br>
-            Admin
-        ";
-        kirim_email($request->email, $message, $judul);
+        Mail::to($request->email)->queue(new ActivationMail(
+            namaHosting: $namaHosting,
+            email: $request->email,
+            password: $request->password,
+            activationUrl: url('/Daftar/validasi/' . $token),
+        ));
 
         session()->flash('pesan2', '<div class="alert alert-success" role="alert">Akun Anda berhasil dibuat!</div>');
 

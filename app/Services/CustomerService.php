@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Mail\GenericMail;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerService
 {
@@ -76,15 +78,12 @@ class CustomerService
         $namaUser  = $this->resolveDisplayName($detail);
 
         $judul   = "Akun anda di {$namaUsaha} telah disuspend";
-        $message = "
-            Yth. {$namaUser}<br><br>
-            Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>
-            Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>
-            Regards<br>
-            Admin
-        ";
+        $message = "Yth. {$namaUser}<br><br>"
+            . "Dengan sangat menyesal kami harus mensuspend akun anda, dikarenakan telah melanggar ketentuan layanan kami.<br>"
+            . "Jika anda keberatan dengan kebijakan kami ini, silahkan menghubungi Customer Service kami.<br><br>"
+            . "Regards<br>Admin";
 
-        kirim_email($user->email, $message, $judul);
+        Mail::to($user->email)->queue(new GenericMail($judul, $message));
     }
 
     /**
@@ -101,14 +100,11 @@ class CustomerService
         $namaUser  = $this->resolveDisplayName($detail);
 
         $judul   = "Akun anda di {$namaUsaha} telah diaktifkan kembali";
-        $message = "
-            Yth. {$namaUser}<br><br>
-            Akun anda telah berhasil diaktifkan kembali. Silahkan login.<br><br>
-            Regards<br>
-            Admin
-        ";
+        $message = "Yth. {$namaUser}<br><br>"
+            . "Akun anda telah berhasil diaktifkan kembali. Silahkan login.<br><br>"
+            . "Regards<br>Admin";
 
-        kirim_email($user->email, $message, $judul);
+        Mail::to($user->email)->queue(new GenericMail($judul, $message));
     }
 
     /**

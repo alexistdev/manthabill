@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCustomerRequest;
 use App\Http\Requests\Admin\UpdateCustomerRequest;
+use App\Mail\GenericMail;
 use App\Models\Inbox;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -48,18 +50,15 @@ class CustomerController extends Controller
         ]);
 
         if ($request->boolean('kirimEmail')) {
-            $setting    = Setting::current();
+            $setting     = Setting::current();
             $namaHosting = $setting?->nama_hosting ?? 'ManthaBill';
-            $judul   = "Anda berhasil mendaftar akun di {$namaHosting}";
-            $message = "
-                Selamat anda telah berhasil mendaftar akun di {$namaHosting} , berikut informasi akun anda:<br><br>
-                Username: {$request->email} <br>
-                Password: {$request->password} <br><br>
-                Anda bisa login di " . url('/') . "<br><br>
-                Regards<br>
-                Admin
-            ";
-            kirim_email($request->email, $message, $judul);
+            $judul       = "Anda berhasil mendaftar akun di {$namaHosting}";
+            $message     = "Selamat anda telah berhasil mendaftar akun di <strong>{$namaHosting}</strong>, berikut informasi akun anda:<br><br>"
+                . "Username: {$request->email}<br>"
+                . "Password: {$request->password}<br><br>"
+                . "Anda bisa login di <a href=\"" . url('/') . '">' . url('/') . "</a><br><br>"
+                . "Regards<br>Admin";
+            Mail::to($request->email)->queue(new GenericMail($judul, $message));
         }
 
         session()->flash('pesan', '<div class="alert alert-success" role="alert">Data user berhasil ditambahkan!</div>');

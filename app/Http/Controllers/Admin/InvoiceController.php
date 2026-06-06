@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateInvoiceRequest;
+use App\Mail\InvoiceMail;
 use App\Models\Hosting;
 use App\Models\Invoice;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
@@ -76,7 +78,7 @@ class InvoiceController extends Controller
         $diskonInv   = ($diskonPct / 100) * $hargaProduk;
         $hargaTotal  = $hargaProduk - $diskonInv;
 
-        Invoice::create([
+        $invoice = Invoice::create([
             'user_id'       => $hosting->user_id,
             'id_hosting'    => $hosting->id,
             'no_invoice'    => $noInvoice,
@@ -92,20 +94,10 @@ class InvoiceController extends Controller
 
         $emailTujuan = $hosting->user?->email ?? '';
         if ($emailTujuan) {
-            $judul   = 'Konfirmasi Pembayaran';
-            $message = "
-                Yth.Pelanggan , kami telah menerima konfirmasi pembayaran anda:<br><br>
-                {$request->deskripsi}<br>
-                =====================================================================<br>
-                Nomor Invoice: " . strtoupper($noInvoice) . " <br>
-                Harga: Rp." . konversiRupiah((int) $hargaTotal) . " <br>
-                Tanggal Invoice: " . konversiTanggal($startDate) . "<br><br>
-                Jika anda membutuhkan bantuan lebih lanjut, silahkan membuka support tiket melalui halaman dashboard akun anda.
-                <br><br>
-                Regards<br>
-                Admin<br>
-            ";
-            kirim_email($emailTujuan, $message, $judul);
+            Mail::to($emailTujuan)->queue(new InvoiceMail(
+                invoice: $invoice->load('hosting'),
+                emailSubject: 'Konfirmasi Pembayaran',
+            ));
         }
 
         session()->flash('pesan', '<div class="alert alert-success" role="alert">Invoice telah berhasil dibuat!</div>');
@@ -126,22 +118,10 @@ class InvoiceController extends Controller
 
         $emailTujuan = $invoice->user?->email ?? '';
         if ($emailTujuan) {
-            $hosting = $invoice->hosting;
-            $judul   = 'Konfirmasi Pembayaran';
-            $message = "
-                Yth.Pelanggan , kami telah menerima konfirmasi pembayaran anda:<br><br>
-                {$invoice->detail_produk}<br>
-                =====================================================================<br>
-                Nomor Invoice: " . strtoupper($invoice->no_invoice) . " <br>
-                Harga: Rp." . konversiRupiah((int) $invoice->total_jumlah) . " <br>
-                Register: " . konversiTanggal($hosting?->start_hosting?->format('Y-m-d') ?? '') . "<br>
-                Expired: " . konversiTanggal($hosting?->end_hosting?->format('Y-m-d') ?? '') . "<br>
-                Jika anda membutuhkan bantuan lebih lanjut, silahkan membuka support tiket melalui halaman dashboard akun anda.
-                <br><br>
-                Regards<br>
-                Admin<br>
-            ";
-            kirim_email($emailTujuan, $message, $judul);
+            Mail::to($emailTujuan)->queue(new InvoiceMail(
+                invoice: $invoice,
+                emailSubject: 'Konfirmasi Pembayaran',
+            ));
         }
 
         session()->flash('pesan', '<div class="alert alert-success" role="alert">Invoice telah berhasil dikonfirmasi!</div>');

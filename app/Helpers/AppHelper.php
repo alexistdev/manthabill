@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Setting;
-
 if (!function_exists('konversiTanggal')) {
     function konversiTanggal(?string $date): string
     {
@@ -37,18 +35,3 @@ if (!function_exists('konversiRupiah')) {
     }
 }
 
-if (!function_exists('kirim_email')) {
-    function kirim_email(string $emailTujuan, string $pesan, string $judul): void
-    {
-        $setting = Setting::current();
-        $sender  = $setting?->email_hosting ?? config('mail.from.address', 'noreply@manthabill.com');
-
-        \App\Models\EmailQueue::create([
-            'email_pengirim' => $sender,
-            'email_tujuan'   => $emailTujuan,
-            'subyek'         => $judul,
-            'email_pesan'    => $pesan,
-            'status'         => 2,
-        ]);
-    }
-}

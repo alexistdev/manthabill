@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\NewPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Mail\ResetPasswordMail;
 use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
@@ -35,20 +37,9 @@ class ResetPasswordController extends Controller
             'token_req' => $keyReq,
         ]);
 
-        $setting = Setting::current();
-
-        $judul = 'Permintaan Reset Password';
-        $pesan = "
-            Anda telah meminta reset password untuk akun anda, silahkan klik link dibawah ini:<br>
-            Reset Password: " . route('password.confirm', $keyReq) . "<br>
-
-            Jika anda tidak merasa melakukan permintaan reset password, abaikan saja email ini. Email ini akan expired setelah 24 jam.<br>
-            <br>
-            Regards<br>
-            Admin
-        ";
-
-        kirim_email($email, $pesan, $judul);
+        Mail::to($email)->queue(new ResetPasswordMail(
+            resetLink: route('password.confirm', $keyReq),
+        ));
 
         session()->flash('pesan2', '<div class="alert alert-success" role="alert"> Permintaan Reset Password telah dikirimkan silahkan cek email anda!</div>');
 
