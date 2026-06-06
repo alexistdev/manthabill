@@ -1,80 +1,63 @@
-# Manthabill
+# ManthaBill
 
-**Note:**
-- Development is ongoing for Manthabill version 2 using Laravel 11: [Link](https://github.com/alexistdev/manthabill/tree/development)
-- Development is ongoing for GeoBill version 1 using Angular and Spring Boot: [Link](https://github.com/alexistdev/geobill)
+A hosting billing and management system built with Laravel 12.
 
-Manthabill is a free billing/invoice management software for hosting owners or those running a hosting business. Please do not remove the copyright link.
-## DEMO
-https://manthabill.my.id/
+## About
 
-## Technologies Used
-- **Framework:** CodeIgniter 3
-- **Template:** [AdminLTE](https://adminlte.io/)
-- **PHP Version:** PHP 5.6 ([Download here](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/5.6.3/))
+ManthaBill is a web-based billing platform for hosting providers. It handles customer registration, hosting/VPS/domain services, invoicing, payment confirmation, and support ticketing — all from a single admin-facing and customer-facing interface.
 
-## Installation on Hosting
+This project is a full rewrite of the original CodeIgniter 3 codebase to Laravel 12, maintaining full feature, UI, and database parity with the legacy system.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/alexistdev/manthabill.git
-   ```
-2. Upload the files and ensure the PHP version is set to 5.6.
-3. Create a database and import the `manthabill.sql` file.
-4. Edit the `config/database.php` file to configure your database username, database name, and password.
-5. Configure SMTP settings for sending emails in `config/email.php`.
-6. Set up a cron job in your cPanel similar to:
-   ```bash
-   wget -qO- http://[your-domain]/Cronjob > /dev/null 2>&1
-   ```
-7. Create file a .htaccess and place it in the public_html directory :
-   ```bash
-   RewriteEngine on
-	RewriteCond $1 !^(index\.php|resources|robots\.txt)
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.*)$ index.php/$1 [L,QSA]
-   ```
+## Tech Stack
 
-## Installation on Localhost
+- **Framework:** Laravel 12
+- **Language:** PHP 8.4
+- **Database:** MySQL 8
+- **Frontend:** Blade Templates, Tailwind CSS
 
-1. Ensure your system has PHP 5.6 installed:
-   ```bash
-   php -v
-   ```
-2. Create the `manthabill` database and import `manthabill.sql`.
-3. Configure database settings in `config/database.php` with your database details.
-4. Edit `config/config.php` to update the URL:
-   ```php
-   $config['base_url'] = 'http://localhost/manthabill/';
-   ```
-5. Login Credentials:
+## Features
 
-   **Administrator**
-   - URL: `http://localhost/manthabill/staff`
-   - Username: `admin`
-   - Password: `admin`
+- Customer registration & authentication
+- Admin panel for managing clients, hosting, VPS, and domains
+- TLD management and domain service configuration
+- Invoice generation and payment confirmation flow
+- Support ticket system
+- Email notification system
 
-   **User**
-   - URL: `http://localhost/manthabill/`
-   - Register to create an account.
+## Requirements
 
-## Note
-Ongoing development for Laravel 11 version is in progress. For assistance, contact me via email at [alexistdev@gmail.com](mailto:alexistdev@gmail.com) or open an issue on GitHub.
+- PHP 8.4+
+- MySQL 8+
+- Composer
 
-## Screenshots
+## Getting Started
 
-#### Administrator Page:
-![Administrator Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar1.png?raw=true)
+```bash
+git clone <repo-url>
+cd manthabill
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
 
-#### Client Page:
-![Client Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar2.png?raw=true)
+## Project Structure
 
-#### Service Page:
-![Service Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar3.png?raw=true)
+```
+app/Http/Controllers/
+├── Auth/          # Customer authentication
+├── Admin/         # Admin panel controllers
+├── Member/        # Customer dashboard
+├── Domain/        # Domain management
+├── Invoice/       # Invoice & payment
+├── Product/       # Hosting packages
+├── Service/       # Service management
+├── Setting/       # System settings
+└── Ticket/        # Support tickets
+```
 
-#### User Detail Page:
-![User Detail Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar4.png?raw=true)
+## License
 
-#### Invoice Detail Page:
-![Invoice Detail Page](https://github.com/alexistdev/manthabill/blob/master/Photo/gambar5.png?raw=true)
+Proprietary. All rights reserved.
