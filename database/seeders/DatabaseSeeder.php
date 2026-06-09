@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'client'      => 1,
             'email'       => 'user@gmail.com',
-            'password'    => bcrypt('password'),
+            'password'    => bcrypt('1234'),
             'date_create' => now()->toDateString(),
             'status'      => User::STATUS_ACTIVE,
         ]);

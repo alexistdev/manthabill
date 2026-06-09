@@ -21,11 +21,14 @@ class LoginController extends Controller
             [
                 'username' => ['required', 'max:10'],
                 'password' => ['required'],
+                'captcha'  => ['required', 'captcha'],
             ],
             [
                 'username.required' => 'Username tidak boleh kosong!',
                 'username.max'      => 'Panjang karakter username maksimal 10 karakter!',
                 'password.required' => 'Password tidak boleh kosong!',
+                'captcha.required'  => 'Kode captcha tidak boleh kosong!',
+                'captcha.captcha'   => 'Kode captcha salah, silakan coba lagi!',
             ]
         );
 
