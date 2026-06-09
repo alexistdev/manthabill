@@ -10,6 +10,12 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    resolve: {
+        alias: {
+            '$': 'jquery',
+            'jQuery': 'jquery',
+        },
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],

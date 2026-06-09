@@ -91,8 +91,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/AdminLTE3/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/AdminLTE3/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 <script>
     $(function () {
         if ($('#tabelku').length) {

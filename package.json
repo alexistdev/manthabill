@@ -6,6 +6,16 @@
         "build": "vite build",
         "dev": "vite"
     },
+    "dependencies": {
+        "admin-lte": "^3.2.0",
+        "bootstrap": "^4.6.2",
+        "datatables.net": "^2.0.0",
+        "datatables.net-bs4": "^2.0.0",
+        "datatables.net-responsive-bs4": "^3.0.0",
+        "jquery": "^3.7.1",
+        "pace-js": "^1.2.4",
+        "select2": "^4.1.0-rc.0"
+    },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
         "axios": "^1.11.0",
