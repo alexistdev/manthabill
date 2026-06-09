@@ -3,22 +3,21 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Layanan TLD</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">Layanan TLD</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar TLD</h3>
                             <div class="card-tools">
@@ -43,7 +42,7 @@
                                     <tr>
                                         <th class="text-center">No</th>
                                         <th class="text-center">Nama TLD</th>
-                                        <th class="text-right">Harga</th>
+                                        <th class="text-end">Harga</th>
                                         <th class="text-center">Status</th>
                                     </tr>
                                 </thead>
@@ -52,12 +51,12 @@
                                     <tr>
                                         <td class="text-center">{{ $i + 1 }}</td>
                                         <td><strong>{{ $tld->tld }}</strong></td>
-                                        <td class="text-right">Rp {{ konversiRupiah((int)$tld->harga_tld) }}</td>
+                                        <td class="text-end">Rp {{ konversiRupiah((int)$tld->harga_tld) }}</td>
                                         <td class="text-center">
                                             @if($tld->status_tld == 1)
-                                                <span class="badge badge-success">Aktif</span>
+                                                <span class="badge bg-success">Aktif</span>
                                             @else
-                                                <span class="badge badge-secondary">Nonaktif</span>
+                                                <span class="badge bg-secondary">Nonaktif</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -71,8 +70,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

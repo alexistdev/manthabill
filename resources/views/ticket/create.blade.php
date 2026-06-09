@@ -3,15 +3,14 @@
 @section('title', 'Buat Support Ticket')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Buat Support Ticket</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('ticket.index') }}">Ticket</a></li>
                         <li class="breadcrumb-item active">Buat Ticket</li>
@@ -19,9 +18,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
@@ -41,8 +40,8 @@
                             <form action="{{ route('ticket.store') }}" method="POST">
                                 @csrf
 
-                                <div class="form-group">
-                                    <label for="judulPesan">
+                                <div class="mb-3">
+                                    <label for="judulPesan" class="form-label">
                                         Judul Pesan <span class="text-danger">*</span>
                                     </label>
                                     <input type="text"
@@ -55,8 +54,8 @@
                                            required>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="isiPesan">
+                                <div class="mb-3">
+                                    <label for="isiPesan" class="form-label">
                                         Isi Pesan <span class="text-danger">*</span>
                                     </label>
                                     <textarea name="isiPesan"
@@ -67,7 +66,7 @@
                                               required>{{ old('isiPesan') }}</textarea>
                                 </div>
 
-                                <div class="row form-group">
+                                <div class="mb-3">
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -88,11 +87,9 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3 d-flex gap-2">
                                     <button type="submit" class="btn btn-primary">Tambah</button>
-                                    <a href="{{ route('ticket.index') }}">
-                                        <button type="button" class="btn btn-danger">Batal</button>
-                                    </a>
+                                    <a href="{{ route('ticket.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </form>
 
@@ -101,6 +98,5 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection

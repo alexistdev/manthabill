@@ -3,28 +3,25 @@
 @section('title', 'Invoice')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
+                <div class="col-sm-6"><h1>Invoice</h1></div>
                 <div class="col-sm-6">
-                    <h1>Invoice</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item active">Invoice</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Invoice Anda</h3>
                         </div>
@@ -39,7 +36,7 @@
                                         <th class="text-center">INVOICE</th>
                                         <th class="text-center">TANGGAL</th>
                                         <th class="text-center">EXPIRE</th>
-                                        <th class="text-center">TOTAL</th>
+                                        <th class="text-end">TOTAL</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Action</th>
                                     </tr>
@@ -51,26 +48,22 @@
                                         <td class="text-center">{{ strtoupper($invoice->no_invoice) }}</td>
                                         <td class="text-center">{{ $invoice->inv_date->format('d-m-Y') }}</td>
                                         <td class="text-center">{{ $invoice->due->format('d-m-Y') }}</td>
-                                        <td class="text-center">Rp. {{ number_format($invoice->total_jumlah, 0, ',', '.') }}, -</td>
+                                        <td class="text-end">Rp. {{ number_format($invoice->total_jumlah, 0, ',', '.') }}, -</td>
                                         <td class="text-center">
                                             @if($invoice->status_inv === 1)
-                                                <small class="badge badge-primary">LUNAS</small>
+                                                <span class="badge bg-primary">LUNAS</span>
                                             @elseif($invoice->status_inv === 2)
-                                                <small class="badge badge-warning">PENDING</small>
+                                                <span class="badge bg-warning text-dark">PENDING</span>
                                             @elseif($invoice->status_inv === 3)
-                                                <small class="badge badge-info">SEDANG DIREVIEW</small>
+                                                <span class="badge bg-info">SEDANG DIREVIEW</span>
                                             @else
-                                                <small class="badge badge-danger">VOID</small>
+                                                <span class="badge bg-danger">VOID</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('invoice.detail', encrypt($invoice->id)) }}">
-                                                <button class="btn bg-olive margin">VIEW</button>
-                                            </a>
+                                            <a href="{{ route('invoice.detail', encrypt($invoice->id)) }}" class="btn btn-sm btn-info">VIEW</a>
                                             @if($invoice->status_inv === 2)
-                                                <a href="{{ route('invoice.bayar', encrypt($invoice->id)) }}">
-                                                    <button class="btn btn-danger">BAYAR</button>
-                                                </a>
+                                                <a href="{{ route('invoice.bayar', encrypt($invoice->id)) }}" class="btn btn-sm btn-danger">BAYAR</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -86,8 +79,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

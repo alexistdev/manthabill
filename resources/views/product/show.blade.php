@@ -3,15 +3,14 @@
 @section('title', 'Beli Produk')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Beli Produk</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('product.index') }}">Product</a></li>
                         <li class="breadcrumb-item active">Beli</li>
@@ -19,9 +18,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             @if(session('pesan'))
@@ -52,8 +51,8 @@
                                 <input type="hidden" name="diskon_unik" value="{{ old('diskon_unik', $diskonUnik) }}">
 
                                 {{-- Duration Selector --}}
-                                <div class="form-group">
-                                    <label>Durasi Berlangganan</label>
+                                <div class="mb-3">
+                                    <label class="form-label">Durasi Berlangganan</label>
                                     @if($product->type_product === 1)
                                         {{-- Personal: monthly --}}
                                         @foreach([1 => '1 Bulan', 3 => '3 Bulan', 6 => '6 Bulan', 12 => '12 Bulan'] as $value => $label)
@@ -82,14 +81,14 @@
                                         @endforeach
                                     @endif
                                     @error('pilihan')
-                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 {{-- Domain Input --}}
-                                <div class="form-group">
-                                    <label for="domain">Nama Domain</label>
-                                    <small class="text-muted d-block mb-1">**Nama domain saja, tanpa http/https</small>
+                                <div class="mb-3">
+                                    <label class="form-label" for="domain">Nama Domain</label>
+                                    <div class="form-text mb-1">**Nama domain saja, tanpa http/https</div>
                                     <div class="input-group">
                                         <input type="text"
                                                name="domain"
@@ -98,12 +97,10 @@
                                                placeholder="contoh: namadomain"
                                                value="{{ old('domain') }}"
                                                required>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">.</span>
-                                        </div>
+                                        <span class="input-group-text">.</span>
                                         <select name="tld_name"
                                                 id="tld_name"
-                                                class="form-control @error('tld_name') is-invalid @enderror"
+                                                class="form-select @error('tld_name') is-invalid @enderror"
                                                 style="max-width: 130px;"
                                                 required>
                                             <option value="">-- TLD --</option>
@@ -116,14 +113,14 @@
                                         </select>
                                     </div>
                                     @error('domain')
-                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                     @error('tld_name')
-                                        <span class="text-danger text-sm">{{ $message }}</span>
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <button type="submit" class="btn btn-block btn-primary btn-lg">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
                                     PESAN SEKARANG
                                 </button>
                             </form>
@@ -174,6 +171,5 @@
             </div>
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection

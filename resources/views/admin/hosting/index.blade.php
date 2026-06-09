@@ -3,22 +3,21 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Shared Hosting</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">Shared Hosting</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Shared Hosting</h3>
                         </div>
@@ -65,17 +64,17 @@
                                         <td class="text-center">{{ konversiTanggal($hosting->end_hosting?->format('Y-m-d')) }}</td>
                                         <td class="text-center">
                                             @if($hosting->status_hosting == 1)
-                                                <span class="badge badge-success">Active</span>
+                                                <span class="badge bg-success">Active</span>
                                             @elseif($hosting->status_hosting == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif($hosting->status_hosting == 3)
-                                                <span class="badge badge-danger">Suspended</span>
+                                                <span class="badge bg-danger">Suspended</span>
                                             @else
-                                                <span class="badge badge-secondary">Terminated</span>
+                                                <span class="badge bg-secondary">Terminated</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.hosting.detail', encrypt($hosting->id)) }}" class="btn btn-xs btn-info">
+                                            <a href="{{ route('admin.hosting.detail', encrypt($hosting->id)) }}" class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i> Detail
                                             </a>
                                         </td>
@@ -90,8 +89,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

@@ -3,22 +3,21 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Domain</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">Domain</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Domain</h3>
                             <div class="card-tools">
@@ -68,17 +67,17 @@
                                         <td class="text-center">{{ konversiTanggal($domain->end_domain?->format('Y-m-d')) }}</td>
                                         <td class="text-center">
                                             @if($domain->status_domain == 1)
-                                                <span class="badge badge-success">Active</span>
+                                                <span class="badge bg-success">Active</span>
                                             @elseif($domain->status_domain == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif($domain->status_domain == 3)
-                                                <span class="badge badge-danger">Suspended</span>
+                                                <span class="badge bg-danger">Suspended</span>
                                             @else
-                                                <span class="badge badge-secondary">Terminated</span>
+                                                <span class="badge bg-secondary">Terminated</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.domains.edit', encrypt($domain->id)) }}" class="btn btn-xs btn-warning">
+                                            <a href="{{ route('admin.domains.edit', encrypt($domain->id)) }}" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         </td>
@@ -93,8 +92,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

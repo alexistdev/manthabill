@@ -3,22 +3,21 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>VPS</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">VPS</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar VPS</h3>
                         </div>
@@ -56,13 +55,13 @@
                                         <td class="text-center">{{ isset($vps->end_vps) ? konversiTanggal($vps->end_vps->format('Y-m-d')) : '—' }}</td>
                                         <td class="text-center">
                                             @if(($vps->status_vps ?? 0) == 1)
-                                                <span class="badge badge-success">Active</span>
+                                                <span class="badge bg-success">Active</span>
                                             @elseif(($vps->status_vps ?? 0) == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif(($vps->status_vps ?? 0) == 3)
-                                                <span class="badge badge-danger">Suspended</span>
+                                                <span class="badge bg-danger">Suspended</span>
                                             @else
-                                                <span class="badge badge-secondary">Terminated</span>
+                                                <span class="badge bg-secondary">Terminated</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -76,8 +75,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

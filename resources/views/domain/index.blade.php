@@ -3,24 +3,21 @@
 @section('title', 'Domain')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
+                <div class="col-sm-6"><h1>Domain</h1></div>
                 <div class="col-sm-6">
-                    <h1>Domain</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item active">Domain</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             @if(session('pesan'))
@@ -52,23 +49,17 @@
                                     @forelse($tldList as $i => $tld)
                                     <tr>
                                         <td class="text-center">{{ $i + 1 }}</td>
-                                        <td class="text-center">
-                                            <strong>.{{ strtoupper($tld->tld) }}</strong>
-                                        </td>
-                                        <td class="text-center">
-                                            Rp. {{ number_format($tld->harga_tld, 0, ',', '.') }}, - / tahun
-                                        </td>
+                                        <td class="text-center"><strong>.{{ strtoupper($tld->tld) }}</strong></td>
+                                        <td class="text-center">Rp. {{ number_format($tld->harga_tld, 0, ',', '.') }}, - / tahun</td>
                                         <td class="text-center">
                                             @if($tld->status_tld === 1)
-                                                <small class="badge badge-success">TERSEDIA</small>
+                                                <span class="badge bg-success">TERSEDIA</span>
                                             @else
-                                                <small class="badge badge-danger">TIDAK TERSEDIA</small>
+                                                <span class="badge bg-danger">TIDAK TERSEDIA</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('domain.beli') }}" class="btn btn-sm btn-primary">
-                                                Beli
-                                            </a>
+                                            <a href="{{ route('domain.beli') }}" class="btn btn-sm btn-primary">Beli</a>
                                         </td>
                                     </tr>
                                     @empty
@@ -115,9 +106,9 @@
                                         <td class="text-center">{{ $domain->due_date->format('d-m-Y') }}</td>
                                         <td class="text-center">
                                             @if($domain->status === 1)
-                                                <small class="badge badge-success">AKTIF</small>
+                                                <span class="badge bg-success">AKTIF</span>
                                             @else
-                                                <small class="badge badge-warning">PENDING</small>
+                                                <span class="badge bg-warning text-dark">PENDING</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -134,8 +125,7 @@
             </div>
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

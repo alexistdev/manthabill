@@ -3,13 +3,12 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Tambah User</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ url('staff/Admin') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.customers.index') }}">Clients</a></li>
                         <li class="breadcrumb-item active">Tambah User</li>
@@ -17,9 +16,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
@@ -35,31 +34,33 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label>Email address <span class="text-danger">*</span></label>
-                                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address <span class="text-danger">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-control"
+                                           value="{{ old('email') }}" required>
                                     <span id="username_result2"></span>
                                     @error('email')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="form-group">
-                                    <label>Password <span class="text-danger">*</span></label>
-                                    <input type="password" name="password" id="password" class="form-control" placeholder="******" required>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                    <input type="password" id="password" name="password" class="form-control"
+                                           placeholder="******" required>
                                     @error('password')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="form-group">
-                                    <label>Ulangi Password <span class="text-danger">*</span></label>
-                                    <input type="password" name="password2" class="form-control" placeholder="******" required>
+                                <div class="mb-3">
+                                    <label class="form-label">Ulangi Password <span class="text-danger">*</span></label>
+                                    <input type="password" name="password2" class="form-control"
+                                           placeholder="******" required>
                                     @error('password2')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="form-check mt-3">
-                                    <input type="checkbox" name="kirimEmail" id="kirimEmail" class="form-check-input" value="1">
+                                    <input type="checkbox" id="kirimEmail" name="kirimEmail"
+                                           class="form-check-input" value="1">
                                     <label class="form-check-label" for="kirimEmail">Kirim Email</label>
                                 </div>
-                                <div class="form-group mt-4">
+                                <div class="mt-4">
                                     <button type="submit" class="btn btn-primary">Tambah</button>
-                                    <a href="{{ route('admin.customers.index') }}">
-                                        <button type="button" class="btn btn-danger">Batal</button>
-                                    </a>
+                                    <a href="{{ route('admin.customers.index') }}" class="btn btn-danger">Batal</a>
                                 </div>
                             </div>
                         </div>
@@ -67,8 +68,7 @@
                 </div>
             </form>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

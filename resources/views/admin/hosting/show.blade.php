@@ -3,13 +3,12 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Detail Hosting</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.hosting.index') }}">Shared Hosting</a></li>
                         <li class="breadcrumb-item active">Detail</li>
@@ -17,9 +16,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -31,18 +30,18 @@
             <div class="row">
                 {{-- Hosting Info --}}
                 <div class="col-md-8">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">{{ $hosting->nama_hosting }}</h3>
                             <div class="card-tools">
                                 @if($hosting->status_hosting == 1)
-                                    <span class="badge badge-success">ACTIVE</span>
+                                    <span class="badge bg-success">ACTIVE</span>
                                 @elseif($hosting->status_hosting == 2)
-                                    <span class="badge badge-warning">PENDING</span>
+                                    <span class="badge bg-warning text-dark">PENDING</span>
                                 @elseif($hosting->status_hosting == 3)
-                                    <span class="badge badge-danger">SUSPENDED</span>
+                                    <span class="badge bg-danger">SUSPENDED</span>
                                 @else
-                                    <span class="badge badge-secondary">TERMINATED</span>
+                                    <span class="badge bg-secondary">TERMINATED</span>
                                 @endif
                             </div>
                         </div>
@@ -115,9 +114,7 @@
                                 <div class="input-group">
                                     <input type="text" name="user_cpanel" class="form-control" maxlength="50"
                                            value="{{ $hosting->user_cpanel }}" placeholder="Username cPanel">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary">Update</button>
-                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </form>
                         </div>
@@ -144,17 +141,17 @@
                                         <td>Rp {{ konversiRupiah((int)$inv->total_jumlah) }}</td>
                                         <td>
                                             @if($inv->status_inv == 1)
-                                                <span class="badge badge-success">Paid</span>
+                                                <span class="badge bg-success">Paid</span>
                                             @elseif($inv->status_inv == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif($inv->status_inv == 3)
-                                                <span class="badge badge-info">Confirmed</span>
+                                                <span class="badge bg-info">Confirmed</span>
                                             @else
-                                                <span class="badge badge-secondary">Void</span>
+                                                <span class="badge bg-secondary">Void</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.invoices.show', encrypt($inv->id)) }}" class="btn btn-xs btn-info">
+                                            <a href="{{ route('admin.invoices.show', encrypt($inv->id)) }}" class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -174,14 +171,14 @@
                         <div class="card-body">
                             <div class="d-grid gap-2">
                                 @if($hosting->status_hosting != 1)
-                                <a href="{{ route('admin.hosting.activate', $encrypted) }}" class="btn btn-success btn-block mb-2">
+                                <a href="{{ route('admin.hosting.activate', $encrypted) }}" class="btn btn-success">
                                     <i class="fas fa-play"></i> Aktifkan Layanan
                                 </a>
                                 @endif
 
                                 @if($hosting->status_hosting == 1)
                                 <a href="{{ route('admin.hosting.suspend', $encrypted) }}"
-                                   class="btn btn-warning btn-block mb-2"
+                                   class="btn btn-warning"
                                    onclick="return confirm('Nonaktifkan layanan ini?')">
                                     <i class="fas fa-pause"></i> Suspend Layanan
                                 </a>
@@ -189,17 +186,17 @@
 
                                 @if($hosting->status_hosting != 4)
                                 <a href="{{ route('admin.hosting.terminate', $encrypted) }}"
-                                   class="btn btn-danger btn-block mb-2"
+                                   class="btn btn-danger"
                                    onclick="return confirm('Akhiri layanan ini secara permanen?')">
                                     <i class="fas fa-times-circle"></i> Terminate
                                 </a>
                                 @endif
 
-                                <a href="{{ route('admin.invoices.create', encrypt($hosting->id)) }}" class="btn btn-info btn-block mb-2">
+                                <a href="{{ route('admin.invoices.create', encrypt($hosting->id)) }}" class="btn btn-info">
                                     <i class="fas fa-file-invoice"></i> Buat Invoice
                                 </a>
 
-                                <a href="{{ route('admin.hosting.index') }}" class="btn btn-secondary btn-block">
+                                <a href="{{ route('admin.hosting.index') }}" class="btn btn-secondary">
                                     <i class="fas fa-arrow-left"></i> Kembali
                                 </a>
                             </div>
@@ -208,6 +205,5 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection

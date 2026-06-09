@@ -2,29 +2,31 @@
     $setting = \App\Models\Setting::first();
 @endphp
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{ url('staff/Admin') }}" class="brand-link">
-        <img src="{{ asset('images/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">{{ $setting->nama_hosting ?? 'ManthaBill' }}</span>
-    </a>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <!-- Sidebar Brand -->
+    <div class="sidebar-brand">
+        <a href="{{ url('staff/Admin') }}" class="brand-link">
+            <img src="{{ asset('images/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+                 class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">{{ $setting->nama_hosting ?? 'ManthaBill' }}</span>
+        </a>
+    </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- Sidebar Wrapper -->
+    <div class="sidebar-wrapper">
         <!-- Sidebar user panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('gambar/default.jpg') }}" class="img-circle elevation-2" alt="Admin">
+                <img src="{{ asset('gambar/default.jpg') }}" class="rounded-circle shadow" alt="Admin">
             </div>
-            <div class="info ml-3">
+            <div class="info ms-3">
                 <a href="{{ url('staff/Admin') }}" class="d-block">Administrator</a>
             </div>
         </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
                 <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ url('staff/Admin') }}" class="nav-link {{ request()->is('staff/Admin') ? 'active' : '' }}">
@@ -42,10 +44,10 @@
                 </li>
 
                 <!-- Domain (treeview) -->
-                <li class="nav-item has-treeview {{ request()->is('staff/Admin/domain*') || request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') || request()->is('staff/Admin/edit_domain*') || request()->is('staff/Admin/tambah_domain*') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ request()->is('staff/Admin/domain*') || request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') || request()->is('staff/Admin/edit_domain*') || request()->is('staff/Admin/tambah_domain*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->is('staff/Admin/domain*') || request()->is('staff/Admin/service_domain*') || request()->is('staff/Admin/tambah_service_domain*') || request()->is('staff/Admin/edit_domain*') || request()->is('staff/Admin/tambah_domain*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-globe"></i>
-                        <p>Domain <i class="fas fa-angle-left right"></i></p>
+                        <p>Domain <i class="nav-arrow fas fa-angle-right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -64,10 +66,10 @@
                 </li>
 
                 <!-- Service (treeview) -->
-                <li class="nav-item has-treeview {{ request()->is('staff/Admin/shared_hosting*') || request()->is('staff/Admin/detail_shared*') || request()->is('staff/Admin/aktif_shared*') || request()->is('staff/Admin/vpshosting*') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ request()->is('staff/Admin/shared_hosting*') || request()->is('staff/Admin/detail_shared*') || request()->is('staff/Admin/aktif_shared*') || request()->is('staff/Admin/vpshosting*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
-                        <p>Service <i class="fas fa-angle-left right"></i></p>
+                        <p>Service <i class="nav-arrow fas fa-angle-right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -96,10 +98,10 @@
                 </li>
 
                 <!-- Paket Hosting (treeview) -->
-                <li class="nav-item has-treeview {{ request()->is('staff/Admin/paket*') || request()->is('staff/Admin/tambah_shared*') || request()->is('staff/Admin/edit_paket*') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ request()->is('staff/Admin/paket*') || request()->is('staff/Admin/tambah_shared*') || request()->is('staff/Admin/edit_paket*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-box-open"></i>
-                        <p>Paket Hosting <i class="fas fa-angle-left right"></i></p>
+                        <p>Paket Hosting <i class="nav-arrow fas fa-angle-right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -112,10 +114,10 @@
                 </li>
 
                 <!-- Setting (treeview) -->
-                <li class="nav-item has-treeview {{ request()->is('staff/Admin/setting_umum') || request()->is('staff/Admin/setting_api') || request()->is('staff/Admin/help') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ request()->is('staff/Admin/setting_umum') || request()->is('staff/Admin/setting_api') || request()->is('staff/Admin/help') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog"></i>
-                        <p>Setting <i class="fas fa-angle-left right"></i></p>
+                        <p>Setting <i class="nav-arrow fas fa-angle-right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -142,5 +144,5 @@
         </nav>
         <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
+    <!-- /.sidebar-wrapper -->
 </aside>

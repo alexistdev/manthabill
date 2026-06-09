@@ -3,21 +3,20 @@
 @section('title', 'Dashboard | Manthabill')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Dashboard</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             {{-- KPI Cards --}}
@@ -77,7 +76,7 @@
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-bullhorn mr-1"></i> Pengumuman</h3>
+                            <h3 class="card-title"><i class="fas fa-bullhorn me-1"></i> Pengumuman</h3>
                         </div>
                         <div class="card-body">
                             @if($berita)
@@ -95,7 +94,7 @@
                 <div class="col-md-6">
                     <div class="card card-danger">
                         <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-ticket-alt mr-1"></i> Tiket Baru</h3>
+                            <h3 class="card-title"><i class="fas fa-ticket-alt me-1"></i> Tiket Baru</h3>
                         </div>
                         <div class="card-body p-0">
                             <table class="table table-sm table-hover mb-0">
@@ -120,13 +119,13 @@
                                         <td>{{ $ticket->judul }}</td>
                                         <td>
                                             @if($ticket->status_inbox == 1)
-                                                <span class="badge badge-success">Open</span>
+                                                <span class="badge bg-success">Open</span>
                                             @else
-                                                <span class="badge badge-warning">Waiting</span>
+                                                <span class="badge bg-warning text-dark">Waiting</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.tickets.show', $ticket->key_token) }}" class="btn btn-xs btn-info">
+                                            <a href="{{ route('admin.tickets.show', $ticket->key_token) }}" class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -137,7 +136,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer text-right">
+                        <div class="card-footer text-end">
                             <a href="{{ route('admin.tickets.inbox') }}" class="btn btn-sm btn-danger">Lihat Semua</a>
                         </div>
                     </div>
@@ -145,6 +144,5 @@
             </div>
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection

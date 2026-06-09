@@ -10,27 +10,28 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="hold-transition sidebar-mini pace-danger">
-<div class="wrapper">
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<div class="app-wrapper">
 
     @include('partials.admin.navbar')
     @include('partials.admin.sidebar')
 
-    @yield('content')
+    <main class="app-main">
+        @yield('content')
+    </main>
 
-    <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
+    <footer class="app-footer">
+        <div class="float-end d-none d-sm-inline">
             <b>Version</b> v.2.1
         </div>
-        <strong>Copyright &copy; 2019-2020 <a href="http://alexistdev.com">Alexistdev</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2019-2020 <a href="https://github.com/alexistdev">Alexistdev</a>.</strong> All rights reserved.
     </footer>
-    <aside class="control-sidebar control-sidebar-dark"></aside>
 
 </div>
 
 <script>
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
-    $(window).bind("load", function () {
+    $(window).on("load", function () {
         window.setTimeout(function () {
             $(".alert").fadeTo(500, 0).slideUp(500, function () { $(this).remove(); });
         }, 2000);

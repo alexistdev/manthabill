@@ -3,15 +3,14 @@
 @section('title', 'Detail Ticket')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Detail Ticket</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('ticket.index') }}">Ticket</a></li>
                         <li class="breadcrumb-item active">Detail</li>
@@ -19,9 +18,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             @if(session('pesan'))
@@ -54,11 +53,11 @@
                                     {{ date('H:i', $ticket->time) }}
                                 </span>
                                 <h3 class="timeline-header">
-                                    <span class="text-primary font-weight-bold">
+                                    <span class="text-primary fw-bold">
                                         {{ $ticket->user?->detail?->nama_depan ?: 'Member' }}
                                     </span>
                                     &mdash;
-                                    <span class="font-weight-bold">{{ ucwords($ticket->judul) }}</span>
+                                    <span class="fw-bold">{{ ucwords($ticket->judul) }}</span>
                                 </h3>
                                 <div class="timeline-body">
                                     {{ $ticket->pesan }}
@@ -81,13 +80,13 @@
                                 </span>
                                 @if($reply->is_admin !== 1)
                                     <h3 class="timeline-header">
-                                        <span class="text-danger font-weight-bold">Anda</span>
+                                        <span class="text-danger fw-bold">Anda</span>
                                     </h3>
                                 @else
                                     <h3 class="timeline-header">
-                                        <span class="text-blue font-weight-bold">Admin</span>
+                                        <span class="text-blue fw-bold">Admin</span>
                                         &mdash;
-                                        <span class="font-weight-bold">Membalas</span>
+                                        <span class="fw-bold">Membalas</span>
                                     </h3>
                                 @endif
                                 <div class="timeline-body">
@@ -110,7 +109,7 @@
                     <div class="col-md-12">
                         <form action="{{ route('ticket.reply', $ticket->key_token) }}" method="POST">
                             @csrf
-                            <div class="form-floating">
+                            <div class="mb-3">
                                 <textarea name="isiPesan"
                                           id="isiPesan"
                                           class="form-control"
@@ -119,7 +118,7 @@
                                           maxlength="400"
                                           required>{{ old('isiPesan') }}</textarea>
                             </div>
-                            <div class="form-group clearfix mt-3">
+                            <div class="d-flex gap-2 mt-3">
                                 <a href="{{ route('ticket.index') }}" class="btn btn-danger">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Balas</button>
                             </div>
@@ -133,6 +132,5 @@
             @endif
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection

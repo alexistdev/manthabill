@@ -3,24 +3,23 @@
 @section('title', 'Support Ticket')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Support Ticket</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item active">Ticket</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -34,13 +33,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Support Ticket Anda</h3>
-                            <a href="{{ route('ticket.create') }}">
-                                <button class="btn btn-success float-right">
-                                    <i class="fas fa-plus-square mr-1"></i> Buat Ticket
-                                </button>
+                            <a href="{{ route('ticket.create') }}" class="btn btn-success float-end">
+                                <i class="fas fa-plus-square me-1"></i> Buat Ticket
                             </a>
                         </div>
                         <div class="card-body">
@@ -59,30 +56,30 @@
                                     <tr>
                                         <td class="text-center">{{ $i + 1 }}</td>
                                         <td class="text-center">{{ date('d-m-Y', $ticket->time) }}</td>
-                                        <td class="text-left">{{ $ticket->judul }}</td>
+                                        <td>{{ $ticket->judul }}</td>
                                         <td class="text-center">
                                             @if($ticket->status_inbox === 1)
-                                                <small class="badge badge-success">OPEN</small>
+                                                <span class="badge bg-success">OPEN</span>
                                             @elseif($ticket->status_inbox === 2)
-                                                <small class="badge badge-warning">DIBALAS</small>
+                                                <span class="badge bg-warning text-dark">DIBALAS</span>
                                             @else
-                                                <small class="badge badge-danger">CLOSED</small>
+                                                <span class="badge bg-danger">CLOSED</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('ticket.show', $ticket->key_token) }}">
-                                                <button class="btn btn-primary" title="Lihat Pesan">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
+                                            <a href="{{ route('ticket.show', $ticket->key_token) }}"
+                                               class="btn btn-sm btn-primary" title="Lihat Pesan">
+                                                <i class="fas fa-eye"></i>
                                             </a>
                                             @if($ticket->status_inbox < 3)
-                                                <span data-toggle="modal"
-                                                      data-target="#modalKunci"
-                                                      data-id="{{ $ticket->key_token }}">
-                                                    <a href="#" class="btn btn-danger" title="Kunci Ticket">
-                                                        <i class="fas fa-lock"></i>
-                                                    </a>
-                                                </span>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-danger"
+                                                        title="Kunci Ticket"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modalKunci"
+                                                        data-id="{{ $ticket->key_token }}">
+                                                    <i class="fas fa-lock"></i>
+                                                </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -100,28 +97,26 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 
-{{-- Modal Kunci Pesan --}}
-<div class="modal fade" id="modalKunci" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Kunci Pesan</h5>
-            </div>
-            <div class="modal-body">
-                Apakah anda yakin ingin mengunci pesan ini?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                <a href="" id="urlKunci">
-                    <button type="button" class="btn btn-danger">Kunci</button>
-                </a>
+    {{-- Modal Kunci Pesan --}}
+    <div class="modal fade" id="modalKunci" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kunci Pesan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin ingin mengunci pesan ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="" id="urlKunci" class="btn btn-danger">Kunci</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')

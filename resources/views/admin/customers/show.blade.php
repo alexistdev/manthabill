@@ -3,15 +3,14 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Detail User <span class="text-primary font-weight-bold">{{ ucwords($user->detail?->nama_depan ?? '') }}</span></h1>
+                    <h1>Detail User <span class="text-primary fw-bold">{{ ucwords($user->detail?->nama_depan ?? '') }}</span></h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.customers.index') }}">Clients</a></li>
                         <li class="breadcrumb-item active">Detail</li>
@@ -19,9 +18,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">{!! session('pesan') !!}</div>
@@ -41,27 +40,27 @@
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>No Telepon</b>
-                                    <a class="float-right">{{ ($user->detail?->phone ?? '') === '' ? 'NA' : $user->detail->phone }}</a>
+                                    <a class="float-end">{{ ($user->detail?->phone ?? '') === '' ? 'NA' : $user->detail->phone }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Email</b>
-                                    <a class="float-right">{{ $user->email }}</a>
+                                    <a class="float-end">{{ $user->email }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Status</b>
-                                    <a class="float-right">
+                                    <a class="float-end">
                                         @if($user->status == 1)
-                                            <small class="badge badge-success">AKTIF</small>
+                                            <small class="badge bg-success">AKTIF</small>
                                         @elseif($user->status == 2)
-                                            <small class="badge badge-warning">BELUM VERIFIKASI</small>
+                                            <small class="badge bg-warning text-dark">BELUM VERIFIKASI</small>
                                         @else
-                                            <small class="badge badge-danger">SUSPEND</small>
+                                            <small class="badge bg-danger">SUSPEND</small>
                                         @endif
                                     </a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Alamat</b>
-                                    <a class="float-right">
+                                    <a class="float-end">
                                         @if(($user->detail?->alamat ?? '') === '' && ($user->detail?->alamat2 ?? '') === '')
                                             NN
                                         @else
@@ -107,11 +106,10 @@
                         </div>
                     </div>
                 </div>
-                {{-- /Left panel --}}
 
                 {{-- Right panel --}}
                 <div class="col-md-9">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Service</h3>
                         </div>
@@ -136,17 +134,17 @@
                                         <td class="text-center">{{ konversiTanggal($hosting->end_hosting?->format('Y-m-d')) }}</td>
                                         <td class="text-center">
                                             @if($hosting->status_hosting == 1)
-                                                <span class="badge badge-success">Active</span>
+                                                <span class="badge bg-success">Active</span>
                                             @elseif($hosting->status_hosting == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif($hosting->status_hosting == 3)
-                                                <span class="badge badge-danger">Suspended</span>
+                                                <span class="badge bg-danger">Suspended</span>
                                             @else
-                                                <span class="badge badge-secondary">Terminated</span>
+                                                <span class="badge bg-secondary">Terminated</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.hosting.detail', encrypt($hosting->id)) }}" class="btn btn-xs btn-info">
+                                            <a href="{{ route('admin.hosting.detail', encrypt($hosting->id)) }}" class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -159,7 +157,7 @@
                         </div>
                     </div>
 
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Invoice</h3>
                         </div>
@@ -169,7 +167,7 @@
                                     <tr>
                                         <th class="text-center">No</th>
                                         <th>No Invoice</th>
-                                        <th class="text-right">Total</th>
+                                        <th class="text-end">Total</th>
                                         <th class="text-center">Due</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Aksi</th>
@@ -179,22 +177,22 @@
                                     @forelse($user->invoices as $i => $inv)
                                     <tr>
                                         <td class="text-center">{{ $i + 1 }}</td>
-                                        <td class="font-weight-bold">{{ strtoupper($inv->no_invoice) }}</td>
-                                        <td class="text-right">Rp {{ konversiRupiah((int)$inv->total_jumlah) }}</td>
+                                        <td class="fw-bold">{{ strtoupper($inv->no_invoice) }}</td>
+                                        <td class="text-end">Rp {{ konversiRupiah((int)$inv->total_jumlah) }}</td>
                                         <td class="text-center">{{ konversiTanggal($inv->due?->format('Y-m-d')) }}</td>
                                         <td class="text-center">
                                             @if($inv->status_inv == 1)
-                                                <span class="badge badge-success">Paid</span>
+                                                <span class="badge bg-success">Paid</span>
                                             @elseif($inv->status_inv == 2)
-                                                <span class="badge badge-warning">Pending</span>
+                                                <span class="badge bg-warning text-dark">Pending</span>
                                             @elseif($inv->status_inv == 3)
-                                                <span class="badge badge-info">Confirmed</span>
+                                                <span class="badge bg-info">Confirmed</span>
                                             @else
-                                                <span class="badge badge-secondary">Void</span>
+                                                <span class="badge bg-secondary">Void</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.invoices.show', encrypt($inv->id)) }}" class="btn btn-xs btn-info">
+                                            <a href="{{ route('admin.invoices.show', encrypt($inv->id)) }}" class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -207,9 +205,7 @@
                         </div>
                     </div>
                 </div>
-                {{-- /Right panel --}}
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection

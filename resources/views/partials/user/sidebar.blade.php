@@ -6,29 +6,31 @@
     $namaUser    = $detail?->nama_depan ?: 'Member';
 @endphp
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{ url('Member') }}" class="brand-link">
-        <img src="{{ asset('images/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">{{ $setting->nama_hosting ?? 'ManthaBill' }}</span>
-    </a>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <!-- Sidebar Brand -->
+    <div class="sidebar-brand">
+        <a href="{{ url('Member') }}" class="brand-link">
+            <img src="{{ asset('images/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+                 class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">{{ $setting->nama_hosting ?? 'ManthaBill' }}</span>
+        </a>
+    </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- Sidebar Wrapper -->
+    <div class="sidebar-wrapper">
         <!-- Sidebar user panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ $detail?->avatarUrl() ?? asset('gambar/default.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ $detail?->avatarUrl() ?? asset('gambar/default.jpg') }}" class="rounded-circle shadow" alt="User Image">
             </div>
-            <div class="info ml-3">
+            <div class="info ms-3">
                 <a href="{{ url('Member') }}" class="d-block">{{ $namaUser }}</a>
             </div>
         </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ url('Member') }}" class="nav-link {{ request()->is('Member') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -75,5 +77,5 @@
         </nav>
         <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
+    <!-- /.sidebar-wrapper -->
 </aside>

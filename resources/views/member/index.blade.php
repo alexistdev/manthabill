@@ -3,10 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -14,81 +11,63 @@
                     <small class="text-muted">{{ $setting->nama_hosting ?? '' }}</small>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item active">Home</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Main content -->
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             {{-- Stat Boxes --}}
             <div class="row">
-                <!-- Services -->
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>{{ $user->hostings->count() }}</h3>
                             <p>SERVICES</p>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-social-buffer"></i>
-                        </div>
+                        <div class="icon"><i class="ion ion-social-buffer"></i></div>
                         <a href="{{ route('service.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
-                <!-- Domain -->
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $user->domains->count() }}</h3>
                             <p>DOMAIN</p>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-earth"></i>
-                        </div>
+                        <div class="icon"><i class="ion ion-earth"></i></div>
                         <a href="{{ route('domain.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
-                <!-- Invoice (pending + confirmed) -->
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ $user->invoices->whereIn('status_inv', [2, 3])->count() }}</h3>
                             <p>INVOICE</p>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-card"></i>
-                        </div>
+                        <div class="icon"><i class="ion ion-card"></i></div>
                         <a href="{{ route('invoice.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
-                <!-- Ticket Support -->
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>{{ $user->inboxes->filter(fn($i) => $i->status_inbox < 3)->count() }}</h3>
                             <p>Ticket Support</p>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-chatbubbles"></i>
-                        </div>
+                        <div class="icon"><i class="ion ion-chatbubbles"></i></div>
                         <a href="{{ route('ticket.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
-            <!-- /End Stat Boxes -->
 
             {{-- Recent Invoices + Active Services --}}
             <div class="row">
-                <!-- Recent Invoices -->
                 <div class="col-md-8">
                     <div class="card card-warning">
                         <div class="card-header">
@@ -96,7 +75,7 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-striped no-margin">
+                                <table class="table table-striped mb-0">
                                     <thead>
                                         <tr>
                                             <th>No Invoice</th>
@@ -115,13 +94,13 @@
                                             <td>{{ $invoice->due->format('d-m-Y') }}</td>
                                             <td>
                                                 @if($invoice->status_inv === 1)
-                                                    <span class="badge badge-success">Lunas</span>
+                                                    <span class="badge bg-success">Lunas</span>
                                                 @elseif($invoice->status_inv === 2)
-                                                    <span class="badge badge-warning">Pending</span>
+                                                    <span class="badge bg-warning text-dark">Pending</span>
                                                 @elseif($invoice->status_inv === 3)
-                                                    <span class="badge badge-info">Terkonfirmasi</span>
+                                                    <span class="badge bg-info">Terkonfirmasi</span>
                                                 @else
-                                                    <span class="badge badge-secondary">Void</span>
+                                                    <span class="badge bg-secondary">Void</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -137,7 +116,6 @@
                     </div>
                 </div>
 
-                <!-- Active Services -->
                 <div class="col-md-4">
                     <div class="card card-info">
                         <div class="card-header">
@@ -164,11 +142,9 @@
                     </div>
                 </div>
             </div>
-            <!-- /End Recent Invoices + Active Services -->
 
             {{-- News + Support Ticket --}}
             <div class="row">
-                <!-- Berita Terbaru -->
                 <div class="col-md-6">
                     <div class="card card-primary">
                         <div class="card-header">
@@ -181,7 +157,7 @@
                                 <p>{!! nl2br(e($berita->isi_berita)) !!}</p>
                                 <hr>
                                 <small>
-                                    <p class="text-right">Diposting : {{ $berita->tgl_berita->format('d-m-Y') }}</p>
+                                    <p class="text-end">Diposting : {{ $berita->tgl_berita->format('d-m-Y') }}</p>
                                 </small>
                             @empty
                                 <p class="text-muted text-center">Tidak ada berita terbaru.</p>
@@ -190,7 +166,6 @@
                     </div>
                 </div>
 
-                <!-- Support Ticket Terbaru -->
                 <div class="col-md-6">
                     <div class="card card-danger">
                         <div class="card-header">
@@ -198,7 +173,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table no-margin">
+                                <table class="table mb-0">
                                     <thead>
                                         <tr>
                                             <th>No Ticket</th>
@@ -207,19 +182,14 @@
                                             <th>Tanggal</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /End News + Support Ticket -->
 
         </div>
-    </section>
-    <!-- /Main content -->
-</div>
-<!-- /.content-wrapper -->
+    </div>
 @endsection

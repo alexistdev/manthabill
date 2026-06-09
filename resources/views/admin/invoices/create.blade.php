@@ -3,13 +3,12 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Buat Invoice</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.invoices.index') }}">Invoice</a></li>
                         <li class="breadcrumb-item active">Buat Invoice</li>
@@ -17,9 +16,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -63,32 +62,38 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Form Invoice</h3>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.invoices.store', $encrypted) }}" method="POST">
                                 @csrf
-                                <div class="form-group">
-                                    <label>Deskripsi <span class="text-danger">*</span></label>
-                                    <input type="text" name="deskripsi" class="form-control" maxlength="50"
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi <span class="text-danger">*</span></label>
+                                    <input type="text" id="deskripsi" name="deskripsi" class="form-control" maxlength="50"
                                            value="{{ old('deskripsi', $hosting->nama_hosting) }}">
-                                    @error('deskripsi')<span class="text-danger text-sm">{{ $message }}</span>@enderror
+                                    @error('deskripsi')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="form-group">
-                                    <label>Harga (Rp) <span class="text-danger">*</span></label>
-                                    <input type="number" name="hargaHosting" class="form-control"
-                                           value="{{ old('hargaHosting', (int)$hosting->harga) }}">
-                                    @error('hargaHosting')<span class="text-danger text-sm">{{ $message }}</span>@enderror
+                                <div class="mb-3">
+                                    <label for="hargaHosting" class="form-label">Harga (Rp) <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" id="hargaHosting" name="hargaHosting" class="form-control"
+                                               value="{{ old('hargaHosting', (int)$hosting->harga) }}">
+                                    </div>
+                                    @error('hargaHosting')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
-                                <div class="form-group">
-                                    <label>Diskon (%) <span class="text-danger">*</span></label>
-                                    <input type="number" name="diskon" class="form-control" min="0" max="100"
-                                           value="{{ old('diskon', 0) }}" placeholder="0">
-                                    @error('diskon')<span class="text-danger text-sm">{{ $message }}</span>@enderror
+                                <div class="mb-4">
+                                    <label for="diskon" class="form-label">Diskon (%) <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="number" id="diskon" name="diskon" class="form-control"
+                                               min="0" max="100" value="{{ old('diskon', 0) }}" placeholder="0">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                    @error('diskon')<div class="text-danger small">{{ $message }}</div>@enderror
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-block">
+                                <button type="submit" class="btn btn-primary w-100">
                                     <i class="fas fa-file-invoice"></i> Buat Invoice
                                 </button>
                             </form>
@@ -97,6 +102,5 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection

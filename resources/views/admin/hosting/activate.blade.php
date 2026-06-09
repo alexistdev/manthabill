@@ -3,13 +3,12 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Aktivasi Hosting</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.hosting.index') }}">Shared Hosting</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.hosting.detail', $encrypted) }}">Detail</a></li>
@@ -18,9 +17,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -63,22 +62,28 @@
 
                             <form action="{{ route('admin.hosting.activate.store', $encrypted) }}" method="POST">
                                 @csrf
-                                <div class="form-group">
-                                    <label>Username cPanel <span class="text-danger">*</span></label>
-                                    <input type="text" name="usernameCpanel" class="form-control @error('usernameCpanel') is-invalid @enderror"
+                                <div class="mb-3">
+                                    <label for="usernameCpanel" class="form-label">
+                                        Username cPanel <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" id="usernameCpanel" name="usernameCpanel"
+                                           class="form-control @error('usernameCpanel') is-invalid @enderror"
                                            value="{{ old('usernameCpanel') }}" minlength="6" maxlength="30"
                                            placeholder="Username cPanel">
                                     @error('usernameCpanel')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label>Password cPanel <span class="text-danger">*</span></label>
-                                    <input type="text" name="passwordCpanel" class="form-control @error('passwordCpanel') is-invalid @enderror"
+                                <div class="mb-4">
+                                    <label for="passwordCpanel" class="form-label">
+                                        Password cPanel <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" id="passwordCpanel" name="passwordCpanel"
+                                           class="form-control @error('passwordCpanel') is-invalid @enderror"
                                            value="{{ old('passwordCpanel') }}" minlength="6" maxlength="80"
                                            placeholder="Password cPanel">
                                     @error('passwordCpanel')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="d-flex justify-content-between">
@@ -95,6 +100,5 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection

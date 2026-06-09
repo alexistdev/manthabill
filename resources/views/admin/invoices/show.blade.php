@@ -3,13 +3,12 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Detail Invoice <span class="text-warning">{{ strtoupper($invoice->no_invoice) }}</span></h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.invoices.index') }}">Invoice</a></li>
                         <li class="breadcrumb-item active">Detail</li>
@@ -17,9 +16,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -36,13 +35,13 @@
                             <h3 class="card-title">Invoice #{{ strtoupper($invoice->no_invoice) }}</h3>
                             <div class="card-tools">
                                 @if($invoice->status_inv == 1)
-                                    <span class="badge badge-success">PAID</span>
+                                    <span class="badge bg-success">PAID</span>
                                 @elseif($invoice->status_inv == 2)
-                                    <span class="badge badge-warning">PENDING</span>
+                                    <span class="badge bg-warning text-dark">PENDING</span>
                                 @elseif($invoice->status_inv == 3)
-                                    <span class="badge badge-info">CONFIRMED</span>
+                                    <span class="badge bg-info">CONFIRMED</span>
                                 @else
-                                    <span class="badge badge-secondary">VOID</span>
+                                    <span class="badge bg-secondary">VOID</span>
                                 @endif
                             </div>
                         </div>
@@ -53,7 +52,7 @@
                                     <small>{{ $setting?->alamat_hosting }}</small><br>
                                     <small>Telp: {{ $setting?->telp_hosting }}</small>
                                 </div>
-                                <div class="col-md-6 text-right">
+                                <div class="col-md-6 text-end">
                                     <p>Tanggal: {{ konversiTanggal($invoice->inv_date?->format('Y-m-d')) }}</p>
                                     <p>Due: {{ konversiTanggal($invoice->due?->format('Y-m-d')) }}</p>
                                 </div>
@@ -76,24 +75,24 @@
                                 <thead>
                                     <tr>
                                         <th>Deskripsi</th>
-                                        <th class="text-right">Subtotal</th>
-                                        <th class="text-right">Diskon</th>
-                                        <th class="text-right">Total</th>
+                                        <th class="text-end">Subtotal</th>
+                                        <th class="text-end">Diskon</th>
+                                        <th class="text-end">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>{{ $invoice->detail_produk }}</td>
-                                        <td class="text-right">Rp {{ konversiRupiah((int)$invoice->sub_total) }}</td>
-                                        <td class="text-right">Rp {{ konversiRupiah((int)$invoice->diskon_inv) }}</td>
-                                        <td class="text-right"><strong>Rp {{ konversiRupiah((int)$invoice->total_jumlah) }}</strong></td>
+                                        <td class="text-end">Rp {{ konversiRupiah((int)$invoice->sub_total) }}</td>
+                                        <td class="text-end">Rp {{ konversiRupiah((int)$invoice->diskon_inv) }}</td>
+                                        <td class="text-end"><strong>Rp {{ konversiRupiah((int)$invoice->total_jumlah) }}</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer text-right">
+                        <div class="card-footer text-end">
                             @if($invoice->status_inv != 1)
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalKonfirmasiPay">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiPay">
                                     <i class="fas fa-check-circle"></i> Bayar Invoice
                                 </button>
                             @endif
@@ -132,9 +131,9 @@
                                 <li class="list-group-item d-flex justify-content-between">
                                     <span>Status</span>
                                     @if($invoice->confirmation->status == 1)
-                                        <span class="badge badge-success">Terverifikasi</span>
+                                        <span class="badge bg-success">Terverifikasi</span>
                                     @else
-                                        <span class="badge badge-warning">Menunggu Review</span>
+                                        <span class="badge bg-warning text-dark">Menunggu Review</span>
                                     @endif
                                 </li>
                             </ul>
@@ -165,33 +164,29 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 
-@if($invoice->status_inv != 1)
-{{-- Confirmation Modal --}}
-<div class="modal fade" id="modalKonfirmasiPay" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiPayLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="modalKonfirmasiPayLabel">Konfirmasi Pembayaran</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Konfirmasi pembayaran invoice <strong>{{ strtoupper($invoice->no_invoice) }}</strong>?</p>
-                <p class="text-muted mb-0">Tindakan ini tidak dapat dibatalkan.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <a href="{{ route('admin.invoices.pay', $encrypted) }}" class="btn btn-success">
-                    <i class="fas fa-check-circle"></i> Konfirmasi
-                </a>
+    @if($invoice->status_inv != 1)
+    {{-- Confirmation Modal --}}
+    <div class="modal fade" id="modalKonfirmasiPay" tabindex="-1" aria-labelledby="modalKonfirmasiPayLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="modalKonfirmasiPayLabel">Konfirmasi Pembayaran</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Konfirmasi pembayaran invoice <strong>{{ strtoupper($invoice->no_invoice) }}</strong>?</p>
+                    <p class="text-muted mb-0">Tindakan ini tidak dapat dibatalkan.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="{{ route('admin.invoices.pay', $encrypted) }}" class="btn btn-success">
+                        <i class="fas fa-check-circle"></i> Konfirmasi
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-@endif
-
+    @endif
 @endsection

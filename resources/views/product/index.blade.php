@@ -3,24 +3,23 @@
 @section('title', 'Product')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Product</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item active">Product</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             @if(session('pesan'))
@@ -48,39 +47,39 @@
                                                 <small class="text-muted">/bulan</small>
                                             </h3>
                                             <ul class="list-unstyled">
-                                                <li><i class="fas fa-hdd mr-2"></i> Disk: {{ $product->kapasitas }}</li>
+                                                <li><i class="fas fa-hdd me-2"></i> Disk: {{ $product->kapasitas }}</li>
                                                 @if($product->bandwith)
-                                                    <li><i class="fas fa-wifi mr-2"></i> Bandwidth: {{ $product->bandwith }}</li>
+                                                    <li><i class="fas fa-wifi me-2"></i> Bandwidth: {{ $product->bandwith }}</li>
                                                 @endif
                                                 @if($product->addon_domain)
-                                                    <li><i class="fas fa-globe mr-2"></i> Addon Domain: {{ $product->addon_domain }}</li>
+                                                    <li><i class="fas fa-globe me-2"></i> Addon Domain: {{ $product->addon_domain }}</li>
                                                 @endif
                                                 @if($product->email_account)
-                                                    <li><i class="fas fa-envelope mr-2"></i> Email: {{ $product->email_account }}</li>
+                                                    <li><i class="fas fa-envelope me-2"></i> Email: {{ $product->email_account }}</li>
                                                 @endif
                                                 @if($product->database_account)
-                                                    <li><i class="fas fa-database mr-2"></i> Database: {{ $product->database_account }}</li>
+                                                    <li><i class="fas fa-database me-2"></i> Database: {{ $product->database_account }}</li>
                                                 @endif
                                                 @if($product->ftp_account)
-                                                    <li><i class="fas fa-folder mr-2"></i> FTP: {{ $product->ftp_account }}</li>
+                                                    <li><i class="fas fa-folder me-2"></i> FTP: {{ $product->ftp_account }}</li>
                                                 @endif
                                                 @if($product->pilihan_1)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_1 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_1 }}</li>
                                                 @endif
                                                 @if($product->pilihan_2)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_2 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_2 }}</li>
                                                 @endif
                                                 @if($product->pilihan_3)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_3 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_3 }}</li>
                                                 @endif
                                                 @if($product->pilihan_4)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_4 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_4 }}</li>
                                                 @endif
                                             </ul>
                                         </div>
                                         <div class="card-footer text-center">
                                             <a href="{{ route('product.beli', encrypt($product->id)) }}"
-                                               class="btn btn-primary btn-block">
+                                               class="btn btn-primary w-100">
                                                 Beli Sekarang
                                             </a>
                                         </div>
@@ -118,39 +117,39 @@
                                                 <small class="text-muted">/tahun</small>
                                             </h3>
                                             <ul class="list-unstyled">
-                                                <li><i class="fas fa-hdd mr-2"></i> Disk: {{ $product->kapasitas }}</li>
+                                                <li><i class="fas fa-hdd me-2"></i> Disk: {{ $product->kapasitas }}</li>
                                                 @if($product->bandwith)
-                                                    <li><i class="fas fa-wifi mr-2"></i> Bandwidth: {{ $product->bandwith }}</li>
+                                                    <li><i class="fas fa-wifi me-2"></i> Bandwidth: {{ $product->bandwith }}</li>
                                                 @endif
                                                 @if($product->addon_domain)
-                                                    <li><i class="fas fa-globe mr-2"></i> Addon Domain: {{ $product->addon_domain }}</li>
+                                                    <li><i class="fas fa-globe me-2"></i> Addon Domain: {{ $product->addon_domain }}</li>
                                                 @endif
                                                 @if($product->email_account)
-                                                    <li><i class="fas fa-envelope mr-2"></i> Email: {{ $product->email_account }}</li>
+                                                    <li><i class="fas fa-envelope me-2"></i> Email: {{ $product->email_account }}</li>
                                                 @endif
                                                 @if($product->database_account)
-                                                    <li><i class="fas fa-database mr-2"></i> Database: {{ $product->database_account }}</li>
+                                                    <li><i class="fas fa-database me-2"></i> Database: {{ $product->database_account }}</li>
                                                 @endif
                                                 @if($product->ftp_account)
-                                                    <li><i class="fas fa-folder mr-2"></i> FTP: {{ $product->ftp_account }}</li>
+                                                    <li><i class="fas fa-folder me-2"></i> FTP: {{ $product->ftp_account }}</li>
                                                 @endif
                                                 @if($product->pilihan_1)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_1 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_1 }}</li>
                                                 @endif
                                                 @if($product->pilihan_2)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_2 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_2 }}</li>
                                                 @endif
                                                 @if($product->pilihan_3)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_3 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_3 }}</li>
                                                 @endif
                                                 @if($product->pilihan_4)
-                                                    <li><i class="fas fa-check mr-2 text-success"></i> {{ $product->pilihan_4 }}</li>
+                                                    <li><i class="fas fa-check me-2 text-success"></i> {{ $product->pilihan_4 }}</li>
                                                 @endif
                                             </ul>
                                         </div>
                                         <div class="card-footer text-center">
                                             <a href="{{ route('product.beli', encrypt($product->id)) }}"
-                                               class="btn btn-warning btn-block">
+                                               class="btn btn-warning w-100">
                                                 Beli Sekarang
                                             </a>
                                         </div>
@@ -168,6 +167,5 @@
             </div>
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection

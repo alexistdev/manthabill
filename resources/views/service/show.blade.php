@@ -3,15 +3,14 @@
 @section('title', 'Detail Hosting')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Detail Hosting</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('member.index') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('service.index') }}">Service</a></li>
                         <li class="breadcrumb-item active">Detail</li>
@@ -19,9 +18,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
 
             @if(session('pesan'))
@@ -61,13 +60,13 @@
                                         <td><strong>Status</strong></td>
                                         <td>
                                             @if($hosting->status_hosting === 1)
-                                                <small class="badge badge-success">AKTIF</small>
+                                                <span class="badge bg-success">AKTIF</span>
                                             @elseif($hosting->status_hosting === 2)
-                                                <small class="badge badge-warning">PENDING</small>
+                                                <span class="badge bg-warning text-dark">PENDING</span>
                                             @elseif($hosting->status_hosting === 3)
-                                                <small class="badge badge-danger">SUSPEND</small>
+                                                <span class="badge bg-danger">SUSPEND</span>
                                             @else
-                                                <small class="badge badge-secondary">TERMINATED</small>
+                                                <span class="badge bg-secondary">TERMINATED</span>
                                             @endif
                                         </td>
                                     </tr>
@@ -94,6 +93,5 @@
             </div>
 
         </div>
-    </section>
-</div>
+    </div>
 @endsection

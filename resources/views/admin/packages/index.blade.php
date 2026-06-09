@@ -3,22 +3,21 @@
 @section('title', $title)
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
+    <div class="app-content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6"><h1>Paket Hosting</h1></div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active">Paket Hosting</li>
                     </ol>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="content">
+    <div class="app-content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -28,13 +27,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card card-dark">
+                    <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Daftar Paket Hosting</h3>
-                            <a href="{{ route('admin.packages.create') }}">
-                                <button class="btn btn-sm btn-primary float-right">
-                                    <i class="fas fa-plus-square"></i> Tambah Paket
-                                </button>
+                            <a href="{{ route('admin.packages.create') }}" class="btn btn-sm btn-primary float-end">
+                                <i class="fas fa-plus-square"></i> Tambah Paket
                             </a>
                         </div>
                         <div class="card-body">
@@ -44,7 +41,7 @@
                                         <th class="text-center">No</th>
                                         <th class="text-center">Nama Paket</th>
                                         <th class="text-center">Tipe</th>
-                                        <th class="text-center">Harga</th>
+                                        <th class="text-end">Harga</th>
                                         <th class="text-center">Kapasitas</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
@@ -56,19 +53,19 @@
                                         <td>{{ $paket->nama_product }}</td>
                                         <td class="text-center">
                                             @if($paket->type_product == 1)
-                                                <span class="badge badge-info">Personal</span>
+                                                <span class="badge bg-info">Personal</span>
                                             @else
-                                                <span class="badge badge-primary">Professional</span>
+                                                <span class="badge bg-primary">Professional</span>
                                             @endif
                                         </td>
-                                        <td class="text-right">Rp {{ konversiRupiah((int)$paket->harga) }}</td>
+                                        <td class="text-end">Rp {{ konversiRupiah((int)$paket->harga) }}</td>
                                         <td class="text-center">{{ $paket->kapasitas }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.packages.edit', encrypt($paket->id)) }}" class="btn btn-xs btn-warning">
+                                            <a href="{{ route('admin.packages.edit', encrypt($paket->id)) }}" class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
                                             <a href="{{ route('admin.packages.destroy', encrypt($paket->id)) }}"
-                                               class="btn btn-xs btn-danger"
+                                               class="btn btn-sm btn-danger"
                                                onclick="return confirm('Hapus paket {{ $paket->nama_product }}?')">
                                                 <i class="fas fa-trash"></i> Hapus
                                             </a>
@@ -84,8 +81,7 @@
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
 @endsection
 
 @push('scripts')

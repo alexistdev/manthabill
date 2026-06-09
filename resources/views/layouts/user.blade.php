@@ -10,18 +10,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="hold-transition sidebar-mini pace-danger">
-<div class="wrapper">
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<div class="app-wrapper">
 
     @include('partials.user.navbar')
     @include('partials.user.sidebar')
 
-    @yield('content')
+    <main class="app-main">
+        @yield('content')
+    </main>
 
     @include('partials.user.footer')
 
     <script>
-        $(window).bind("load", function () {
+        $(window).on("load", function () {
             window.setTimeout(function () {
                 $(".alert").fadeTo(500, 0).slideUp(500, function () { $(this).remove(); });
             }, 2000);
